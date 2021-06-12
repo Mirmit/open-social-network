@@ -1,11 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    
+    <the-header></the-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -14,8 +9,9 @@
       </ion-header>
     
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <strong>Ready to change the world?</strong>
+        <p>Start to</p>
+        <action-button></action-button>
       </div>
     </ion-content>
   </ion-page>
@@ -24,10 +20,14 @@
 <script>
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import ActionButton from "./UI/ActionButton";
+import TheHeader from "./layouts/TheHeader";
 
 export default defineComponent({
   name: 'Home',
   components: {
+    TheHeader,
+    ActionButton,
     IonContent,
     IonHeader,
     IonPage,
