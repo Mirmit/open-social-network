@@ -3,8 +3,13 @@
 </template>
 
 <script>
+import { IonButton } from "@ionic/vue";
+
 export default {
-  name: "ActionButton"
+  name: "ActionButton",
+  components: {
+    IonButton
+  }
 }
 </script>
 

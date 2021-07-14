@@ -1,6 +1,5 @@
 <template>
   <ion-page>
-    <the-header></the-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -21,12 +20,10 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ActionButton from "./UI/ActionButton";
-import TheHeader from "./layouts/TheHeader";
 
 export default defineComponent({
   name: 'Home',
   components: {
-    TheHeader,
     ActionButton,
     IonContent,
     IonHeader,

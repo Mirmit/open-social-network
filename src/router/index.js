@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Home from '../components/Home.vue'
+import MyBeats from "../pages/MyBeats";
+import MyWall from "../pages/MyWall";
+import Discover from "../pages/Discover";
 
 const routes = [
   {
@@ -10,6 +13,21 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/myBeats',
+    name: 'MyBeats',
+    component: MyBeats
+  },
+  {
+    path: '/myWall',
+    name: 'MyWall',
+    component: MyWall
+  },
+  {
+    path: '/discover',
+    name: 'Discover',
+    component: Discover
   }
 ]
 
