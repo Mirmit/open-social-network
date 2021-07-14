@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content>
       <h2>My beats list</h2>
-      <div slot="fixed">
+      <div>
         <h1>Fixed Content</h1>
       </div>
       <new-post-button></new-post-button>
