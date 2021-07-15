@@ -1,7 +1,6 @@
 <template>
   <ion-page>
     <ion-content>
-      <h2>My beats list</h2>
       <beat
           v-for="beat in beatList"
           :key="beat.id"

@@ -1,6 +1,6 @@
 <template>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
+    <ion-fab-button color="secondary">
       <ion-icon name="search-outline">how</ion-icon>
     </ion-fab-button>
   </ion-fab>
