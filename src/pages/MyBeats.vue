@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
+      <user-profile :username="userInfo.username"></user-profile>
       <beat
           v-for="beat in beatList"
           :key="beat.id"
@@ -18,17 +19,22 @@
 import NewPostButton from "../components/UI/NewPostButton";
 import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
+import UserProfile from "../components/layouts/UserProfile";
 
 export default {
   name: "MyBeats",
   components: {
     Beat,
     NewPostButton,
+    UserProfile,
     IonPage,
     IonContent
   },
   data() {
     return {
+      userInfo: {
+        username: 'johnsmith'
+      },
       beatList: [
         {
           id: 3,
