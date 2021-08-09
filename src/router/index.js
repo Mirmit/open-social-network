@@ -7,7 +7,7 @@ import Discover from "../pages/Discover";
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/myWall'
   },
   {
     path: '/home',

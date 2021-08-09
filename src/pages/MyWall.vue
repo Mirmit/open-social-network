@@ -18,6 +18,7 @@
 import { IonPage , IonContent} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
 import NewPostButton from "../components/UI/NewPostButton";
+import {Utils} from "@ethersphere/bee-js";
 
 export default {
   name: "MyWall",
@@ -54,6 +55,15 @@ export default {
 
       ]
     }
+  },
+  methods: {
+    async signer() {
+      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+    }
+  },
+  async ionViewDidEnter() {
+    const signer = await this.signer();
+    console.log('hey', signer);
   }
 }
 </script>
