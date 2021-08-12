@@ -10,13 +10,11 @@
           :datetime="beat.datetime"
           :content="beat.content"
       ></beat>
-      <new-post-button></new-post-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import NewPostButton from "../components/UI/NewPostButton";
 import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
@@ -25,7 +23,6 @@ export default {
   name: "MyBeats",
   components: {
     Beat,
-    NewPostButton,
     UserProfile,
     IonPage,
     IonContent

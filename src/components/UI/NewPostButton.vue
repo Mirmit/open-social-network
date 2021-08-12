@@ -1,6 +1,6 @@
 <template>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="secondary">
+    <ion-fab-button color="secondary" @click="$emit('customClick')">
       <ion-icon name="search-outline">how</ion-icon>
     </ion-fab-button>
   </ion-fab>
