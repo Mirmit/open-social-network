@@ -15,7 +15,8 @@ export default {
     IonFab,
     IonIcon,
     IonFabButton
-  }
+  },
+  emits: ['customClick']
 }
 </script>
 
