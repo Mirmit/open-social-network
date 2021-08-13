@@ -18,6 +18,7 @@
 import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
+import {Bee, Utils} from "@ethersphere/bee-js";
 
 export default {
   name: "MyBeats",
@@ -27,35 +28,34 @@ export default {
     IonPage,
     IonContent
   },
+  inject: [ 'beeAddress', 'beatTopic' ],
   data() {
     return {
       userInfo: {
         username: 'johnsmith'
       },
-      beatList: [
-        {
-          id: 3,
-          title: 'third beat',
-          author: 'me',
-          datetime: 'now',
-          content: 'I want to write my third beat'
-        },
-        {
-          id: 2,
-          title: 'second beat',
-          author: 'me',
-          datetime: 'now - 10 min',
-          content: 'I want to write my second beat'
-        },
-        {
-          id: 1,
-          title: 'fist beat',
-          author: 'me',
-          datetime: 'now - 20 min',
-          content: 'I want to write my first beat'
-        },
-
-      ]
+      beatList: []
+    }
+  },
+  methods: {
+    async signer() {
+      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+    }
+  },
+  async ionViewDidEnter() {
+    const bee = new Bee(this.beeAddress);
+    const signer = await this.signer();
+    const beats = await bee.getJsonFeed(
+        this.beatTopic,
+        { signer: signer }
+    );
+    console.log('beats', beats);
+    console.log('beatsLength', beats.length);
+    if (beats.length > 0) {
+      beats.sort(function(a, b) {
+        return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
+      });
+      this.beatList = beats;
     }
   }
 }

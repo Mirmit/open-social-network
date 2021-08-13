@@ -34,8 +34,8 @@ export default {
   computed: {
     dateFormatted: function () {
       if (typeof this.datetime === 'number') {
-        console.log('Inside if loop');
         dayjs.extend(relativeTime);
+
         return dayjs(this.datetime).fromNow();
       }
 

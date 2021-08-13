@@ -16,7 +16,7 @@
 <script>
 import { IonPage , IonContent} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
-import {Bee, Utils} from "@ethersphere/bee-js";
+import { Utils } from "@ethersphere/bee-js";
 
 export default {
   name: "MyWall",
@@ -62,22 +62,22 @@ export default {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
     }
   },
-  async ionViewDidEnter() {
-    const bee = new Bee(this.beeAddress);
-    const signer = await this.signer();
-    const beats = await bee.getJsonFeed(
-        this.beatTopic,
-        { signer: signer }
-    );
-    console.log('beats', beats);
-    console.log('beatsLength', beats.length);
-    if (beats.length > 0) {
-      beats.sort(function(a, b) {
-        return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-      });
-      this.beatList = beats;
-    }
-  }
+  // async ionViewDidEnter() {
+  //   const bee = new Bee(this.beeAddress);
+  //   const signer = await this.signer();
+  //   const beats = await bee.getJsonFeed(
+  //       this.beatTopic,
+  //       { signer: signer }
+  //   );
+  //   console.log('beats', beats);
+  //   console.log('beatsLength', beats.length);
+  //   if (beats.length > 0) {
+  //     beats.sort(function(a, b) {
+  //       return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
+  //     });
+  //     this.beatList = beats;
+  //   }
+  // }
 }
 </script>
 
