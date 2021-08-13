@@ -30,6 +30,10 @@ export default defineComponent({
     IonContent,
     NewPostButton
   },
+  provide: {
+    beeAddress: 'http://localhost:1633',
+    beatTopic: 'opensocialnetwork.eth/beats'
+  },
   data() {
     return {
       signer: '',

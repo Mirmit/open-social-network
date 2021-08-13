@@ -21,6 +21,10 @@ import { Utils } from '@ethersphere/bee-js';
 
 export default {
   name: "NewBeat",
+  inject: [
+    'beeAddress',
+    'beatTopic'
+  ],
   components: {
     ActionButton,
     IonCard,
@@ -40,13 +44,13 @@ export default {
   },
   methods: {
     async postBeat() {
-      const bee = new Bee('http://localhost:1633');
-      const topic = bee.makeFeedTopic('opensocialnetwork.eth/beats');
+      const bee = new Bee(this.beeAddress);
+      const topic = bee.makeFeedTopic(this.beatTopic);
       const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
       const postageBatchId = '1cf22a5a35a4f6b9d97831c3fb34b12fe4852875415d5744579bf0105ce9cc71';
       console.log(signer, topic);
       const oldBeats = await bee.getJsonFeed(
-          'opensocialnetwork.eth/beats',
+          this.beatTopic,
           { signer: signer }
       );
       console.log('oldBeats', oldBeats);
@@ -63,12 +67,12 @@ export default {
       beats.push(newBeat)
       await bee.setJsonFeed(
           postageBatchId,
-          'opensocialnetwork.eth/beats',
+          this.beatTopic,
           beats,
           { signer: signer }
       );
       const newBeats = await bee.getJsonFeed(
-          'opensocialnetwork.eth/beats',
+          this.beatTopic,
           { signer: signer }
       );
       console.log(newBeats);

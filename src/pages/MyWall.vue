@@ -16,10 +16,14 @@
 <script>
 import { IonPage , IonContent} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
-import {Utils} from "@ethersphere/bee-js";
+import {Bee, Utils} from "@ethersphere/bee-js";
 
 export default {
   name: "MyWall",
+  inject: [
+    'beeAddress',
+    'beatTopic'
+  ],
   components: {
     IonPage,
     IonContent,
@@ -59,8 +63,17 @@ export default {
     }
   },
   async ionViewDidEnter() {
+    const bee = new Bee(this.beeAddress);
     const signer = await this.signer();
-    console.log('hey', signer);
+    const beats = await bee.getJsonFeed(
+        this.beatTopic,
+        { signer: signer }
+    );
+    console.log('beats', beats);
+    console.log('beatsLength', beats.length);
+    if (beats.length > 0) {
+      this.beatList = beats;
+    }
   }
 }
 </script>
