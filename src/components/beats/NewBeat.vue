@@ -28,6 +28,7 @@ export default {
     'beeAddress',
     'beatTopic'
   ],
+  emits: [ 'closeNewBeat' ],
   components: {
     ActionButton,
     IonCard,
@@ -48,19 +49,14 @@ export default {
   methods: {
     async postBeat() {
       const bee = new Bee(this.beeAddress);
-      const topic = bee.makeFeedTopic(this.beatTopic);
       const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
       const postageBatchId = '1cf22a5a35a4f6b9d97831c3fb34b12fe4852875415d5744579bf0105ce9cc71';
-      console.log(signer, topic);
       const oldBeats = await bee.getJsonFeed(
           this.beatTopic,
           { signer: signer }
       );
-      console.log('oldBeats', oldBeats);
       const beats = oldBeats;
-      console.log('beats', beats);
       const date = Date.now();
-      console.log('date', date);
       const newBeatId = Math.max.apply(Math, oldBeats.map(function(o) { return o.id; })) + 1;
       const newBeat = {
         id: newBeatId,
@@ -76,11 +72,7 @@ export default {
           beats,
           { signer: signer }
       );
-      const newBeats = await bee.getJsonFeed(
-          this.beatTopic,
-          { signer: signer }
-      );
-      console.log(newBeats);
+      this.$emit('closeNewBeat');
     }
   }
 }

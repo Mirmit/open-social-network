@@ -5,8 +5,8 @@
     </ion-header>
     <ion-content>
       <ion-router-outlet :style="shadow"/>
-      <new-post-button @custom-click="openNewBeat" :style="shadow"></new-post-button>
-      <new-beat :class="{hidden: newBeatHidden}"></new-beat>
+      <new-post-button @custom-click="openCloseNewBeat" :style="shadow"></new-post-button>
+      <new-beat :class="{hidden: newBeatHidden}" @close-new-beat="openCloseNewBeat"></new-beat>
     </ion-content>
   </ion-app>
 </template>
@@ -41,7 +41,7 @@ export default defineComponent({
     }
   },
   methods: {
-    openNewBeat() {
+    openCloseNewBeat() {
       this.newBeatHidden = !this.newBeatHidden;
     }
   },
