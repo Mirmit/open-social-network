@@ -72,6 +72,9 @@ export default {
     console.log('beats', beats);
     console.log('beatsLength', beats.length);
     if (beats.length > 0) {
+      beats.sort(function(a, b) {
+        return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
+      });
       this.beatList = beats;
     }
   }

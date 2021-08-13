@@ -1,7 +1,10 @@
 <template>
   <ion-card class="card-style">
     <ion-card-header>
-      <ion-card-title>{{ title }}</ion-card-title>
+      <ion-card-title>
+        <ion-input placeholder="Title" v-model="title"
+        ></ion-input>
+      </ion-card-title>
       <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>
     </ion-card-header>
 
@@ -36,7 +39,7 @@ export default {
   },
   data() {
     return {
-      title: 'New beat',
+      title: '',
       author: 'me',
       content: '',
       datetime: 'now'
@@ -56,12 +59,14 @@ export default {
       console.log('oldBeats', oldBeats);
       const beats = oldBeats;
       console.log('beats', beats);
+      const date = Date.now();
+      console.log('date', date);
       const newBeatId = Math.max.apply(Math, oldBeats.map(function(o) { return o.id; })) + 1;
       const newBeat = {
         id: newBeatId,
-        title: 'My title',
+        title: this.title,
         author: 'me',
-        datetime: 'write datetime',
+        datetime: date,
         content: this.content
       };
       beats.push(newBeat)
