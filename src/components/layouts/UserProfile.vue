@@ -5,6 +5,7 @@
           <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
         </ion-avatar>
         <ion-label>{{ username }}</ion-label>
+        <ion-label>{{ bios }}</ion-label>
         <ion-button @click="setOpen(true)">Edit profile</ion-button>
         <ion-modal
             :is-open="isOpen"
@@ -33,7 +34,8 @@ export default {
     IonModal
   },
   props: {
-    username: String
+    username: String,
+    bios: String
   },
   data() {
     return {

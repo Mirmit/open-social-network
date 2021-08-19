@@ -1,7 +1,10 @@
 <template>
   <ion-page>
     <ion-content>
-      <user-profile :username="userInfo.username"></user-profile>
+      <user-profile
+          :username="userInfo.username"
+          :bios="userInfo.biosInfo"
+      ></user-profile>
       <beat
           v-for="beat in beatList"
           :key="beat.id"
@@ -32,7 +35,8 @@ export default {
   data() {
     return {
       userInfo: {
-        username: 'johnsmith'
+        username: '',
+        bios: ''
       },
       beatList: []
     }
@@ -57,6 +61,7 @@ export default {
       );
       console.log('beats', beats);
       console.log('biosInfo', biosInfo);
+      this.userInfo = biosInfo;
       if (beats.length > 0) {
         beats.sort(function(a, b) {
           return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
