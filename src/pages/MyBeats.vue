@@ -28,7 +28,7 @@ export default {
     IonPage,
     IonContent
   },
-  inject: [ 'beeAddress', 'beatTopic' ],
+  inject: [ 'beeAddress', 'beatTopic', 'biosTopic' ],
   data() {
     return {
       userInfo: {
@@ -43,19 +43,28 @@ export default {
     }
   },
   async ionViewDidEnter() {
+    console.log('bee address', this.beeAddress);
     const bee = new Bee(this.beeAddress);
     const signer = await this.signer();
-    const beats = await bee.getJsonFeed(
-        this.beatTopic,
-        { signer: signer }
-    );
-    console.log('beats', beats);
-    console.log('beatsLength', beats.length);
-    if (beats.length > 0) {
-      beats.sort(function(a, b) {
-        return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-      });
-      this.beatList = beats;
+    try {
+      const beats = await bee.getJsonFeed(
+          this.beatTopic,
+          { signer: signer }
+      );
+      const biosInfo = await bee.getJsonFeed(
+          this.biosTopic,
+          { signer: signer }
+      );
+      console.log('beats', beats);
+      console.log('biosInfo', biosInfo);
+      if (beats.length > 0) {
+        beats.sort(function(a, b) {
+          return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
+        });
+        this.beatList = beats;
+      }
+    } catch(error) {
+      console.log('custom error', error);
     }
   }
 }

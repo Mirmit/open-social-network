@@ -25,7 +25,8 @@ export default {
   name: "NewBeat",
   inject: [
     'beeAddress',
-    'beatTopic'
+    'beatTopic',
+    'postageBatchId'
   ],
   emits: [ 'closeNewBeat' ],
   components: {
@@ -48,7 +49,7 @@ export default {
     async postBeat() {
       const bee = new Bee(this.beeAddress);
       const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-      const postageBatchId = '1cf22a5a35a4f6b9d97831c3fb34b12fe4852875415d5744579bf0105ce9cc71';
+      const postageBatchId = this.postageBatchId;
       const oldBeats = await bee.getJsonFeed(
           this.beatTopic,
           { signer: signer }

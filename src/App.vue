@@ -7,49 +7,86 @@
       <ion-router-outlet :style="shadow"/>
       <new-post-button @custom-click="openCloseNewBeat" :style="shadow"></new-post-button>
       <new-beat :class="{hidden: newBeatHidden}" @close-new-beat="openCloseNewBeat"></new-beat>
+      <ion-modal
+          :is-open="isModalOpen"
+          css-class="my-custom-class"
+          @didDismiss="setModalOpen(false)"
+      >
+        <welcome-user @close-welcome-user="setModalOpen(false)"></welcome-user>
+      </ion-modal>
     </ion-content>
   </ion-app>
 </template>
 
 <script>
-import {IonApp, IonRouterOutlet, IonHeader, IonContent } from '@ionic/vue';
+import {IonApp, IonRouterOutlet, IonHeader, IonContent, IonModal} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import TheHeader from "./components/layouts/TheHeader";
-import { Utils } from '@ethersphere/bee-js';
+import { Bee, Utils } from '@ethersphere/bee-js';
 import NewPostButton from "./components/UI/NewPostButton";
 import NewBeat from "./components/beats/NewBeat";
+import WelcomeUser from "./components/layouts/WelcomeUser";
 
 export default defineComponent({
   name: 'App',
   components: {
+    WelcomeUser,
     NewBeat,
     IonApp,
     IonRouterOutlet,
     TheHeader,
     IonHeader,
     IonContent,
-    NewPostButton
+    NewPostButton,
+    IonModal
   },
   provide: {
     beeAddress: 'http://localhost:1633',
-    beatTopic: 'opensocialnetwork.eth/beats'
+    beatTopic: 'opensocialnetwork.eth/beats',
+    biosTopic: 'opensocialnetwork.eth/beater',
+    postageBatchId: '18b343cbc3d0abf3232b6287a47754314c3264f9d6ffa89cc4294a8b7f85bfb7'
   },
   data() {
     return {
-      signer: '',
-      newBeatHidden: true
+      newBeatHidden: true,
+      beeAddress: 'http://localhost:1633',
+      beatTopic: 'opensocialnetwork.eth/beats',
+      biosTopic: 'opensocialnetwork.eth/beater',
+      postageBatchId: 'f48fb2685701ab29334f4e3e55f726988378f5daa9f62c9f977101026d70d3bc',
+      isModalOpen: false
     }
   },
   methods: {
     openCloseNewBeat() {
       this.newBeatHidden = !this.newBeatHidden;
+    },
+    initializeUser() {
+      //make first empty beats and basic user bios if userIsStill not in swarm
+    },
+    async signer() {
+      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+    },
+    async checkIfUserHasRegistered() {
+      let http = new XMLHttpRequest();
+      const bee = new Bee(this.beeAddress);
+      const signer = Utils.Eth.makeHexEthAddress((await this.signer()).address);
+      const url = this.beeAddress + '/feeds/' + signer + '/' + bee.makeFeedTopic(this.biosTopic);
+      await http.open('GET' ,url ,true);
+      http.send();
+      return http.status === 404;
+    },
+    setModalOpen(value) {
+      this.isModalOpen = value;
     }
   },
-  async beforeCreate() {
-    await Utils.Eth.makeEthereumWalletSigner(window.ethereum).then( (signer) => {
-      this.signer = signer;
-      console.log('Ethereum wallet signer', signer);
-    });
+  async created() {
+    // const signer = await this.signer();
+    // const bee = new Bee(this.beeAddress);
+    const userHasRegistered = await this.checkIfUserHasRegistered();
+    //check if user has already registered on the network. If not, make first beat "[]" and profile info "{ username: "username}"
+    if (!userHasRegistered) {
+      this.setModalOpen(true);
+    }
   },
   computed: {
     shadow() {
