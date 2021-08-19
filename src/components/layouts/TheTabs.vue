@@ -1,8 +1,8 @@
 <template>
   <ion-buttons>
     <ion-col>
-      <ion-button router-link="/myBeats" expand="full" :class="isActive('/myBeats')">
-        <ion-label>My Beats</ion-label>
+      <ion-button router-link="/me" expand="full" :class="isActive('/myBeats')">
+        <ion-label>Me</ion-label>
       </ion-button>
     </ion-col>
     <ion-col>

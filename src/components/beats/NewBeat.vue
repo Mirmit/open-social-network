@@ -12,13 +12,12 @@
       <ion-input placeholder="Write your beat" v-model="content"
       ></ion-input>
     </ion-card-content>
-    <action-button @custom-click="postBeat"></action-button>
+    <action-button @custom-click="postBeat" button-name="Beat"></action-button>
   </ion-card>
 </template>
 
 <script>
 import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput } from "@ionic/vue";
-import ActionButton from "../UI/ActionButton";
 import { Bee } from "@ethersphere/bee-js";
 import { Utils } from '@ethersphere/bee-js';
 
@@ -30,7 +29,6 @@ export default {
   ],
   emits: [ 'closeNewBeat' ],
   components: {
-    ActionButton,
     IonCard,
     IonCardHeader,
     IonCardContent,

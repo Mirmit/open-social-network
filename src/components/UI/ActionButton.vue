@@ -1,5 +1,5 @@
 <template>
-  <ion-button @click="$emit('customClick')">Beat</ion-button>
+  <ion-button @click="$emit('customClick')">{{ buttonName }}</ion-button>
 </template>
 
 <script>
@@ -10,7 +10,10 @@ export default {
   components: {
     IonButton
   },
-  emits: [ 'customClick']
+  emits: [ 'customClick'],
+  props: {
+    'buttonName': String
+  }
 }
 </script>
 

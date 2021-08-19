@@ -22,10 +22,15 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import ActionButton from "./components/UI/ActionButton";
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
+
+app.component(
+  'action-button', ActionButton
+);
   
 router.isReady().then(() => {
   app.mount('#app');
