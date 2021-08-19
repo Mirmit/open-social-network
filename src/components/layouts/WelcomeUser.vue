@@ -7,7 +7,6 @@
       <ion-input
           placeholder="username"
           v-model="username"
-          type="text"
       ></ion-input>
     </ion-item>
     <ion-item>
@@ -15,7 +14,6 @@
       <ion-input
           placeholder="biosInfo"
           v-model="biosInfo"
-          type="text"
       ></ion-input>
     </ion-item>
     <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
@@ -25,10 +23,18 @@
 <script>
 import ActionButton from "../UI/ActionButton";
 import {Bee, Utils} from "@ethersphere/bee-js";
+import { IonInput, IonItem, IonLabel, IonTitle, IonContent } from "@ionic/vue";
 
 export default {
   name: "WelcomeUser",
-  components: {ActionButton},
+  components: {
+    ActionButton,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonTitle,
+    IonContent
+  },
   emits: ['closeWelcomeUser'],
   inject: [
     'beeAddress',
@@ -53,6 +59,7 @@ export default {
         biosInfo: this.biosInfo,
         following: []
       };
+      console.log(this.biosInfo, this.username, 'new data entered by user');
       await bee.setJsonFeed(
           postageBatchId,
           this.biosTopic,

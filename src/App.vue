@@ -84,8 +84,10 @@ export default defineComponent({
     // const bee = new Bee(this.beeAddress);
     const userHasRegistered = await this.checkIfUserHasRegistered();
     //check if user has already registered on the network. If not, make first beat "[]" and profile info "{ username: "username}"
-    if (!userHasRegistered) {
+    if (userHasRegistered) {
       this.setModalOpen(true);
+    } else {
+      this.setModalOpen(false);
     }
   },
   computed: {
