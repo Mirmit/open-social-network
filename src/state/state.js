@@ -5,6 +5,7 @@ const store = createStore({
   state () {
     return {
       myBeats: [],
+      beats: [],
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
@@ -15,6 +16,9 @@ const store = createStore({
   mutations: {
     setMyBeats(state, myBeats) {
       state.myBeats = myBeats;
+    },
+    setBeats(state, beats) {
+      state.beats = beats;
     },
     setBiosInfo(state, biosInfo) {
       state.biosInfo = biosInfo;
@@ -30,6 +34,20 @@ const store = createStore({
           { signer: signer }
         );
         context.commit('setMyBeats', beats);
+      } catch(error) {
+        console.log('custom error', error);
+      }
+    },
+    async getBeats(context, ethAddress) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = Utils.Eth.makeHexEthAddress(ethAddress);
+      console.log(signer);
+      try {
+        const beats = await bee.getJsonFeed(
+          context.getters.beatTopic,
+          { signer: signer }
+        );
+        context.commit('setBeats', beats);
       } catch(error) {
         console.log('custom error', error);
       }
@@ -85,6 +103,9 @@ const store = createStore({
   getters: {
     myBeats(state) {
       return state.myBeats;
+    },
+    beats(state) {
+      return state.beats;
     },
     biosInfo(state) {
       return state.biosInfo;

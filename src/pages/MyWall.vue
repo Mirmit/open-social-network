@@ -17,6 +17,7 @@
 import { IonPage , IonContent} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
 import { Utils } from "@ethersphere/bee-js";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "MyWall",
@@ -57,11 +58,26 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters([
+      'beats',
+      'biosInfo'
+    ]),
+  },
   methods: {
     async signer() {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-    }
+    },
+    ...mapActions([
+      'getBeats',
+      'getBiosInfo'
+    ]),
   },
+  async ionViewDidEnter() {
+    await this.getBiosInfo();
+    await this.getBeats(this.biosInfo.following.pop());
+    this.beatList = this.beats;
+  }
   // async ionViewDidEnter() {
   //   const bee = new Bee(this.beeAddress);
   //   const signer = await this.signer();
