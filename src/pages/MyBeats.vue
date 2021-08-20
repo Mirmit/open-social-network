@@ -3,7 +3,7 @@
     <ion-content>
       <user-profile
           :username="biosInfo.username"
-          :bios="biosInfo.biosInfo"
+          :bios="biosInfo.bios"
       ></user-profile>
       <beat
           v-for="beat in myBeats"

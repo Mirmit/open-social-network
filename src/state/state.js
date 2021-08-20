@@ -47,10 +47,36 @@ const store = createStore({
         console.log('custom error', error);
       }
     },
+    async setBiosInfo(context, biosInfo) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = await context.dispatch('signer');
+      try {
+        await bee.setJsonFeed(
+          context.getters.postageBatchId,
+          context.getters.biosTopic,
+          biosInfo,
+          { signer: signer }
+        );
+        context.commit('setBiosInfo', biosInfo);
+      } catch(error) {
+        console.log('custom error', error);
+      }
+    }
+    ,
     addNewBeat(context, newBeat) {
       const beats = context.getters.myBeats;
       beats.unshift(newBeat);
       context.commit('setMyBeats', beats);
+    },
+    async firstBeat(context) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = await context.dispatch('signer');
+      await bee.setJsonFeed(
+        context.getters.postageBatchId,
+        context.getters.beatTopic,
+        [],
+        { signer: signer }
+      );
     },
     async signer() {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);

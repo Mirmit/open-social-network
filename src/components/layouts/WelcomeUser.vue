@@ -12,8 +12,8 @@
     <ion-item>
       <ion-label position="stacked">Something about you:</ion-label>
       <ion-input
-          placeholder="biosInfo"
-          v-model="biosInfo"
+          placeholder="bios"
+          v-model="bios"
       ></ion-input>
     </ion-item>
     <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
@@ -22,8 +22,8 @@
 
 <script>
 import ActionButton from "../UI/ActionButton";
-import {Bee, Utils} from "@ethersphere/bee-js";
 import { IonInput, IonItem, IonLabel, IonTitle, IonContent } from "@ionic/vue";
+import {mapActions} from "vuex";
 
 export default {
   name: "WelcomeUser",
@@ -45,35 +45,25 @@ export default {
   data() {
     return {
       'username': '',
-      'biosInfo': ''
+      'bios': ''
     }
   },
   methods: {
     async createFirstBios() {
-      const bee = new Bee(this.beeAddress);
-      const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-      const postageBatchId = this.postageBatchId;
-      const bios = {
+      const biosInfo = {
         username: this.username,
         image: '',
-        biosInfo: this.biosInfo,
+        bios: this.bios,
         following: []
       };
-      console.log(this.biosInfo, this.username, 'new data entered by user');
-      await bee.setJsonFeed(
-          postageBatchId,
-          this.biosTopic,
-          bios,
-          { signer: signer }
-      );
-      await bee.setJsonFeed(
-          postageBatchId,
-          this.beatTopic,
-          [],
-          { signer: signer }
-      );
+      await this.setBiosInfo(biosInfo);
+      await this.firstBeat();
       this.$emit('closeWelcomeUser');
-    }
+    },
+    ...mapActions([
+      'setBiosInfo',
+      'firstBeat'
+    ]),
   }
 }
 </script>
