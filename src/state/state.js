@@ -40,12 +40,10 @@ const store = createStore({
     },
     async getBeats(context, ethAddress) {
       const bee = new Bee(context.getters.beeAddress);
-      const signer = Utils.Eth.makeHexEthAddress(ethAddress);
-      console.log(signer);
       try {
         const beats = await bee.getJsonFeed(
           context.getters.beatTopic,
-          { signer: signer }
+          { address: ethAddress }
         );
         context.commit('setBeats', beats);
       } catch(error) {
