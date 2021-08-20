@@ -2,11 +2,11 @@
   <ion-page>
     <ion-content>
       <user-profile
-          :username="userInfo.username"
-          :bios="userInfo.biosInfo"
+          :username="biosInfo.username"
+          :bios="biosInfo.biosInfo"
       ></user-profile>
       <beat
-          v-for="beat in beatList"
+          v-for="beat in myBeats"
           :key="beat.id"
           :title="beat.title"
           :author="beat.author"
@@ -21,7 +21,7 @@
 import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
-import {Bee, Utils} from "@ethersphere/bee-js";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "MyBeats",
@@ -37,41 +37,22 @@ export default {
       userInfo: {
         username: '',
         bios: ''
-      },
-      beatList: []
+      }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'myBeats',
+      'biosInfo'
+    ]),
   },
   methods: {
-    async signer() {
-      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-    }
+    ...mapActions([
+        'getMyBeats'
+    ]),
   },
   async ionViewDidEnter() {
-    console.log('bee address', this.beeAddress);
-    const bee = new Bee(this.beeAddress);
-    const signer = await this.signer();
-    try {
-      const beats = await bee.getJsonFeed(
-          this.beatTopic,
-          { signer: signer }
-      );
-      const biosInfo = await bee.getJsonFeed(
-          this.biosTopic,
-          { signer: signer }
-      );
-      console.log('beats', beats);
-      console.log('biosInfo', biosInfo);
-      this.userInfo = biosInfo;
-      if (beats.length > 0) {
-        beats.sort(function(a, b) {
-          return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-        });
-        this.$store.commit('setMyBeats', beats);
-        this.beatList = this.$store.state.myBeats;
-      }
-    } catch(error) {
-      console.log('custom error', error);
-    }
+    await this.getMyBeats();
   }
 }
 </script>

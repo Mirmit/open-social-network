@@ -26,6 +26,7 @@ import { Bee, Utils } from '@ethersphere/bee-js';
 import NewPostButton from "./components/UI/NewPostButton";
 import NewBeat from "./components/beats/NewBeat";
 import WelcomeUser from "./components/layouts/WelcomeUser";
+import { mapGetters } from "vuex";
 
 export default defineComponent({
   name: 'App',
@@ -49,10 +50,6 @@ export default defineComponent({
   data() {
     return {
       newBeatHidden: true,
-      beeAddress: 'http://localhost:1633',
-      beatTopic: 'opensocialnetwork.eth/beats',
-      biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: 'f48fb2685701ab29334f4e3e55f726988378f5daa9f62c9f977101026d70d3bc',
       isModalOpen: false
     }
   },
@@ -101,7 +98,12 @@ export default defineComponent({
           opacity: 1
         }
       }
-    }
+    },
+    ...mapGetters([
+      'beeAddress',
+      'beatTopic',
+      'biosTopic',
+    ]),
   }
 });
 </script>
