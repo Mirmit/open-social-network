@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import {createStore} from "vuex";
 import {Bee, Utils} from "@ethersphere/bee-js";
 
 const store = createStore({
@@ -25,30 +25,77 @@ const store = createStore({
     }
   },
   actions: {
-    async getMyBeats(context) {
-      const bee = new Bee(context.getters.beeAddress);
+    async getMyBeats(context, number) {
       const signer = await context.dispatch('signer');
-      try {
-        const beats = await bee.getJsonFeed(
-          context.getters.beatTopic,
-          { signer: signer }
-        );
-        context.commit('setMyBeats', beats);
-      } catch(error) {
-        console.log('custom error', error);
+      const numberOfBeats = context.getters.biosInfo.numberOfBeats;
+      //5   4    4
+      //5   6    5
+      const totalBeats = Math.min(number, numberOfBeats);
+      let i = 0;
+      let beats = [];
+      while (i < totalBeats) {
+        beats.push(await context.dispatch('getOneBeat', signer.address, i));
+        i++;
       }
+      context.commit('setMyBeats', beats);
     },
-    async getBeats(context, ethAddress) {
+    async getOneBeat(context, ethAddress, id) {
       const bee = new Bee(context.getters.beeAddress);
       try {
-        const beats = await bee.getJsonFeed(
-          context.getters.beatTopic,
+        return await bee.getJsonFeed(
+          context.getters.beatTopic + id,
           { address: ethAddress }
         );
+      } catch (error) {
+        console.log('custom error getOneBeat', error);
+      }
+    },
+    async getBeats(context, ethAddress, number) {
+      const bee = new Bee(context.getters.beeAddress);
+      console.log(ethAddress, number, 'errorrsasdasdsaasdsasda');
+      try {
+        const biosInfo = await bee.getJsonFeed(
+          context.getters.biosTopic,
+          { address: ethAddress }
+        );
+        const totalBeats = Math.min(number, biosInfo.numberOfBeats);
+        let i = 0;
+        let beats = [];
+        while (i < totalBeats) {
+          beats.push(await context.dispatch('getOneBeat', ethAddress, i));
+          i++;
+        }
         context.commit('setBeats', beats);
+      } catch(error) {
+        console.log('custom error getBeats', error);
+      }
+    },
+    async addNewBeat(context, newBeat) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = await context.dispatch('signer');
+      const beats = context.getters.myBeats;
+      const numberOfBeats = beats.length;try {
+      await bee.setJsonFeed(
+          context.getters.postageBatchId,
+          context.getters.beatTopic + numberOfBeats,
+          newBeat,
+          { signer: signer }
+        );
       } catch(error) {
         console.log('custom error', error);
       }
+      beats.unshift(newBeat);
+      context.commit('setMyBeats', beats);
+    },
+    async firstBeat(context) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = await context.dispatch('signer');
+      await bee.setJsonFeed(
+        context.getters.postageBatchId,
+        context.getters.beatTopic,
+        [],
+        { signer: signer }
+      );
     },
     async getBiosInfo(context) {
       const bee = new Bee(context.getters.beeAddress);
@@ -79,21 +126,6 @@ const store = createStore({
       }
     }
     ,
-    addNewBeat(context, newBeat) {
-      const beats = context.getters.myBeats;
-      beats.unshift(newBeat);
-      context.commit('setMyBeats', beats);
-    },
-    async firstBeat(context) {
-      const bee = new Bee(context.getters.beeAddress);
-      const signer = await context.dispatch('signer');
-      await bee.setJsonFeed(
-        context.getters.postageBatchId,
-        context.getters.beatTopic,
-        [],
-        { signer: signer }
-      );
-    },
     async signer() {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
     },

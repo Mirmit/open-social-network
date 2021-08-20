@@ -54,7 +54,8 @@ export default {
         username: this.username,
         image: '',
         bios: this.bios,
-        following: []
+        following: [],
+        numberOfBeats: 0
       };
       await this.setBiosInfo(biosInfo);
       await this.firstBeat();

@@ -54,7 +54,7 @@ export default {
     ]),
   },
   async ionViewDidEnter() {
-    await this.getMyBeats();
+    await this.getMyBeats(10);
     await this.getBiosInfo();
   }
 }

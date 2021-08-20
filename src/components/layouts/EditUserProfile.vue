@@ -95,7 +95,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'biosInfo'
+      'biosInfo',
+      'myBeats'
     ]),
   },
   methods: {
@@ -106,7 +107,8 @@ export default {
         username: this.username,
         image: this.image,
         bios: this.bios,
-        following: newFollowing
+        following: newFollowing,
+        numberOfBeats: this.myBeats.length
       };
       //update
       await this.setBiosInfo(biosInfo);
