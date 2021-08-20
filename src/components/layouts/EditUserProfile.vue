@@ -31,6 +31,14 @@
             type="url"
         ></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Follow beater:</ion-label>
+        <ion-input
+            placeholder="address"
+            v-model="newFollower"
+            type="text"
+        ></ion-input>
+      </ion-item>
       <ion-list v-if="following.length > 0">
         <ion-list-header>
           <ion-label>Following</ion-label>
@@ -58,7 +66,7 @@ import {
   IonList
 } from "@ionic/vue";
 import ActionButton from "../UI/ActionButton";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "EditUserProfile",
@@ -81,19 +89,24 @@ export default {
       username: '',
       image: '',
       bios: '',
-      following: [
-        '0x213',
-        '0x123'
-      ]
+      following: [],
+      newFollower: ''
     }
+  },
+  computed: {
+    ...mapGetters([
+      'biosInfo'
+    ]),
   },
   methods: {
     async updateProfile() {
+      const newFollowing = this.following;
+      newFollowing.push(this.newFollower);
       const biosInfo = {
         username: this.username,
         image: this.image,
         bios: this.bios,
-        following: []
+        following: newFollowing
       };
       //update
       await this.setBiosInfo(biosInfo);
@@ -103,8 +116,16 @@ export default {
       this.$emit('closeEditProfile');
     },
     ...mapActions([
-      'setBiosInfo'
+      'setBiosInfo',
+      'getBiosInfo'
     ]),
+  },
+  async beforeCreate() {
+    await this.getBiosInfo;
+    this.username = this.biosInfo.username;
+    this.image = this.biosInfo.image;
+    this.bios = this.biosInfo.bios;
+    this.following = this.biosInfo.following;
   }
 }
 </script>
