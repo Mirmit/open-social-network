@@ -19,7 +19,7 @@
         <ion-label position="stacked">More about you:</ion-label>
         <ion-input
             placeholder="bios info"
-            v-model="biosInfo"
+            v-model="bios"
             type="text"
         ></ion-input>
       </ion-item>
@@ -54,9 +54,11 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonListHeader
+  IonListHeader,
+  IonList
 } from "@ionic/vue";
 import ActionButton from "../UI/ActionButton";
+import {mapActions} from "vuex";
 
 export default {
   name: "EditUserProfile",
@@ -71,13 +73,14 @@ export default {
     IonItem,
     IonLabel,
     IonIcon,
-    IonListHeader
+    IonListHeader,
+    IonList
   },
   data() {
     return {
       username: '',
       image: '',
-      biosInfo: '',
+      bios: '',
       following: [
         '0x213',
         '0x123'
@@ -85,13 +88,23 @@ export default {
     }
   },
   methods: {
-    updateProfile() {
+    async updateProfile() {
+      const biosInfo = {
+        username: this.username,
+        image: this.image,
+        bios: this.bios,
+        following: []
+      };
       //update
+      await this.setBiosInfo(biosInfo);
       this.$emit('closeEditProfile');
     },
     closeEdit() {
       this.$emit('closeEditProfile');
-    }
+    },
+    ...mapActions([
+      'setBiosInfo'
+    ]),
   }
 }
 </script>

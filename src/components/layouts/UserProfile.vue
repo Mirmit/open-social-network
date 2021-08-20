@@ -2,10 +2,11 @@
   <ion-row class="ion-justify-content-center">
       <ion-col size="3">
         <ion-avatar>
-          <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          <img :src="image">
         </ion-avatar>
-        <ion-label>{{ username }}</ion-label>
-        <ion-label>{{ bios }}</ion-label>
+        <h2>{{ username }}</h2>
+        <h3>Signer Adress</h3>
+        <p>{{ bios }}</p>
         <ion-button @click="setOpen(true)">Edit profile</ion-button>
         <ion-modal
             :is-open="isOpen"
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import {IonAvatar, IonLabel, IonCol, IonRow, IonButton, IonModal} from "@ionic/vue";
+import {IonAvatar, IonCol, IonRow, IonButton, IonModal} from "@ionic/vue";
 import EditUserProfile from "./EditUserProfile";
 
 export default {
@@ -27,7 +28,6 @@ export default {
   components: {
     EditUserProfile,
     IonAvatar,
-    IonLabel,
     IonCol,
     IonRow,
     IonButton,
@@ -35,7 +35,8 @@ export default {
   },
   props: {
     username: String,
-    bios: String
+    bios: String,
+    image: String
   },
   data() {
     return {

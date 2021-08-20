@@ -4,6 +4,7 @@
       <user-profile
           :username="biosInfo.username"
           :bios="biosInfo.bios"
+          :image="biosInfo.image"
       ></user-profile>
       <beat
           v-for="beat in myBeats"
