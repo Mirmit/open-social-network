@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import store from "./state/state";
 
 import { IonicVue } from '@ionic/vue';
 
@@ -26,7 +27,8 @@ import ActionButton from "./components/UI/ActionButton";
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
+  .use(store);
 
 app.component(
   'action-button', ActionButton

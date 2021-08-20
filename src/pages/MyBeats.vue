@@ -66,7 +66,8 @@ export default {
         beats.sort(function(a, b) {
           return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
         });
-        this.beatList = beats;
+        this.$store.commit('setMyBeats', beats);
+        this.beatList = this.$store.state.myBeats;
       }
     } catch(error) {
       console.log('custom error', error);
