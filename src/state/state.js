@@ -22,7 +22,6 @@ const store = createStore({
   },
   actions: {
     async getMyBeats(context) {
-      console.log('bee address', context.getters.beeAddress);
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
       try {
@@ -30,21 +29,20 @@ const store = createStore({
           context.getters.beatTopic,
           { signer: signer }
         );
+        context.commit('setMyBeats', beats);
+      } catch(error) {
+        console.log('custom error', error);
+      }
+    },
+    async getBiosInfo(context) {
+      const bee = new Bee(context.getters.beeAddress);
+      const signer = await context.dispatch('signer');
+      try {
         const biosInfo = await bee.getJsonFeed(
           context.getters.biosTopic,
           { signer: signer }
         );
-        console.log('beats', beats);
-        console.log('biosInfo', biosInfo);
         context.commit('setBiosInfo', biosInfo);
-        context.commit('setMyBeats', beats);
-        // if (beats.length > 0) {
-        //   console.log('bets not ordered', beats);
-        //   beats.sort(function(a, b) {
-        //     return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-        //   });
-        //   console.log('bets ordered', beats);
-        // }
       } catch(error) {
         console.log('custom error', error);
       }

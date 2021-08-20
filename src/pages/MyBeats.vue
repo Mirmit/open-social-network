@@ -48,11 +48,13 @@ export default {
   },
   methods: {
     ...mapActions([
-        'getMyBeats'
+        'getMyBeats',
+        'getBiosInfo'
     ]),
   },
   async ionViewDidEnter() {
     await this.getMyBeats();
+    await this.getBiosInfo();
   }
 }
 </script>
