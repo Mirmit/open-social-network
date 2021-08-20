@@ -19,15 +19,10 @@
 <script>
 import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput } from "@ionic/vue";
 import { Bee } from "@ethersphere/bee-js";
-import { Utils } from '@ethersphere/bee-js';
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "NewBeat",
-  inject: [
-    'beeAddress',
-    'beatTopic',
-    'postageBatchId'
-  ],
   emits: [ 'closeNewBeat' ],
   components: {
     IonCard,
@@ -45,18 +40,20 @@ export default {
       datetime: 'now'
     }
   },
+  computed: {
+    ...mapGetters([
+      'beeAddress',
+      'postageBatchId',
+      'beatTopic',
+      'myBeats'
+    ]),
+  },
   methods: {
     async postBeat() {
-      const bee = new Bee(this.beeAddress);
-      const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-      const postageBatchId = this.postageBatchId;
-      const oldBeats = await bee.getJsonFeed(
-          this.beatTopic,
-          { signer: signer }
-      );
-      const beats = oldBeats;
+      const beats = this.myBeats;
       const date = Date.now();
-      const newBeatId = Math.max.apply(Math, oldBeats.map(function(o) { return o.id; })) + 1;
+      const newBeatId = Math.max.apply(Math, beats.map(function(o) { return o.id; })) + 1;
+      console.log('beats aasa', beats);
       const newBeat = {
         id: newBeatId,
         title: this.title,
@@ -64,15 +61,24 @@ export default {
         datetime: date,
         content: this.content
       };
-      beats.push(newBeat)
+      this.addNewBeat(newBeat);
+      const bee = new Bee(this.beeAddress);
+      const signer = await this.signer();
       await bee.setJsonFeed(
-          postageBatchId,
+          this.postageBatchId,
           this.beatTopic,
-          beats,
+          this.myBeats,
           { signer: signer }
       );
       this.$emit('closeNewBeat');
-    }
+      console.log('myBeats from state', this.myBeats);
+      await this.getMyBeats();
+    },
+    ...mapActions([
+      'getMyBeats',
+      'signer',
+      'addNewBeat'
+    ]),
   }
 }
 </script>

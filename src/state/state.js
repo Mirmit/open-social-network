@@ -37,15 +37,22 @@ const store = createStore({
         console.log('beats', beats);
         console.log('biosInfo', biosInfo);
         context.commit('setBiosInfo', biosInfo);
-        if (beats.length > 0) {
-          beats.sort(function(a, b) {
-            return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-          });
-          context.commit('setMyBeats', beats);
-        }
+        context.commit('setMyBeats', beats);
+        // if (beats.length > 0) {
+        //   console.log('bets not ordered', beats);
+        //   beats.sort(function(a, b) {
+        //     return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
+        //   });
+        //   console.log('bets ordered', beats);
+        // }
       } catch(error) {
         console.log('custom error', error);
       }
+    },
+    addNewBeat(context, newBeat) {
+      const beats = context.getters.myBeats;
+      beats.unshift(newBeat);
+      context.commit('setMyBeats', beats);
     },
     async signer() {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
