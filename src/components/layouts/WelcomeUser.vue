@@ -58,12 +58,10 @@ export default {
         numberOfBeats: 0
       };
       await this.setBiosInfo(biosInfo);
-      await this.firstBeat();
       this.$emit('closeWelcomeUser');
     },
     ...mapActions([
-      'setBiosInfo',
-      'firstBeat'
+      'setBiosInfo'
     ]),
   }
 }

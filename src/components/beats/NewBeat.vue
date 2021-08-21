@@ -18,7 +18,6 @@
 
 <script>
 import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput } from "@ionic/vue";
-import { Bee } from "@ethersphere/bee-js";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
@@ -61,18 +60,10 @@ export default {
         datetime: date,
         content: this.content
       };
-      this.addNewBeat(newBeat);
-      const bee = new Bee(this.beeAddress);
-      const signer = await this.signer();
-      await bee.setJsonFeed(
-          this.postageBatchId,
-          this.beatTopic,
-          this.myBeats,
-          { signer: signer }
-      );
+      await this.addNewBeat(newBeat);
       this.$emit('closeNewBeat');
-      console.log('myBeats from state', this.myBeats);
-      await this.getMyBeats();
+      this.title = '';
+      this.content = '';
     },
     ...mapActions([
       'getMyBeats',

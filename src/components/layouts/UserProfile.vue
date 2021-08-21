@@ -7,6 +7,8 @@
         <h2>{{ username }}</h2>
         <h3>Signer Adress</h3>
         <p>{{ bios }}</p>
+        <h5>Number of beats: {{ numberOfBeats }}</h5>
+        <p>{{ bios }}</p>
         <ion-button @click="setOpen(true)">Edit profile</ion-button>
         <ion-modal
             :is-open="isOpen"
@@ -36,7 +38,8 @@ export default {
   props: {
     username: String,
     bios: String,
-    image: String
+    image: String,
+    numberOfBeats: Number
   },
   data() {
     return {

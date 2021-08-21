@@ -5,6 +5,7 @@
           :username="biosInfo.username"
           :bios="biosInfo.bios"
           :image="biosInfo.image"
+          :number-of-beats="biosInfo.numberOfBeats"
       ></user-profile>
       <beat
           v-for="beat in myBeats"
@@ -54,8 +55,8 @@ export default {
     ]),
   },
   async ionViewDidEnter() {
-    await this.getMyBeats(10);
     await this.getBiosInfo();
+    await this.getMyBeats(10);
   }
 }
 </script>

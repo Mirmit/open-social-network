@@ -28,26 +28,37 @@ const store = createStore({
     async getMyBeats(context, number) {
       const signer = await context.dispatch('signer');
       const numberOfBeats = context.getters.biosInfo.numberOfBeats;
-      //5   4    4
-      //5   6    5
       const totalBeats = Math.min(number, numberOfBeats);
-      let i = 0;
       let beats = [];
-      while (i < totalBeats) {
-        beats.push(await context.dispatch('getOneBeat', signer.address, i));
-        i++;
+      for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
+        console.log('inside the loooo', i);
+        const newBeat = await context.dispatch(
+          'getOneBeat',
+          {
+            ethAddress: signer.address,
+            id: i
+          }
+        );
+        beats.push(newBeat);
       }
       context.commit('setMyBeats', beats);
     },
-    async getOneBeat(context, ethAddress, id) {
+    async getOneBeat(context, { ethAddress, id }) {
+      console.log('parameters in function',  id);
       const bee = new Bee(context.getters.beeAddress);
+      const topic = context.getters.beatTopic + '/' + id;
       try {
-        return await bee.getJsonFeed(
-          context.getters.beatTopic + id,
+        console.log('topic in getOneBeat',topic);
+        const beat = await bee.getJsonFeed(
+          topic,
           { address: ethAddress }
         );
+        console.log('beat in getOneBeat', beat);
+        return beat;
       } catch (error) {
         console.log('custom error getOneBeat', error);
+        console.log('id in getOneBEat and more', id);
+        console.log('topic in getOneBEat and more', topic);
       }
     },
     async getBeats(context, ethAddress, number) {
@@ -73,29 +84,23 @@ const store = createStore({
     async addNewBeat(context, newBeat) {
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
+      let biosInfo = await context.dispatch('getBiosInfo');
       const beats = context.getters.myBeats;
-      const numberOfBeats = beats.length;try {
-      await bee.setJsonFeed(
+      const numberOfBeats = beats.length + 1;
+      try {
+        await bee.setJsonFeed(
           context.getters.postageBatchId,
-          context.getters.beatTopic + numberOfBeats,
+          context.getters.beatTopic + '/' + numberOfBeats,
           newBeat,
           { signer: signer }
         );
+        biosInfo.numberOfBeats = numberOfBeats;
+        beats.unshift(newBeat);
+        context.commit('setBeats', beats);
+        await context.dispatch('setBiosInfo', biosInfo);
       } catch(error) {
         console.log('custom error', error);
       }
-      beats.unshift(newBeat);
-      context.commit('setMyBeats', beats);
-    },
-    async firstBeat(context) {
-      const bee = new Bee(context.getters.beeAddress);
-      const signer = await context.dispatch('signer');
-      await bee.setJsonFeed(
-        context.getters.postageBatchId,
-        context.getters.beatTopic,
-        [],
-        { signer: signer }
-      );
     },
     async getBiosInfo(context) {
       const bee = new Bee(context.getters.beeAddress);
@@ -106,6 +111,8 @@ const store = createStore({
           { signer: signer }
         );
         context.commit('setBiosInfo', biosInfo);
+
+        return biosInfo;
       } catch(error) {
         console.log('custom error', error);
       }
