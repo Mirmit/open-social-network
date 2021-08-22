@@ -1,28 +1,25 @@
 <template>
-  <ion-row class="ion-justify-content-center">
-      <ion-col size="3">
-        <ion-avatar>
-          <img :src="image">
-        </ion-avatar>
+      <ion-avatar>
+        <img :src="image">
+      </ion-avatar>
+      <ion-label>
         <h2>{{ username }}</h2>
         <h3>Signer Adress</h3>
         <p>{{ bios }}</p>
-        <h5>Number of beats: {{ numberOfBeats }}</h5>
-        <p>{{ bios }}</p>
-        <ion-button @click="setOpen(true)">Edit profile</ion-button>
-        <ion-modal
-            :is-open="isOpen"
-            css-class="my-custom-class"
-            @didDismiss="setOpen(false)"
-        >
-          <edit-user-profile @close-edit-profile="setOpen(false)"></edit-user-profile>
-        </ion-modal>
-      </ion-col>
-  </ion-row>
+        <p>{{ numberOfBeats }} beats</p>
+      </ion-label>
+  <ion-button @click="setOpen(true)">Edit profile</ion-button>
+  <ion-modal
+      :is-open="isOpen"
+      css-class="my-custom-class"
+      @didDismiss="setOpen(false)"
+  >
+    <edit-user-profile @close-edit-profile="setOpen(false)"></edit-user-profile>
+  </ion-modal>
 </template>
 
 <script>
-import {IonAvatar, IonCol, IonRow, IonButton, IonModal} from "@ionic/vue";
+import {IonAvatar, IonLabel, IonButton, IonModal} from "@ionic/vue";
 import EditUserProfile from "./EditUserProfile";
 
 export default {
@@ -30,8 +27,7 @@ export default {
   components: {
     EditUserProfile,
     IonAvatar,
-    IonCol,
-    IonRow,
+    IonLabel,
     IonButton,
     IonModal
   },
@@ -51,17 +47,6 @@ export default {
     setOpen(value) {
       this.isOpen = value;
     }
-     // async presentModalEditProfile() {
-     //    const modal = await modalController
-     //    .create({
-     //      component: EditUserProfile,
-     //      // cssClass: 'my-custom-class',
-     //      // componentProps: {
-     //      //   title: 'New Title'
-     //      // },
-     //    })
-     //    return modal.present();
-     // }
   }
 }
 </script>

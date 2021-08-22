@@ -9,7 +9,7 @@ const store = createStore({
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: '18b343cbc3d0abf3232b6287a47754314c3264f9d6ffa89cc4294a8b7f85bfb7',
+      postageBatchId: '2c9a1e6e2ed74a77f441e38fe718e87b4d8ec6786aaf4b2b4c9bfb6d522f2de3',
       biosInfo: {}
     }
   },
@@ -61,25 +61,27 @@ const store = createStore({
         console.log('topic in getOneBEat and more', topic);
       }
     },
-    async getBeats(context, ethAddress, number) {
+    async getBeats(context, {ethAddress, number}) {
       const bee = new Bee(context.getters.beeAddress);
-      console.log(ethAddress, number, 'errorrsasdasdsaasdsasda');
-      try {
-        const biosInfo = await bee.getJsonFeed(
-          context.getters.biosTopic,
-          { address: ethAddress }
+      const biosInfo = await bee.getJsonFeed(
+        context.getters.biosTopic,
+        { address: ethAddress }
+      );
+      const numberOfBeats = biosInfo.numberOfBeats;
+      const totalBeats = Math.min(number, numberOfBeats);
+      let beats = [];
+      for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
+        console.log('inside the loooo', i);
+        const newBeat = await context.dispatch(
+          'getOneBeat',
+          {
+            ethAddress: ethAddress,
+            id: i
+          }
         );
-        const totalBeats = Math.min(number, biosInfo.numberOfBeats);
-        let i = 0;
-        let beats = [];
-        while (i < totalBeats) {
-          beats.push(await context.dispatch('getOneBeat', ethAddress, i));
-          i++;
-        }
-        context.commit('setBeats', beats);
-      } catch(error) {
-        console.log('custom error getBeats', error);
+        beats.push(newBeat);
       }
+      context.commit('setBeats', beats);
     },
     async addNewBeat(context, newBeat) {
       const bee = new Bee(context.getters.beeAddress);
@@ -120,6 +122,8 @@ const store = createStore({
     async setBiosInfo(context, biosInfo) {
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
+      console.log('signer',signer);
+      console.log('postageBatchId',context.getters.postageBatchId);
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,

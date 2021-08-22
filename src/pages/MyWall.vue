@@ -75,7 +75,7 @@ export default {
   },
   async ionViewDidEnter() {
     await this.getBiosInfo();
-    await this.getBeats(this.biosInfo.following[0], 10);
+    await this.getBeats({ethAddress: this.biosInfo.following[0], number: 10});
     this.beatList = this.beats;
   }
   // async ionViewDidEnter() {
