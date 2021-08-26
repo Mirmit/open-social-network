@@ -4,14 +4,38 @@
   <ion-content v-if="!logged">
     This is the first time you visit Open Social Network. You must initialize your account (just setting an username) in order to hear the network beating.
 
+    First of all, lets connect to your bee node. If you don't have one available, start bzzzing with th following link:
+    <a href="https://docs.ethswarm.org/docs/">Run your bee</a>
+    If you want to learn more about Swarm and Bee:
+    <a href="https://www.ethswarm.org">Learn more</a>
+    <ion-item>
+      <ion-label position="stacked">Bee node url (default http://localhost:1633):</ion-label>
+      <ion-input
+          placeholder="username"
+          v-model="beeAddressToChange"
+          value="http://localhost:1633"
+      ></ion-input>
+    </ion-item>
+    <ion-item v-if="!beeNodeConnected">
+      <action-button  @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
+      <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
+    </ion-item>
+    <ion-item v-else>
+      Connection successful
+    </ion-item>
     <ion-content v-if="postageBatchId === ''">
       Before starting, you should buy some stamps. Click here to buy your first batch
       <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
-      <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+      <ion-item v-else-if="buyingBatch">
+        <ion-spinner name="dots"></ion-spinner>
+        Buying some stamps
+      </ion-item>
     </ion-content>
     <ion-content v-else>
       Fantastic, you have already bought some stamps. Your postage stamp batch id is:
-      {{ postageBatchId }}
+      <ion-item>
+        {{ postageBatchId }}
+      </ion-item>
     </ion-content>
     <ion-item>
       <ion-label position="stacked">Username:</ion-label>
@@ -30,6 +54,21 @@
     <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
   </ion-content>
   <ion-content v-else-if="logged">
+    <ion-item>
+    <ion-label position="stacked">Bee node url (default http://localhost:1633):</ion-label>
+    <ion-input
+        placeholder="username"
+        v-model="beeAddressToChange"
+        value="http://localhost:1633"
+    ></ion-input>
+  </ion-item>
+    <ion-item v-if="!beeNodeConnected">
+      <action-button  @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
+      <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
+    </ion-item>
+    <ion-item v-else>
+      Connection successful
+    </ion-item>
     <ion-content v-if="postageBatchId === ''">
       You should buy some post stamps. Click here to buy your first batch
       <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
@@ -68,7 +107,8 @@ export default {
     return {
       'username': '',
       'bios': '',
-      'buyingBatch' : false
+      'buyingBatch' : false,
+      'beeAddressToChange' : this.beeAddress
     }
   },
   methods: {
@@ -93,10 +133,15 @@ export default {
     close() {
       this.$emit('closeWelcomeUser');
     },
+    saveBeeAddress() {
+      this.setBeeAddress(this.beeAddressToChange);
+    },
     ...mapActions([
       'setBiosInfo',
       'setPostageBatchId',
-      'signer'
+      'signer',
+      'setBeeAddress',
+      'checkBeeNodeConnected'
     ]),
   },
   computed: {
@@ -106,7 +151,8 @@ export default {
       'biosTopic',
       'loading',
       'logged',
-      'postageBatchId'
+      'postageBatchId',
+      'beeNodeConnected'
     ]),
   }
 }

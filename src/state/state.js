@@ -12,7 +12,8 @@ const store = createStore({
       postageBatchId: '',
       biosInfo: {},
       loading: false,
-      logged: false
+      logged: false,
+      beeNodeConnected: false
     }
   },
   mutations: {
@@ -33,6 +34,12 @@ const store = createStore({
     },
     setPostageBatchId(state, postageBatchId) {
       state.postageBatchId = postageBatchId;
+    },
+    setBeeAddress(state, beeAddress) {
+      state.beeAddress = beeAddress;
+    },
+    setBeeNodeConnected(state, beeNodeConnected) {
+      state.beeNodeConnected = beeNodeConnected;
     }
   },
   actions: {
@@ -163,6 +170,20 @@ const store = createStore({
     },
     setPostageBatchId(context, postageBatchId) {
       context.commit('setPostageBatchId', postageBatchId);
+    },
+    setBeeAddress(context, beeAddress) {
+      context.commit('setBeeAddress', beeAddress);
+    },
+    async checkBeeNodeConnected(context) {
+      const bee = new Bee(context.getters.beeAddress);
+      try {
+        await bee.checkConnection();
+        context.commit('setBeeNodeConnected', true);
+      } catch(error) {
+        console.log('Error checking connection to bee node');
+        alert('Cannot connect to bee node');
+        context.commit('setBeeNodeConnected', false);
+      }
     }
   },
   getters: {
@@ -192,6 +213,9 @@ const store = createStore({
     },
     logged(state) {
       return state.logged;
+    },
+    beeNodeConnected(state) {
+      return state.beeNodeConnected;
     }
   }
 });
