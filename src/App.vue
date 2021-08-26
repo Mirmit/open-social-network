@@ -19,10 +19,9 @@
 </template>
 
 <script>
-import {IonApp, IonRouterOutlet, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {IonApp, IonRouterOutlet, IonHeader, IonContent, IonModal } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import TheHeader from "./components/layouts/TheHeader";
-import { Bee, Utils } from '@ethersphere/bee-js';
 import NewPostButton from "./components/UI/NewPostButton";
 import NewBeat from "./components/beats/NewBeat";
 import WelcomeUser from "./components/layouts/WelcomeUser";
@@ -60,18 +59,9 @@ export default defineComponent({
     initializeUser() {
       //make first empty beats and basic user bios if userIsStill not in swarm
     },
-    async signer() {
-      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-    },
     async checkIfUserHasRegistered() {
-      const bee = new Bee(this.beeAddress);
-      const signer = Utils.Eth.makeHexEthAddress((await this.signer()).address);
       try {
-        const biosInfo = await bee.getJsonFeed(
-            this.biosTopic,
-            { address: signer }
-        );
-        await this.setBiosInfo(biosInfo);
+        await this.getBiosInfo();
 
         return true;
       } catch(error) {
@@ -85,24 +75,25 @@ export default defineComponent({
     },
     ...mapActions([
       'setBiosInfo',
-      'getBiosInfo'
+      'getBiosInfo',
+      'setLoading',
+      'signer'
     ]),
   },
   async created() {
+    this.setLoading(true);
     const userHasRegistered = await this.checkIfUserHasRegistered();
-    console.log('userHasRegistered', userHasRegistered);
-    const signer = Utils.Eth.makeHexEthAddress((await this.signer()).address);
-    console.log('signer address', signer);
     //check if user has already registered on the network"
     if (userHasRegistered) {
       this.setModalOpen(false);
     } else {
       this.setModalOpen(true);
     }
+    this.setLoading(false);
   },
   computed: {
     shadow() {
-      if (this.signer === '' || !this.newBeatHidden) {
+      if (this.loading || !this.newBeatHidden) {
         return {
           opacity: 0.6
         }
@@ -116,6 +107,7 @@ export default defineComponent({
       'beeAddress',
       'beatTopic',
       'biosTopic',
+      'loading'
     ]),
   }
 });

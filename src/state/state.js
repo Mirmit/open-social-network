@@ -10,7 +10,8 @@ const store = createStore({
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
       postageBatchId: '2c9a1e6e2ed74a77f441e38fe718e87b4d8ec6786aaf4b2b4c9bfb6d522f2de3',
-      biosInfo: {}
+      biosInfo: {},
+      loading: false
     }
   },
   mutations: {
@@ -22,6 +23,9 @@ const store = createStore({
     },
     setBiosInfo(state, biosInfo) {
       state.biosInfo = biosInfo;
+    },
+    setLoading(state, loading) {
+      state.loading = loading;
     }
   },
   actions: {
@@ -140,6 +144,9 @@ const store = createStore({
     async signer() {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
     },
+    setLoading(context, loading) {
+      context.commit('setLoading', loading);
+    }
   },
   getters: {
     myBeats(state) {
@@ -163,6 +170,9 @@ const store = createStore({
     postageBatchId(state) {
       return state.postageBatchId;
     },
+    loading(state) {
+      return state.loading;
+    }
   }
 });
 
