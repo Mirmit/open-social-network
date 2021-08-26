@@ -45,6 +45,7 @@
         </ion-list-header>
         <ion-item v-for="followed in following" v-bind:key="followed">
           <ion-label>{{ followed }}</ion-label>
+          <ion-icon name="close" @click="stopFollowing(followed)"></ion-icon>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -102,7 +103,9 @@ export default {
   methods: {
     async updateProfile() {
       const newFollowing = this.following;
-      newFollowing.push(this.newFollower);
+      if (this.newFollower) {
+        newFollowing.push(this.newFollower);
+      }
       const biosInfo = {
         username: this.username,
         image: this.image,
@@ -114,6 +117,17 @@ export default {
       await this.setBiosInfo(biosInfo);
       this.$emit('closeEditProfile');
     },
+    stopFollowing(followed) {
+      console.log('enter');
+      console.log('first follwing', followed, this.following);
+      const newFollowing = this.following;
+      this.following = newFollowing.filter(followedInArray => {
+        console.log(followedInArray, followed, followedInArray !== followed);
+        return followedInArray != followed;
+      });
+      console.log('last follwing', followed, newFollowing);
+    }
+    ,
     closeEdit() {
       this.$emit('closeEditProfile');
     },
