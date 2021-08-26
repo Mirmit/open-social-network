@@ -8,6 +8,7 @@
           :author="beat.author"
           :datetime="beat.datetime"
           :content="beat.content"
+          :userImage="beat.userImage"
       ></beat>
     </ion-content>
   </ion-page>

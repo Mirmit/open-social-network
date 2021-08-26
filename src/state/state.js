@@ -76,7 +76,7 @@ const store = createStore({
       } catch (error) {
         console.log('custom error getOneBeat', error);
         console.log('id in getOneBEat and more', id);
-        console.log('topic in getOneBEat and more', topic);
+        console.log('topic in getOneBeat and more', topic);
       }
     },
     async getBeats(context, {ethAddress, number}) {
@@ -99,6 +99,8 @@ const store = createStore({
             id: i
           }
         );
+        newBeat.author = biosInfo.username;
+        newBeat.userImage = biosInfo.image;
         beats.push(newBeat);
       }
       context.commit('setBeats', beats);

@@ -3,6 +3,9 @@
     <ion-card-header>
       <ion-card-title>{{ title }}</ion-card-title>
       <ion-card-subtitle color="primary">{{ author }} - {{ dateFormatted }}</ion-card-subtitle>
+      <ion-avatar v-if="userImage">
+        <img :src="userImage">
+      </ion-avatar>
     </ion-card-header>
 
     <ion-card-content>
@@ -12,7 +15,7 @@
 </template>
 
 <script>
-import { IonCardHeader ,IonCardTitle, IonCardSubtitle, IonCardContent, IonCard } from "@ionic/vue";
+import { IonCardHeader ,IonCardTitle, IonCardSubtitle, IonCardContent, IonCard, IonAvatar } from "@ionic/vue";
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -23,13 +26,15 @@ export default {
     IonCardTitle,
     IonCardSubtitle,
     IonCardContent,
-    IonCard
+    IonCard,
+    IonAvatar
   },
   props: {
     title: String,
     author: String,
     datetime: [ Number, String],
-    content: String
+    content: String,
+    userImage: String
   },
   computed: {
     dateFormatted: function () {
