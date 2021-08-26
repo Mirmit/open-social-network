@@ -16,10 +16,16 @@
       </ion-modal>
     </ion-content>
   </ion-app>
+  <ion-loading
+    :is-open="loading"
+    cssClass="my-custom-class"
+    message="Please wait..."
+>
+</ion-loading>
 </template>
 
 <script>
-import {IonApp, IonRouterOutlet, IonHeader, IonContent, IonModal } from '@ionic/vue';
+import {IonApp, IonRouterOutlet, IonHeader, IonContent, IonModal, IonLoading } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import TheHeader from "./components/layouts/TheHeader";
 import NewPostButton from "./components/UI/NewPostButton";
@@ -39,7 +45,8 @@ export default defineComponent({
     IonHeader,
     IonContent,
     NewPostButton,
-    IonModal
+    IonModal,
+    IonLoading
   },
   provide: {
     beeAddress: 'http://localhost:1633',
