@@ -26,7 +26,7 @@ import { Bee, Utils } from '@ethersphere/bee-js';
 import NewPostButton from "./components/UI/NewPostButton";
 import NewBeat from "./components/beats/NewBeat";
 import WelcomeUser from "./components/layouts/WelcomeUser";
-import { mapGetters } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default defineComponent({
   name: 'App',
@@ -64,27 +64,40 @@ export default defineComponent({
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
     },
     async checkIfUserHasRegistered() {
-      let http = new XMLHttpRequest();
       const bee = new Bee(this.beeAddress);
       const signer = Utils.Eth.makeHexEthAddress((await this.signer()).address);
-      const url = this.beeAddress + '/feeds/' + signer + '/' + bee.makeFeedTopic(this.biosTopic);
-      await http.open('GET' ,url ,true);
-      http.send();
-      return http.status === 404;
+      try {
+        const biosInfo = await bee.getJsonFeed(
+            this.biosTopic,
+            { address: signer }
+        );
+        await this.setBiosInfo(biosInfo);
+
+        return true;
+      } catch(error) {
+        console.log('custom error in retriveing bios info in checkIfUSerHasRegistered', error);
+
+        return false;
+      }
     },
     setModalOpen(value) {
       this.isModalOpen = value;
-    }
+    },
+    ...mapActions([
+      'setBiosInfo',
+      'getBiosInfo'
+    ]),
   },
   async created() {
-    // const signer = await this.signer();
-    // const bee = new Bee(this.beeAddress);
     const userHasRegistered = await this.checkIfUserHasRegistered();
-    //check if user has already registered on the network. If not, make first beat "[]" and profile info "{ username: "username}"
+    console.log('userHasRegistered', userHasRegistered);
+    const signer = Utils.Eth.makeHexEthAddress((await this.signer()).address);
+    console.log('signer address', signer);
+    //check if user has already registered on the network"
     if (userHasRegistered) {
-      this.setModalOpen(true);
-    } else {
       this.setModalOpen(false);
+    } else {
+      this.setModalOpen(true);
     }
   },
   computed: {
