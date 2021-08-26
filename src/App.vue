@@ -26,6 +26,7 @@ import NewPostButton from "./components/UI/NewPostButton";
 import NewBeat from "./components/beats/NewBeat";
 import WelcomeUser from "./components/layouts/WelcomeUser";
 import {mapActions, mapGetters} from "vuex";
+import {Bee} from "@ethersphere/bee-js";
 
 export default defineComponent({
   name: 'App',
@@ -56,12 +57,14 @@ export default defineComponent({
     openCloseNewBeat() {
       this.newBeatHidden = !this.newBeatHidden;
     },
-    initializeUser() {
-      //make first empty beats and basic user bios if userIsStill not in swarm
-    },
     async checkIfUserHasRegistered() {
       try {
-        await this.getBiosInfo();
+        const bee = new Bee(this.beeAddress);
+        const signer = await this.signer();
+        await bee.getJsonFeed(
+           this.biosTopic,
+            { signer: signer }
+        );
 
         return true;
       } catch(error) {
@@ -77,7 +80,8 @@ export default defineComponent({
       'setBiosInfo',
       'getBiosInfo',
       'setLoading',
-      'signer'
+      'signer',
+      'setLogged'
     ]),
   },
   async created() {
@@ -86,6 +90,7 @@ export default defineComponent({
     //check if user has already registered on the network"
     if (userHasRegistered) {
       this.setModalOpen(false);
+      this.setLogged(true);
     } else {
       this.setModalOpen(true);
     }
@@ -107,7 +112,8 @@ export default defineComponent({
       'beeAddress',
       'beatTopic',
       'biosTopic',
-      'loading'
+      'loading',
+      'logged'
     ]),
   }
 });

@@ -11,7 +11,8 @@ const store = createStore({
       biosTopic: 'opensocialnetwork.eth/beater',
       postageBatchId: '2c9a1e6e2ed74a77f441e38fe718e87b4d8ec6786aaf4b2b4c9bfb6d522f2de3',
       biosInfo: {},
-      loading: false
+      loading: false,
+      logged: false
     }
   },
   mutations: {
@@ -26,6 +27,9 @@ const store = createStore({
     },
     setLoading(state, loading) {
       state.loading = loading;
+    },
+    setLogged(state, logged) {
+      state.logged = logged;
     }
   },
   actions: {
@@ -126,8 +130,6 @@ const store = createStore({
     async setBiosInfo(context, biosInfo) {
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
-      console.log('signer',signer);
-      console.log('postageBatchId',context.getters.postageBatchId);
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
@@ -146,6 +148,9 @@ const store = createStore({
     },
     setLoading(context, loading) {
       context.commit('setLoading', loading);
+    },
+    setLogged(context, logged) {
+      context.commit('setLogged', logged);
     }
   },
   getters: {
@@ -172,6 +177,9 @@ const store = createStore({
     },
     loading(state) {
       return state.loading;
+    },
+    logged(state) {
+      return state.logged;
     }
   }
 });

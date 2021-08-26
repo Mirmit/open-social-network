@@ -61,7 +61,8 @@ export default {
   computed: {
     ...mapGetters([
       'beats',
-      'biosInfo'
+      'biosInfo',
+      'logged'
     ]),
   },
   methods: {
@@ -74,9 +75,11 @@ export default {
     ]),
   },
   async ionViewDidEnter() {
-    await this.getBiosInfo();
-    await this.getBeats({ethAddress: this.biosInfo.following[0], number: 10});
-    this.beatList = this.beats;
+    if (this.logged) {
+      await this.getBiosInfo();
+      await this.getBeats({ethAddress: this.biosInfo.following[0], number: 10});
+      this.beatList = this.beats;
+    }
   }
   // async ionViewDidEnter() {
   //   const bee = new Bee(this.beeAddress);
