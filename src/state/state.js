@@ -9,7 +9,7 @@ const store = createStore({
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: '',
+      postageBatchId: '15c05c2e91bca9dc43dec2b109f88dc8c592e288ac1ec47b6dc4ad392239ab97',
       biosInfo: {},
       loading: false,
       logged: false,
@@ -81,10 +81,12 @@ const store = createStore({
     },
     async getBeats(context, {ethAddress, number}) {
       const bee = new Bee(context.getters.beeAddress);
+      console.log('inside the funciton',  ethAddress, number);
       const biosInfo = await bee.getJsonFeed(
         context.getters.biosTopic,
         { address: ethAddress }
       );
+      console.log('other user bios info', biosInfo);
       const numberOfBeats = biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = [];

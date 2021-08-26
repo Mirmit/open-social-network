@@ -79,8 +79,14 @@ export default {
     if (this.logged) {
       this.setLoading(true);
       await this.getBiosInfo();
-      await this.getBeats({ethAddress: this.biosInfo.following[0], number: 10});
-      this.beatList = this.beats;
+      console.log('array of following', this.biosInfo.following, this.biosInfo.following.length);
+      const numberOfFollowing = this.biosInfo.following.length;
+      this.beatList= [];
+      for(let i = 0; i < numberOfFollowing; i++) {
+        console.log('followed inside for', this.biosInfo.following[i]);
+        await this.getBeats({ethAddress: this.biosInfo.following[i], number: 10});
+        this.beatList = this.beatList.concat(this.beats);
+      }
       this.setLoading(false);
     }
   }
