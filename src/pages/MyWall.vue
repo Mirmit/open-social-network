@@ -71,14 +71,17 @@ export default {
     },
     ...mapActions([
       'getBeats',
-      'getBiosInfo'
+      'getBiosInfo',
+      'setLoading'
     ]),
   },
   async ionViewDidEnter() {
     if (this.logged) {
+      this.setLoading(true);
       await this.getBiosInfo();
       await this.getBeats({ethAddress: this.biosInfo.following[0], number: 10});
       this.beatList = this.beats;
+      this.setLoading(false);
     }
   }
   // async ionViewDidEnter() {

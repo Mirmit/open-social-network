@@ -3,10 +3,15 @@
   <ion-content v-if="!logged">
     This is the firt time you visit Open Social Network. You must initialize your account (just setting an username) in order to hear the network beating.
 
-
-    Before starting, you should buy some stamps. Click here to buy your first batch
-    <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
-    <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+    <ion-content v-if="postageBatchId === ''">
+      Before starting, you should buy some stamps. Click here to buy your first batch
+      <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
+      <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+    </ion-content>
+    <ion-content v-else>
+      Fantastic, you have already bought some stamps. Your postage stamp batch id is:
+      {{ postageBatchId }}
+    </ion-content>
     <ion-item>
       <ion-label position="stacked">Username:</ion-label>
       <ion-input
@@ -24,10 +29,16 @@
     <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
   </ion-content>
   <ion-content v-else>
-    You should buy some post stamps. Click here to buy your first batch
-    <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
-    <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
-    <action-button @custom-click="close" button-name="Close"></action-button>
+    <ion-content v-if="postageBatchId === ''">
+      You should buy some post stamps. Click here to buy your first batch
+      <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
+      <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+    </ion-content>
+    <ion-content v-else>
+      Fantastic, you have already bought some stamps. Your postage stamp batch id is:
+      {{ postageBatchId }}
+      <action-button @custom-click="close" button-name="Close"></action-button>
+    </ion-content>
   </ion-content>
 </template>
 
