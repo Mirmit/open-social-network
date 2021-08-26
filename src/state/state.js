@@ -111,6 +111,7 @@ const store = createStore({
       let biosInfo = await context.dispatch('getBiosInfo');
       const beats = context.getters.myBeats;
       const numberOfBeats = beats.length + 1;
+      //TODO set author of newbeat to username
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,

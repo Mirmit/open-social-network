@@ -88,6 +88,7 @@ export default {
         await this.getBeats({ethAddress: this.biosInfo.following[i], number: 10});
         this.beatList = this.beatList.concat(this.beats);
       }
+      this.beatList.sort((a,b) => (a.datetime < b.datetime) ? 1 : ((b.datetime < a.datetime) ? -1 : 0))
       this.setLoading(false);
     }
   }
