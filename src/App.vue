@@ -68,13 +68,17 @@ export default defineComponent({
       try {
         const bee = new Bee(this.beeAddress);
         const signer = await this.signer();
-        await bee.getJsonFeed(
-           this.biosTopic,
-            { signer: signer }
-        );
-        this.setLogged(true);
+        if (signer) {
+          await bee.getJsonFeed(
+              this.biosTopic,
+              { signer: signer }
+          );
+          this.setLogged(true);
 
-        return true;
+          return true;
+        } else {
+          alert('You don\'t have Metamask or another ethereum wallet EIP-1193 compatible provider');
+        }
       } catch(error) {
         console.log('custom error in retriveing bios info in checkIfUSerHasRegistered', error);
 

@@ -1,7 +1,8 @@
 <template>
-  <ion-title>You are new</ion-title>
+  <ion-title v-if="!logged">You are new</ion-title>
+  <ion-title v-else-if="logged">Welcome back</ion-title>
   <ion-content v-if="!logged">
-    This is the firt time you visit Open Social Network. You must initialize your account (just setting an username) in order to hear the network beating.
+    This is the first time you visit Open Social Network. You must initialize your account (just setting an username) in order to hear the network beating.
 
     <ion-content v-if="postageBatchId === ''">
       Before starting, you should buy some stamps. Click here to buy your first batch
@@ -28,7 +29,7 @@
     </ion-item>
     <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
   </ion-content>
-  <ion-content v-else>
+  <ion-content v-else-if="logged">
     <ion-content v-if="postageBatchId === ''">
       You should buy some post stamps. Click here to buy your first batch
       <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
@@ -39,6 +40,9 @@
       {{ postageBatchId }}
       <action-button @custom-click="close" button-name="Close"></action-button>
     </ion-content>
+  </ion-content>
+  <ion-content v-else>
+    You don't have Metamask or another ethereum wallet EIP-1193 compatible provider
   </ion-content>
 </template>
 
@@ -91,7 +95,8 @@ export default {
     },
     ...mapActions([
       'setBiosInfo',
-      'setPostageBatchId'
+      'setPostageBatchId',
+      'signer'
     ]),
   },
   computed: {

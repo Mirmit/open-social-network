@@ -147,7 +147,13 @@ const store = createStore({
     }
     ,
     async signer() {
-      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+      if (window.ethereum) {
+
+        return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+      } else {
+
+        return false;
+      }
     },
     setLoading(context, loading) {
       context.commit('setLoading', loading);
