@@ -65,6 +65,7 @@ export default defineComponent({
            this.biosTopic,
             { signer: signer }
         );
+        this.setLogged(true);
 
         return true;
       } catch(error) {
@@ -81,20 +82,24 @@ export default defineComponent({
       'getBiosInfo',
       'setLoading',
       'signer',
-      'setLogged'
+      'setLogged',
+      'setPostageBatchId'
     ]),
+    async checkUserStatus() {
+      this.setLoading(true);
+      const userHasRegistered = await this.checkIfUserHasRegistered();
+      const userHasPostageStamps = this.postageBatchId !== '';
+      //check if user has already registered on the network"
+      if (userHasRegistered && userHasPostageStamps) {
+        this.setModalOpen(false);
+      } else {
+        this.setModalOpen(true);
+      }
+      this.setLoading(false);
+    }
   },
   async created() {
-    this.setLoading(true);
-    const userHasRegistered = await this.checkIfUserHasRegistered();
-    //check if user has already registered on the network"
-    if (userHasRegistered) {
-      this.setModalOpen(false);
-      this.setLogged(true);
-    } else {
-      this.setModalOpen(true);
-    }
-    this.setLoading(false);
+    await this.checkUserStatus();
   },
   computed: {
     shadow() {
@@ -113,7 +118,8 @@ export default defineComponent({
       'beatTopic',
       'biosTopic',
       'loading',
-      'logged'
+      'logged',
+      'postageBatchId'
     ]),
   }
 });

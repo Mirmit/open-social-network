@@ -9,7 +9,7 @@ const store = createStore({
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: '2c9a1e6e2ed74a77f441e38fe718e87b4d8ec6786aaf4b2b4c9bfb6d522f2de3',
+      postageBatchId: '',
       biosInfo: {},
       loading: false,
       logged: false
@@ -30,6 +30,9 @@ const store = createStore({
     },
     setLogged(state, logged) {
       state.logged = logged;
+    },
+    setPostageBatchId(state, postageBatchId) {
+      state.postageBatchId = postageBatchId;
     }
   },
   actions: {
@@ -151,6 +154,9 @@ const store = createStore({
     },
     setLogged(context, logged) {
       context.commit('setLogged', logged);
+    },
+    setPostageBatchId(context, postageBatchId) {
+      context.commit('setPostageBatchId', postageBatchId);
     }
   },
   getters: {
