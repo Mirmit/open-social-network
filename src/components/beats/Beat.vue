@@ -1,13 +1,14 @@
 <template>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>{{ title }}</ion-card-title>
-      <ion-card-subtitle color="primary">{{ author }} - {{ dateFormatted }}</ion-card-subtitle>
-      <ion-avatar v-if="userImage">
-        <img :src="userImage">
-      </ion-avatar>
+      <ion-item>
+        <ion-avatar v-if="userImage" slot="start">
+          <img :src="userImage">
+        </ion-avatar>
+        <ion-card-title>{{ title }}</ion-card-title>
+      </ion-item>
+        <ion-card-subtitle color="primary">{{ author }} - {{ dateFormatted }}</ion-card-subtitle>
     </ion-card-header>
-
     <ion-card-content>
       {{ content }}
     </ion-card-content>
@@ -15,7 +16,13 @@
 </template>
 
 <script>
-import { IonCardHeader ,IonCardTitle, IonCardSubtitle, IonCardContent, IonCard, IonAvatar } from "@ionic/vue";
+import {
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonCard, IonAvatar
+} from "@ionic/vue";
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 

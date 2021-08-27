@@ -2,17 +2,17 @@
   <ion-card class="card-style">
     <ion-card-header>
       <ion-card-title>
-        <ion-input placeholder="Title" v-model="title"
-        ></ion-input>
+        <ion-input placeholder="Title" v-model="title"></ion-input>
       </ion-card-title>
       <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>
     </ion-card-header>
-
     <ion-card-content>
       <ion-input placeholder="Write your beat" v-model="content"
       ></ion-input>
     </ion-card-content>
-    <action-button @custom-click="postBeat" button-name="Beat"></action-button>
+    <div class="ion-text-center">
+      <action-button @custom-click="postBeat" button-name="Beat"></action-button>
+    </div>
   </ion-card>
 </template>
 
@@ -78,5 +78,10 @@ export default {
   .card-style {
     z-index: 5;
     opacity: 1;
+    padding-bottom: 20px;
+  }
+
+  ion-card-subtitle {
+    padding-left:7px
   }
 </style>

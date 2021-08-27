@@ -1,7 +1,7 @@
 <template>
   <ion-header :translucent="true">
     <ion-toolbar :color="'primary'">
-      <ion-title>Open Social Network</ion-title>
+      <ion-title><h1>Open Social Network</h1></ion-title>
     </ion-toolbar>
     <the-tabs></the-tabs>
   </ion-header>
@@ -25,5 +25,14 @@ export default {
 <style scoped>
 ion-title {
   color: white
+}
+h1 {
+  font-size: 20px
+}
+h2 {
+  font-size: 20px
+}
+h3 {
+  font-size: 16px
 }
 </style>

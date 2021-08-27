@@ -33,6 +33,8 @@ export default {
   },
   data() {
     return {
+      beatList: []
+/*
       beatList: [
         {
           id: 3,
@@ -57,6 +59,7 @@ export default {
         },
 
       ]
+*/
     }
   },
   computed: {
