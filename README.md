@@ -29,8 +29,9 @@ Welcome to the new social network. The open one.
 
 ### - What is Swarm?
 
-It is a system of peer-to-peer networked nodes that create a
-decentralised storage and communication service.
+>It is a system of peer-to-peer networked nodes that create a
+decentralised storage and communication service. To know more about it, visit
+> [Ethereum Swarm](https://www.ethswarm.org)
 
 We, the contributors to this repo, love the idea, but do not own it. We
 encourage anyone who is interested in this idea to contribute to this
