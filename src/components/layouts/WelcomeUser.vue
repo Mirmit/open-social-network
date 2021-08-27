@@ -150,7 +150,16 @@
 
 <script>
 import ActionButton from "../UI/ActionButton";
-import { IonInput, IonItem, IonLabel, IonText, IonContent, IonSpinner,IonRow, IonCol } from "@ionic/vue";
+import {
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonText,
+  IonContent,
+  IonSpinner,
+  IonRow,
+  IonCol
+} from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 import {Bee} from "@ethersphere/bee-js";
 

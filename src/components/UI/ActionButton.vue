@@ -18,5 +18,7 @@ export default {
 </script>
 
 <style scoped>
-
+ion-button {
+  font-color: white
+}
 </style>
