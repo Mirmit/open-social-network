@@ -9,7 +9,7 @@ const store = createStore({
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: '',
+      postageBatchId: 'cb6bc0c81c817fe25da3d379713eabf564d0a539a7fd743f5a646e25437e0f74',
       biosInfo: {},
       loading: false,
       logged: false,
