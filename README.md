@@ -80,5 +80,11 @@ And to start the server, run:
 ```bash
 npm run serve
 ```
-The app will be running on the address shown at the end of the command, probably `http://localhost:8080`. If you want to
-stop the server, press `Ctrl` + `C`.
+The app will be running on the address shown at the end of the command, probably
+`http://localhost:8080`. If you want to stop the server, press `Ctrl` + `C`.
+
+
+## Contribute
+
+If you would like to contribute to this project, you can open an issue with
+your proposal, or join a discussion in an open one.
