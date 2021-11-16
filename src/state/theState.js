@@ -167,8 +167,10 @@ const store = createStore({
     async getBiosInfo(context, ethAddress = null) {
       const bee = new Bee(context.getters.beeAddress);
       let signer = null;
+      let myBios = false;
       if (!ethAddress) {
         ethAddress = context.getters.myEthAddress;
+        myBios = true;
       }
       const ethAddressOrSigner = ethAddress ? { address: ethAddress } : { signer: signer };
       console.log('ethAddressOrSigner:', ethAddressOrSigner);
@@ -185,9 +187,12 @@ const store = createStore({
             context.getters.biosTopic,
             ethAddressOrSigner
           );
-          context.commit('setBiosInfo', biosInfo);
-          othersBiosInfo[ethAddress] = biosInfo;
-          context.commit('setOthersBiosInfo', othersBiosInfo);
+          if (myBios) {
+            context.commit('setBiosInfo', biosInfo);
+          } else {
+            othersBiosInfo[ethAddress] = biosInfo;
+            context.commit('setOthersBiosInfo', othersBiosInfo);
+          }
         } catch (error) {
           console.log('custom error', error);
         }
