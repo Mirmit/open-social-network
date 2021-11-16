@@ -11,11 +11,47 @@ const store = createStore({
       beeAddress: 'http://localhost:1633',
       beatTopic: 'opensocialnetwork.eth/beats',
       biosTopic: 'opensocialnetwork.eth/beater',
-      postageBatchId: 'cb6bc0c81c817fe25da3d379713eabf564d0a539a7fd743f5a646e25437e0f74',
+      postageBatchId: '',
       biosInfo: {},
+      othersBiosInfo: {},
       loading: false,
       logged: false,
       beeNodeConnected: false
+    }
+  },
+  getters: {
+    myBeats(state) {
+      return state.myBeats;
+    },
+    beats(state) {
+      return state.beats;
+    },
+    biosInfo(state) {
+      return state.biosInfo;
+    },
+    othersBiosInfo(state) {
+      return state.othersBiosInfo;
+    },
+    beeAddress(state) {
+      return state.beeAddress;
+    },
+    beatTopic(state) {
+      return state.beatTopic;
+    },
+    biosTopic(state) {
+      return state.biosTopic;
+    },
+    postageBatchId(state) {
+      return state.postageBatchId;
+    },
+    loading(state) {
+      return state.loading;
+    },
+    logged(state) {
+      return state.logged;
+    },
+    beeNodeConnected(state) {
+      return state.beeNodeConnected;
     }
   },
   mutations: {
@@ -27,6 +63,9 @@ const store = createStore({
     },
     setBiosInfo(state, biosInfo) {
       state.biosInfo = biosInfo;
+    },
+    setOthersBiosInfo(state, othersBiosInfo) {
+      state.othersBiosInfo = othersBiosInfo;
     },
     setLoading(state, loading) {
       state.loading = loading;
@@ -44,6 +83,7 @@ const store = createStore({
       state.beeNodeConnected = beeNodeConnected;
     }
   },
+  //TODO check if posatage stam is still valid before trying to post
   actions: {
     async getMyBeats(context, number) {
       const signer = await context.dispatch('signer');
@@ -64,31 +104,33 @@ const store = createStore({
       context.commit('setMyBeats', beats);
     },
     async getOneBeat(context, { ethAddress, id }) {
-      console.log('parameters in function',  id);
       const bee = new Bee(context.getters.beeAddress);
       const topic = context.getters.beatTopic + '/' + id;
       try {
-        console.log('topic in getOneBeat',topic);
         const beat = await bee.getJsonFeed(
           topic,
           { address: ethAddress }
         );
-        console.log('beat in getOneBeat', beat);
         return beat;
       } catch (error) {
         console.log('custom error getOneBeat', error);
-        console.log('id in getOneBEat and more', id);
-        console.log('topic in getOneBeat and more', topic);
       }
     },
     async getBeats(context, {ethAddress, number}) {
       const bee = new Bee(context.getters.beeAddress);
-      console.log('inside the funciton',  ethAddress, number);
-      const biosInfo = await bee.getJsonFeed(
-        context.getters.biosTopic,
-        { address: ethAddress }
-      );
-      console.log('other user bios info', biosInfo);
+      let othersBiosInfo = context.getters.othersBiosInfo;
+      let biosInfo = {};
+      //Check if we already have this bios in storage. If we do not, we make the query and store the result in state
+      if (othersBiosInfo[ethAddress]) {
+        biosInfo = othersBiosInfo[ethAddress];
+      } else {
+        biosInfo = await bee.getJsonFeed(
+          context.getters.biosTopic,
+          { address: ethAddress }
+        );
+        othersBiosInfo[ethAddress] = biosInfo;
+        context.commit('setOthersBiosInfo', othersBiosInfo);
+      }
       const numberOfBeats = biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = [];
@@ -146,7 +188,9 @@ const store = createStore({
     },
     async setBiosInfo(context, biosInfo) {
       const bee = new Bee(context.getters.beeAddress);
+      console.log('setBiosInfo', bee);
       const signer = await context.dispatch('signer');
+      console.log(signer);
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
@@ -191,38 +235,6 @@ const store = createStore({
         alert('Cannot connect to bee node');
         context.commit('setBeeNodeConnected', false);
       }
-    }
-  },
-  getters: {
-    myBeats(state) {
-      return state.myBeats;
-    },
-    beats(state) {
-      return state.beats;
-    },
-    biosInfo(state) {
-      return state.biosInfo;
-    },
-    beeAddress(state) {
-      return state.beeAddress;
-    },
-    beatTopic(state) {
-      return state.beatTopic;
-    },
-    biosTopic(state) {
-      return state.biosTopic;
-    },
-    postageBatchId(state) {
-      return state.postageBatchId;
-    },
-    loading(state) {
-      return state.loading;
-    },
-    logged(state) {
-      return state.logged;
-    },
-    beeNodeConnected(state) {
-      return state.beeNodeConnected;
     }
   }
 });
