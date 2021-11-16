@@ -1,7 +1,9 @@
 import {createStore} from "vuex";
 import {Bee, Utils} from "@ethersphere/bee-js";
+import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
+  plugins: [createPersistedState()],
   state () {
     return {
       myBeats: [],
