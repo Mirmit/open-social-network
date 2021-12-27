@@ -102,7 +102,10 @@ export default {
   },
   methods: {
     async updateProfile() {
-      const newFollowing = this.following;
+      let newFollowing = this.following;
+      if (!newFollowing) {
+        newFollowing = [];
+      }
       if (this.newFollower) {
         newFollowing.push(this.newFollower);
       }
