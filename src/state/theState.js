@@ -183,7 +183,7 @@ const store = createStore({
         console.log('biosInfo after posting new Beat', biosInfo);
         let beatId = context.getters.myEthAddress + beatNumber;
         beats[beatId] = newBeat;
-        context.commit('setBeats', beats);
+        context.commit('setMyBeats', beats);
         await context.dispatch('setBiosInfo', biosInfo);
       } catch(error) {
         console.log('custom error', error);
