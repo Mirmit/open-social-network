@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <user-profile
+      <user-profile v-if="biosInfo"
           :username="biosInfo.username"
           :bios="biosInfo.bios"
           :image="biosInfo.image"
@@ -24,6 +24,7 @@ import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
 import {mapActions, mapGetters} from "vuex";
+import router from "../router";
 
 export default {
   name: "MyBeats",
@@ -47,7 +48,8 @@ export default {
       'myBeats',
       'biosInfo',
       'registered',
-      'loading'
+      'loading',
+      'logged'
     ]),
   },
   methods: {
@@ -57,8 +59,13 @@ export default {
         'setLoading'
     ]),
   },
+  async ionViewWillEnter() {
+    if (!(this.registered && this.logged)) {
+      await router.push({ name: 'MyWall'})
+    }
+  },
   async ionViewDidEnter() {
-    if (this.registered) {
+    if (this.registered && this.logged) {
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);

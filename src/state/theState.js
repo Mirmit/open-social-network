@@ -97,18 +97,22 @@ const store = createStore({
       const signer = await context.dispatch('signer');
       const numberOfBeats = context.getters.biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
-      let beats = [];
+      let beats = context.getters.myBeats;
+      console.log('beats before setting anything',beats);
       for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
         console.log('inside the loooo', i);
-        const newBeat = await context.dispatch(
-          'getOneBeat',
-          {
-            ethAddress: signer.address,
-            id: i
-          }
-        );
-        beats.push(newBeat);
+        let beatId = context.getters.myEthAddress + i;
+        if ( beats[beatId] === undefined ) {
+          beats[beatId] = await context.dispatch(
+            'getOneBeat',
+            {
+              ethAddress: signer.address,
+              id: i
+            }
+          );
+        }
       }
+      console.log('beats in my beats', beats);
       context.commit('setMyBeats', beats);
     },
     async refreshBeats(context, {ethAddress, number}) {
@@ -133,6 +137,7 @@ const store = createStore({
         newBeat.userImage = biosInfo.image;
         beats.push(newBeat);
       }
+      console.log('beats in other user beats', beats);
       context.commit('setBeats', beats);
     },
     async getOneBeat(context, { ethAddress, id }) {

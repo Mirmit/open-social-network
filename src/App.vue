@@ -97,7 +97,6 @@ export default defineComponent({
       'setPostageBatchId'
     ]),
     async checkUserStatus() {
-      this.setLoading(true);
       const userHasRegistered = await this.checkIfUserHasRegistered();
       const userHasPostageStamps = this.postageBatchId !== '';
       //check if user has already registered on the network"
@@ -106,7 +105,6 @@ export default defineComponent({
       } else {
         this.setModalOpen(true);
       }
-      this.setLoading(false);
     }
   },
   async created() {

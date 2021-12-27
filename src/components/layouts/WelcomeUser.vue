@@ -215,9 +215,9 @@ export default {
       this.setPostageBatchId(postageBatchId);
       this.buyingBatch = false;
     },
-    loginAndClose() {
+    async loginAndClose() {
       this.close();
-      this.login();
+      await this.login();
       window.location.reload();
     },
     close() {
