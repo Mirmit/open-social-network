@@ -46,7 +46,7 @@ export default {
     ...mapGetters([
       'myBeats',
       'biosInfo',
-      'logged',
+      'registered',
       'loading'
     ]),
   },
@@ -58,9 +58,9 @@ export default {
     ]),
   },
   async ionViewDidEnter() {
-    if (this.logged) {
+    if (this.registered) {
       this.setLoading(true);
-      await this.getBiosInfo();
+      await this.getBiosInfo(null, true);
       await this.getMyBeats(10);
       this.setLoading(false);
     }

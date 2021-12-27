@@ -66,7 +66,7 @@ export default {
     ...mapGetters([
       'beats',
       'biosInfo',
-      'logged'
+      'registered'
     ]),
   },
   methods: {
@@ -80,11 +80,11 @@ export default {
     ]),
   },
   async ionViewDidEnter() {
-    if (this.logged) {
+    if (this.registered) {
       this.setLoading(true);
       await this.getBiosInfo();
-      console.log('array of following', this.biosInfo.following, this.biosInfo.following.length);
-      const numberOfFollowing = this.biosInfo.following.length;
+      const numberOfFollowing = this.biosInfo.following ? this.biosInfo.following.length : 0;
+      console.log('array of following', this.biosInfo.following, numberOfFollowing);
       this.beatList= [];
       for(let i = 0; i < numberOfFollowing; i++) {
         console.log('followed inside for', this.biosInfo.following[i]);
@@ -95,22 +95,6 @@ export default {
       this.setLoading(false);
     }
   }
-  // async ionViewDidEnter() {
-  //   const bee = new Bee(this.beeAddress);
-  //   const signer = await this.signer();
-  //   const beats = await bee.getJsonFeed(
-  //       this.beatTopic,
-  //       { signer: signer }
-  //   );
-  //   console.log('beats', beats);
-  //   console.log('beatsLength', beats.length);
-  //   if (beats.length > 0) {
-  //     beats.sort(function(a, b) {
-  //       return - ( a.id - b.id  ||  a.name.localeCompare(b.name) );
-  //     });
-  //     this.beatList = beats;
-  //   }
-  // }
 }
 </script>
 

@@ -3,13 +3,13 @@
     <ion-row>
       <ion-col>
         <div class="ion-text-center">
-          <h1 v-if="!logged">Welcome to  <ion-text color="primary">Open Social Network</ion-text></h1>
-          <h1 v-else-if="logged">Welcome back to <ion-text  color="primary">Open Social Network</ion-text></h1>
+          <h1 v-if="!registered">Welcome to  <ion-text color="primary">Open Social Network</ion-text></h1>
+          <h1 v-else-if="registered">Welcome back to <ion-text  color="primary">Open Social Network</ion-text></h1>
           <p>A <b>censorship-resistant</b>,<br> <b>permissionless</b> and <b>descentralized</b><br> social media platform based on Swarm. <br>Not based on the extractive attention economy.</p>
         </div>
       </ion-col>
     </ion-row>
-    <ion-row v-if="!logged">
+    <ion-row v-if="!registered">
       <ion-col>
         <div class="ion-text-center">
           <h2><ion-text color="primary">Let's start!</ion-text></h2>
@@ -89,7 +89,7 @@
         </ion-row>
       </ion-col>
     </ion-row>
-    <ion-row v-else-if="logged">
+    <ion-row v-else-if="registered">
       <ion-col>
         <div class="ion-text-center">
           <h2><ion-text color="primary">Let's start!</ion-text></h2>
@@ -224,7 +224,7 @@ export default {
       'beatTopic',
       'biosTopic',
       'loading',
-      'logged',
+      'registered',
       'postageBatchId',
       'beeNodeConnected'
     ]),

@@ -40,8 +40,8 @@ const store = createStore({
     loading(state) {
       return state.loading;
     },
-    logged(state) {
-      return state.logged;
+    registered(state) {
+      return state.registered;
     },
     beeNodeConnected(state) {
       return state.beeNodeConnected;
@@ -66,8 +66,8 @@ const store = createStore({
     setLoading(state, loading) {
       state.loading = loading;
     },
-    setLogged(state, logged) {
-      state.logged = logged;
+    setRegistered(state, registered) {
+      state.registered = registered;
     },
     setPostageBatchId(state, postageBatchId) {
       state.postageBatchId = postageBatchId;
@@ -164,28 +164,24 @@ const store = createStore({
         console.log('custom error', error);
       }
     },
-    async getBiosInfo(context, ethAddress = null) {
+    async getBiosInfo(context, ethAddress = null, forceRefresh = false) {
       const bee = new Bee(context.getters.beeAddress);
-      let signer = null;
       let myBios = false;
       if (!ethAddress) {
         ethAddress = context.getters.myEthAddress;
         myBios = true;
       }
-      const ethAddressOrSigner = ethAddress ? { address: ethAddress } : { signer: signer };
-      console.log('ethAddressOrSigner:', ethAddressOrSigner);
-      console.log('signer:', signer);
       console.log('ethAddress:', ethAddress);
       let othersBiosInfo = context.getters.othersBiosInfo;
       let biosInfo = {};
       //Check if we already have this bios in storage. If we do not, we make the query and store the result in state
-      if (othersBiosInfo[ethAddress]) {
+      if (othersBiosInfo[ethAddress] && !forceRefresh) {
         biosInfo = othersBiosInfo[ethAddress];
       } else {
         try {
           const biosInfo = await bee.getJsonFeed(
             context.getters.biosTopic,
-            ethAddressOrSigner
+            { address: ethAddress }
           );
           if (myBios) {
             context.commit('setBiosInfo', biosInfo);
@@ -232,8 +228,8 @@ const store = createStore({
     setLoading(context, loading) {
       context.commit('setLoading', loading);
     },
-    setLogged(context, logged) {
-      context.commit('setLogged', logged);
+    setRegistered(context, registered) {
+      context.commit('setRegistered', registered);
     },
     setPostageBatchId(context, postageBatchId) {
       context.commit('setPostageBatchId', postageBatchId);

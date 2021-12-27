@@ -73,7 +73,7 @@ export default defineComponent({
               this.biosTopic,
               { signer: signer }
           );
-          this.setLogged(true);
+          this.setRegistered(true);
 
           return true;
         } else {
@@ -93,7 +93,7 @@ export default defineComponent({
       'getBiosInfo',
       'setLoading',
       'signer',
-      'setLogged',
+      'setRegistered',
       'setPostageBatchId'
     ]),
     async checkUserStatus() {
@@ -129,7 +129,7 @@ export default defineComponent({
       'beatTopic',
       'biosTopic',
       'loading',
-      'logged',
+      'registered',
       'postageBatchId'
     ]),
   }
