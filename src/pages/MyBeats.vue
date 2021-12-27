@@ -8,7 +8,7 @@
           :number-of-beats="biosInfo.numberOfBeats"
       ></user-profile>
       <beat
-          v-for="beat in myBeats"
+          v-for="beat in orderedMyBeats"
           :key="beat.id"
           :title="beat.title"
           :author="beat.author"
@@ -25,6 +25,7 @@ import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
 import {mapActions, mapGetters} from "vuex";
 import router from "../router";
+import _ from "lodash";
 
 export default {
   name: "MyBeats",
@@ -40,7 +41,8 @@ export default {
       userInfo: {
         username: '',
         bios: ''
-      }
+      },
+      orderedMyBeats: {}
     }
   },
   computed: {
@@ -64,6 +66,7 @@ export default {
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);
+      this.orderedMyBeats = _.orderBy(this.myBeats, ['datetime'], ['desc']);
       this.setLoading(false);
     } else {
       await router.push({ name: 'MyWall'})

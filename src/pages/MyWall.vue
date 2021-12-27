@@ -19,6 +19,7 @@ import { IonPage , IonContent} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
 import { Utils } from "@ethersphere/bee-js";
 import {mapActions, mapGetters} from "vuex";
+import _ from "lodash";
 
 export default {
   name: "MyWall",
@@ -38,6 +39,11 @@ export default {
       'registered',
       'logged'
     ]),
+  },
+  data() {
+    return {
+      orderedBeats: {}
+    }
   },
   methods: {
     async signer() {
@@ -59,6 +65,7 @@ export default {
       for(let i = 0; i < numberOfFollowing; i++) {
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
       }
+      this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
       this.setLoading(false);
     }
   }
