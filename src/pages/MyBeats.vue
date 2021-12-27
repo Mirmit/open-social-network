@@ -60,16 +60,13 @@ export default {
     ]),
   },
   async ionViewWillEnter() {
-    if (!(this.registered && this.logged)) {
-      await router.push({ name: 'MyWall'})
-    }
-  },
-  async ionViewDidEnter() {
     if (this.registered && this.logged) {
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);
       this.setLoading(false);
+    } else {
+      await router.push({ name: 'MyWall'})
     }
   }
 }

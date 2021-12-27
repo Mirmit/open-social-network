@@ -44,14 +44,15 @@ export default {
       'beeAddress',
       'postageBatchId',
       'beatTopic',
-      'myBeats'
+      'myBeats',
+      'biosInfo'
     ]),
   },
   methods: {
     async postBeat() {
       const beats = this.myBeats;
       const date = Date.now();
-      const newBeatId = Math.max.apply(Math, beats.map(function(o) { return o.id; })) + 1;
+      const newBeatId = this.biosInfo.numberOfBeats + 1;
       console.log('beats aasa', beats);
       const newBeat = {
         id: newBeatId,

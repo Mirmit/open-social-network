@@ -52,6 +52,7 @@ const store = createStore({
   },
   mutations: {
     setMyBeats(state, myBeats) {
+      console.log('I set my beats to this', myBeats);
       state.myBeats = myBeats;
     },
     setBeats(state, beats) {
@@ -94,25 +95,22 @@ const store = createStore({
       context.commit('RESET_STATE');
     },
     async refreshMyBeats(context, number) {
-      const signer = await context.dispatch('signer');
       const numberOfBeats = context.getters.biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = context.getters.myBeats;
-      console.log('beats before setting anything',beats);
-      for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
-        console.log('inside the loooo', i);
+      console.log('beats before setting anything', beats);
+      for (let i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
         let beatId = context.getters.myEthAddress + i;
-        if ( beats[beatId] === undefined ) {
+        if (!(beatId in beats )) {
           beats[beatId] = await context.dispatch(
             'getOneBeat',
             {
-              ethAddress: signer.address,
+              ethAddress: context.getters.myEthAddress,
               id: i
             }
           );
         }
       }
-      console.log('beats in my beats', beats);
       context.commit('setMyBeats', beats);
     },
     async refreshBeats(context, {ethAddress, number}) {
@@ -158,16 +156,17 @@ const store = createStore({
       const signer = await context.dispatch('signer');
       let biosInfo = await context.dispatch('getBiosInfo');
       const beats = context.getters.myBeats;
-      const numberOfBeats = beats.length + 1;
+      const beatNumber = beats.length + 1;
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
-          context.getters.beatTopic + '/' + numberOfBeats,
+          context.getters.beatTopic + '/' + beatNumber,
           newBeat,
           { signer: signer }
         );
-        biosInfo.numberOfBeats = numberOfBeats;
-        beats.unshift(newBeat);
+        biosInfo.numberOfBeats = beatNumber;
+        let beatId = context.getters.myEthAddress + beatNumber;
+        beats[beatId] = newBeat;
         context.commit('setBeats', beats);
         await context.dispatch('setBiosInfo', biosInfo);
       } catch(error) {
