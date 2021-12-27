@@ -156,7 +156,7 @@ const store = createStore({
       const signer = await context.dispatch('signer');
       let biosInfo = await context.dispatch('getBiosInfo');
       const beats = context.getters.myBeats;
-      const beatNumber = beats.length + 1;
+      const beatNumber = Object.keys(beats).length + 1;
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
