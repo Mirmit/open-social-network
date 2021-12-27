@@ -43,6 +43,9 @@ const store = createStore({
     registered(state) {
       return state.registered;
     },
+    logged(state) {
+      return state.logged;
+    },
     beeNodeConnected(state) {
       return state.beeNodeConnected;
     }
@@ -68,6 +71,9 @@ const store = createStore({
     },
     setRegistered(state, registered) {
       state.registered = registered;
+    },
+    setLogged(state, logged) {
+      state.logged = logged;
     },
     setPostageBatchId(state, postageBatchId) {
       state.postageBatchId = postageBatchId;
@@ -198,9 +204,7 @@ const store = createStore({
     },
     async setBiosInfo(context, biosInfo) {
       const bee = new Bee(context.getters.beeAddress);
-      console.log('setBiosInfo', bee);
       const signer = await context.dispatch('signer');
-      console.log(signer);
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
@@ -214,6 +218,10 @@ const store = createStore({
       }
     }
     ,
+    emptyBiosInfo(context)
+    {
+        context.commit('setBiosInfo', null);
+    },
     async signer(context) {
       if (window.ethereum) {
         const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
@@ -225,11 +233,27 @@ const store = createStore({
         return false;
       }
     },
+    async logout(context) {
+      await context.dispatch('setMyEthAddress');
+      await context.dispatch('emptyBiosInfo');
+      context.commit('setLogged', false);
+    },
+    async login(context) {
+      await context.dispatch('signer');
+      await context.dispatch('getBiosInfo', { ethAddress: null, forceRefresh: true });
+      context.commit('setLogged', true);
+    },
+    setMyEthAddress(context, ethAddress = null) {
+      context.commit('setMyEthAddress', ethAddress);
+    },
     setLoading(context, loading) {
       context.commit('setLoading', loading);
     },
     setRegistered(context, registered) {
       context.commit('setRegistered', registered);
+    },
+    setLogged(context, logged) {
+      context.commit('setLogged', logged);
     },
     setPostageBatchId(context, postageBatchId) {
       context.commit('setPostageBatchId', postageBatchId);

@@ -10,5 +10,6 @@ export default {
   othersBiosInfo: {},
   loading: false,
   registered: false,
+  logged: false,
   beeNodeConnected: false
 }

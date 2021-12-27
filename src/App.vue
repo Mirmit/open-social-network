@@ -101,7 +101,7 @@ export default defineComponent({
       const userHasRegistered = await this.checkIfUserHasRegistered();
       const userHasPostageStamps = this.postageBatchId !== '';
       //check if user has already registered on the network"
-      if (userHasRegistered && userHasPostageStamps) {
+      if (userHasRegistered && userHasPostageStamps && this.logged) {
         this.setModalOpen(false);
       } else {
         this.setModalOpen(true);
@@ -130,6 +130,7 @@ export default defineComponent({
       'biosTopic',
       'loading',
       'registered',
+      'logged',
       'postageBatchId'
     ]),
   }

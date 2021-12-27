@@ -90,7 +90,15 @@
       </ion-col>
     </ion-row>
     <ion-row v-else-if="registered">
-      <ion-col>
+      <ion-col v-if="!logged">
+        <div class="ion-text-center">
+          <h2><ion-text color="primary">Log in</ion-text></h2>
+          <ion-button @click="loginAndClose" slot="end">
+            <ion-icon :icon="logInOutline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col v-else>
         <div class="ion-text-center">
           <h2><ion-text color="primary">Let's start!</ion-text></h2>
           <p>
@@ -150,6 +158,7 @@
 
 <script>
 import ActionButton from "../UI/ActionButton";
+import {logInOutline} from 'ionicons/icons';
 import {
   IonInput,
   IonItem,
@@ -158,7 +167,8 @@ import {
   IonContent,
   IonSpinner,
   IonRow,
-  IonCol
+  IonCol,
+  IonIcon
 } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 import {Bee} from "@ethersphere/bee-js";
@@ -174,7 +184,8 @@ export default {
     IonContent,
     IonSpinner,
     IonRow,
-    IonCol
+    IonCol,
+    IonIcon
   },
   emits: ['closeWelcomeUser'],
   data() {
@@ -204,6 +215,11 @@ export default {
       this.setPostageBatchId(postageBatchId);
       this.buyingBatch = false;
     },
+    loginAndClose() {
+      this.close();
+      this.login();
+      window.location.reload();
+    },
     close() {
       this.$emit('closeWelcomeUser');
     },
@@ -215,7 +231,8 @@ export default {
       'setPostageBatchId',
       'signer',
       'setBeeAddress',
-      'checkBeeNodeConnected'
+      'checkBeeNodeConnected',
+      'login'
     ]),
   },
   computed: {
@@ -226,8 +243,12 @@ export default {
       'loading',
       'registered',
       'postageBatchId',
-      'beeNodeConnected'
+      'beeNodeConnected',
+      'logged'
     ]),
+  },
+  setup() {
+    return { logInOutline };
   }
 }
 </script>

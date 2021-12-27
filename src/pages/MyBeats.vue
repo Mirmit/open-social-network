@@ -60,7 +60,7 @@ export default {
   async ionViewDidEnter() {
     if (this.registered) {
       this.setLoading(true);
-      await this.getBiosInfo(null, true);
+      await this.getBiosInfo();
       await this.getMyBeats(10);
       this.setLoading(false);
     }

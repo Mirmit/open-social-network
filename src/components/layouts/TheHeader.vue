@@ -2,16 +2,19 @@
   <ion-header :translucent="true">
     <ion-toolbar :color="'primary'">
       <ion-title><h1>Open Social Network</h1></ion-title>
-      <ion-button @click="resetState"></ion-button>
+      <ion-button v-if="logged" @click="logoutAndRefresh" slot="end">
+        <ion-icon :icon="logOutOutline"></ion-icon>
+      </ion-button>
     </ion-toolbar>
     <the-tabs></the-tabs>
   </ion-header>
 </template>
 
 <script>
-import { IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonHeader, IonTitle, IonToolbar, IonIcon } from "@ionic/vue";
+import { logOutOutline, logInOutline } from 'ionicons/icons';
 import TheTabs from "./TheTabs";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "TheHeader",
@@ -19,11 +22,32 @@ export default {
     TheTabs,
     IonHeader,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonIcon
   },
-  ...mapActions([
-    'resetState',
-  ]),
+  computed: {
+    ...mapGetters([
+      'logged'
+    ])
+  }
+  ,
+  methods: {
+    ...mapActions([
+      'emptyBiosInfo',
+      'setMyEthAddress',
+      'setLogged',
+      'signer',
+      'getBiosInfo',
+      'logout'
+    ]),
+    logoutAndRefresh() {
+      this.logout();
+      window.location.reload();
+    }
+  },
+  setup() {
+    return { logOutOutline, logInOutline };
+  },
 }
 </script>
 
