@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     async postBeat() {
+      this.waitForSigner();
       const beats = this.myBeats;
       const date = Date.now();
       const newBeatId = this.biosInfo.numberOfBeats + 1;
@@ -62,13 +63,15 @@ export default {
         content: this.content
       };
       await this.addNewBeat(newBeat);
+      this.waitForSigner(false);
       this.$emit('closeNewBeat');
       this.title = '';
       this.content = '';
     },
     ...mapActions([
       'signer',
-      'addNewBeat'
+      'addNewBeat',
+      'waitForSigner'
     ]),
   }
 }

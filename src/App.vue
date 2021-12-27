@@ -20,8 +20,14 @@
     :is-open="loading"
     cssClass="my-custom-class"
     message="Please wait..."
->
-</ion-loading>
+  >
+  </ion-loading>
+  <ion-loading
+    :is-open="waitForSigner"
+    cssClass="my-custom-class"
+    message="Wait for signer..."
+  >
+  </ion-loading>
 </template>
 
 <script>
@@ -129,7 +135,8 @@ export default defineComponent({
       'loading',
       'registered',
       'logged',
-      'postageBatchId'
+      'postageBatchId',
+      'waitForSigner'
     ]),
   }
 });

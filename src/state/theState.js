@@ -46,6 +46,9 @@ const store = createStore({
     logged(state) {
       return state.logged;
     },
+    waitForSigner(state) {
+      return state.waitForSigner;
+    },
     beeNodeConnected(state) {
       return state.beeNodeConnected;
     }
@@ -75,6 +78,9 @@ const store = createStore({
     },
     setLogged(state, logged) {
       state.logged = logged;
+    },
+    setWaitForSigner(state, waitForSigner) {
+      state.waitForSigner = waitForSigner;
     },
     setPostageBatchId(state, postageBatchId) {
       state.postageBatchId = postageBatchId;
@@ -170,8 +176,7 @@ const store = createStore({
       const signer = await context.dispatch('signer');
       let biosInfo = await context.getters.biosInfo;
       console.log('biosInfo before posting new Beat', biosInfo);
-      const beats = context.getters.myBeats;
-      const beatNumber = Object.keys(beats).length + 1;
+      const beatNumber = biosInfo.numberOfBeats + 1;
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,
@@ -181,10 +186,8 @@ const store = createStore({
         );
         biosInfo.numberOfBeats = beatNumber;
         console.log('biosInfo after posting new Beat', biosInfo);
-        let beatId = context.getters.myEthAddress + beatNumber;
-        beats[beatId] = newBeat;
-        context.commit('setMyBeats', beats);
         await context.dispatch('setBiosInfo', biosInfo);
+        await context.dispatch('refreshMyBeats', 5);
       } catch(error) {
         console.log('custom error', error);
       }
@@ -261,6 +264,9 @@ const store = createStore({
       await context.dispatch('signer');
       await context.dispatch('getBiosInfo', { ethAddress: null, forceRefresh: true });
       context.commit('setLogged', true);
+    },
+    waitForSigner(context, wait = true) {
+      context.commit('setWaitForSigner', wait);
     },
     setMyEthAddress(context, ethAddress = null) {
       context.commit('setMyEthAddress', ethAddress);
