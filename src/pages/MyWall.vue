@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content>
       <beat
-          v-for="beat in beatList"
+          v-for="beat in beats"
           :key="beat.id"
           :title="beat.title"
           :author="beat.author"
@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      beatList: []
+      // beatList: []
 /*
       beatList: [
         {
@@ -89,9 +89,9 @@ export default {
       for(let i = 0; i < numberOfFollowing; i++) {
         console.log('followed inside for', this.biosInfo.following[i]);
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
-        this.beatList = this.beatList.concat(this.beats);
+        // this.beatList = this.beatList.concat(this.beats);
       }
-      this.beatList.sort((a,b) => (a.datetime < b.datetime) ? 1 : ((b.datetime < a.datetime) ? -1 : 0))
+      // this.beatList.sort((a,b) => (a.datetime < b.datetime) ? 1 : ((b.datetime < a.datetime) ? -1 : 0))
       this.setLoading(false);
     }
   }

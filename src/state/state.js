@@ -1,6 +1,6 @@
 export default {
   myBeats: {},
-  beats: [],
+  beats: {},
   beeAddress: 'http://localhost:1633',
   beatTopic: 'opensocialnetwork.eth/beats',
   biosTopic: 'opensocialnetwork.eth/beater',

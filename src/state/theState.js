@@ -102,13 +102,18 @@ const store = createStore({
       for (let i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
         let beatId = context.getters.myEthAddress + i;
         if (!(beatId in beats )) {
-          beats[beatId] = await context.dispatch(
+           let currentBeat = await context.dispatch(
             'getOneBeat',
             {
               ethAddress: context.getters.myEthAddress,
               id: i
             }
           );
+           if (currentBeat) {
+             beats[beatId] = currentBeat;
+           }
+        } else {
+          break;
         }
       }
       context.commit('setMyBeats', beats);
@@ -121,19 +126,26 @@ const store = createStore({
       console.log('getBiosInfo in refreshBeats', biosInfo);
       const numberOfBeats = biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
-      let beats = [];
+      let beats = context.getters.beats;
       for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
         console.log('inside the loooo', i);
-        const newBeat = await context.dispatch(
-          'getOneBeat',
-          {
-            ethAddress: ethAddress,
-            id: i
+        let beatId = ethAddress + i;
+        if (!(beatId in beats)) {
+          let currentBeat = await context.dispatch(
+            'getOneBeat',
+            {
+              ethAddress: ethAddress,
+              id: i
+            }
+          );
+          if (currentBeat) {
+            currentBeat.author = biosInfo.username;
+            currentBeat.userImage = biosInfo.image;
+            beats[beatId] = currentBeat;
           }
-        );
-        newBeat.author = biosInfo.username;
-        newBeat.userImage = biosInfo.image;
-        beats.push(newBeat);
+        } else {
+          break;
+        }
       }
       console.log('beats in other user beats', beats);
       context.commit('setBeats', beats);
@@ -149,12 +161,15 @@ const store = createStore({
         );
       } catch (error) {
         console.log('custom error getOneBeat', error);
+
+        return false;
       }
     },
     async addNewBeat(context, newBeat) {
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
-      let biosInfo = await context.dispatch('getBiosInfo');
+      let biosInfo = await context.getters.biosInfo;
+      console.log('biosInfo before posting new Beat', biosInfo);
       const beats = context.getters.myBeats;
       const beatNumber = Object.keys(beats).length + 1;
       try {
@@ -165,6 +180,7 @@ const store = createStore({
           { signer: signer }
         );
         biosInfo.numberOfBeats = beatNumber;
+        console.log('biosInfo after posting new Beat', biosInfo);
         let beatId = context.getters.myEthAddress + beatNumber;
         beats[beatId] = newBeat;
         context.commit('setBeats', beats);
