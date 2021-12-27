@@ -74,7 +74,7 @@ export default {
       return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
     },
     ...mapActions([
-      'getBeats',
+      'refreshBeats',
       'getBiosInfo',
       'setLoading'
     ]),
@@ -88,7 +88,7 @@ export default {
       this.beatList= [];
       for(let i = 0; i < numberOfFollowing; i++) {
         console.log('followed inside for', this.biosInfo.following[i]);
-        await this.getBeats({ethAddress: this.biosInfo.following[i], number: 10});
+        await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
         this.beatList = this.beatList.concat(this.beats);
       }
       this.beatList.sort((a,b) => (a.datetime < b.datetime) ? 1 : ((b.datetime < a.datetime) ? -1 : 0))

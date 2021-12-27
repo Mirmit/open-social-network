@@ -88,12 +88,12 @@ const store = createStore({
       Object.assign(state, defaultState);
     }
   },
-  //TODO check if posatage stam is still valid before trying to post
+  //TODO check if postage stamp is still valid before trying to post
   actions: {
     resetState(context) {
       context.commit('RESET_STATE');
     },
-    async getMyBeats(context, number) {
+    async refreshMyBeats(context, number) {
       const signer = await context.dispatch('signer');
       const numberOfBeats = context.getters.biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
@@ -111,25 +111,12 @@ const store = createStore({
       }
       context.commit('setMyBeats', beats);
     },
-    async getOneBeat(context, { ethAddress, id }) {
-      const bee = new Bee(context.getters.beeAddress);
-      const topic = context.getters.beatTopic + '/' + id;
-      console.log('ethaddress in get one beat', ethAddress, id);
-      try {
-        return await bee.getJsonFeed(
-          topic,
-          {address: ethAddress}
-        );
-      } catch (error) {
-        console.log('custom error getOneBeat', error);
-      }
-    },
-    async getBeats(context, {ethAddress, number}) {
+    async refreshBeats(context, {ethAddress, number}) {
       const biosInfo = await context.dispatch(
         'getBiosInfo',
          ethAddress
       );
-      console.log('getBiosInfo in getBeats', biosInfo);
+      console.log('getBiosInfo in refreshBeats', biosInfo);
       const numberOfBeats = biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = [];
@@ -148,13 +135,25 @@ const store = createStore({
       }
       context.commit('setBeats', beats);
     },
+    async getOneBeat(context, { ethAddress, id }) {
+      const bee = new Bee(context.getters.beeAddress);
+      const topic = context.getters.beatTopic + '/' + id;
+      console.log('ethaddress in get one beat', ethAddress, id);
+      try {
+        return await bee.getJsonFeed(
+          topic,
+          {address: ethAddress}
+        );
+      } catch (error) {
+        console.log('custom error getOneBeat', error);
+      }
+    },
     async addNewBeat(context, newBeat) {
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
       let biosInfo = await context.dispatch('getBiosInfo');
       const beats = context.getters.myBeats;
       const numberOfBeats = beats.length + 1;
-      //TODO set author of newbeat to username
       try {
         await bee.setJsonFeed(
           context.getters.postageBatchId,

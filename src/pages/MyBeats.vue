@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     ...mapActions([
-        'getMyBeats',
+        'refreshMyBeats',
         'getBiosInfo',
         'setLoading'
     ]),
@@ -61,7 +61,7 @@ export default {
     if (this.registered) {
       this.setLoading(true);
       await this.getBiosInfo();
-      await this.getMyBeats(10);
+      await this.refreshMyBeats(10);
       this.setLoading(false);
     }
   }

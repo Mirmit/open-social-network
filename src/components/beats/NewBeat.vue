@@ -66,7 +66,6 @@ export default {
       this.content = '';
     },
     ...mapActions([
-      'getMyBeats',
       'signer',
       'addNewBeat'
     ]),
