@@ -41,8 +41,7 @@ export default {
       userInfo: {
         username: '',
         bios: ''
-      },
-      orderedMyBeats: {}
+      }
     }
   },
   computed: {
@@ -53,6 +52,9 @@ export default {
       'loading',
       'logged'
     ]),
+    orderedMyBeats() {
+      return _.orderBy(this.myBeats, ['datetime'], ['desc']);
+    }
   },
   methods: {
     ...mapActions([
@@ -66,7 +68,6 @@ export default {
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);
-      this.orderedMyBeats = _.orderBy(this.myBeats, ['datetime'], ['desc']);
       this.setLoading(false);
     } else {
       await router.push({ name: 'MyWall'})

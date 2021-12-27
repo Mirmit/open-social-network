@@ -64,6 +64,7 @@ export default {
       };
       await this.addNewBeat(newBeat);
       this.waitForSigner(false);
+      await this.refreshMyBeats();
       this.$emit('closeNewBeat');
       this.title = '';
       this.content = '';
@@ -71,7 +72,8 @@ export default {
     ...mapActions([
       'signer',
       'addNewBeat',
-      'waitForSigner'
+      'waitForSigner',
+      'refreshMyBeats'
     ]),
   }
 }
