@@ -91,7 +91,8 @@ export default {
       image: '',
       bios: '',
       following: [],
-      newFollower: ''
+      newFollower: '',
+      numberOfBeats: 0
     }
   },
   computed: {
@@ -114,8 +115,9 @@ export default {
         image: this.image,
         bios: this.bios,
         following: newFollowing,
-        numberOfBeats: this.myBeats.length
+        numberOfBeats: this.numberOfBeats
       };
+      console.log(biosInfo);
       //update
       await this.setBiosInfo(biosInfo);
       this.$emit('closeEditProfile');
@@ -145,6 +147,7 @@ export default {
     this.image = this.biosInfo.image;
     this.bios = this.biosInfo.bios;
     this.following = this.biosInfo.following;
+    this.numberOfBeats = this.biosInfo.numberOfBeats;
   }
 }
 </script>
