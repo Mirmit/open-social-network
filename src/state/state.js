@@ -5,7 +5,7 @@ export default {
   beatTopic: 'opensocialnetwork.eth/beats',
   biosTopic: 'opensocialnetwork.eth/beater',
   myEthAddress: '',
-  postageBatchId: '1244e4d080de7948f4cece81d6bf83beef238004fa702def92e667626a092400',
+  postageBatchId: '0f410285be4caee04dca7ddbcdb1e31033d21aabca6d99e38c68efe0b5149ed3',
   biosInfo: {},
   othersBiosInfo: {},
   loading: false,

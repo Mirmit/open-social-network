@@ -206,6 +206,7 @@ export default {
         numberOfBeats: 0
       };
       await this.setBiosInfo(biosInfo);
+      await this.login();
       this.$emit('closeWelcomeUser');
     },
     async buyPostageStampBatch() {
