@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { IonHeader, IonTitle, IonToolbar, IonIcon } from "@ionic/vue";
+import { IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from "@ionic/vue";
 import { logOutOutline, logInOutline } from 'ionicons/icons';
 import TheTabs from "./TheTabs";
 import {mapActions, mapGetters} from "vuex";
@@ -23,7 +23,8 @@ export default {
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonIcon
+    IonIcon,
+    IonButton
   },
   computed: {
     ...mapGetters([

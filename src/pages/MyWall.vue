@@ -1,6 +1,11 @@
 <template>
   <ion-page>
     <ion-content>
+      <ion-card v-if="noBeats">
+        <ion-card-header>
+          <ion-card-subtitle>Start following someone to hear the beating</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
       <beat
           v-for="beat in beats"
           :key="beat.id"
@@ -15,7 +20,7 @@
 </template>
 
 <script>
-import { IonPage , IonContent} from "@ionic/vue"
+import { IonPage , IonContent, IonCardHeader, IonCardSubtitle, IonCard} from "@ionic/vue"
 import Beat from "../components/beats/Beat";
 import { Utils } from "@ethersphere/bee-js";
 import {mapActions, mapGetters} from "vuex";
@@ -30,6 +35,9 @@ export default {
   components: {
     IonPage,
     IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
     Beat
   },
   computed: {
@@ -42,7 +50,8 @@ export default {
   },
   data() {
     return {
-      orderedBeats: {}
+      orderedBeats: {},
+      noBeats: false
     }
   },
   methods: {
@@ -66,6 +75,7 @@ export default {
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
       }
       this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
+      this.noBeats = this.myBeats ? (Object.keys(this.myBeats).length > 0) : true;
       this.setLoading(false);
     }
   }

@@ -168,7 +168,9 @@ import {
   IonSpinner,
   IonRow,
   IonCol,
-  IonIcon
+  IonIcon,
+  IonTextarea,
+  IonButton
 } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 import {Bee} from "@ethersphere/bee-js";
@@ -185,7 +187,9 @@ export default {
     IonSpinner,
     IonRow,
     IonCol,
-    IonIcon
+    IonIcon,
+    IonTextarea,
+    IonButton
   },
   emits: ['closeWelcomeUser'],
   data() {
