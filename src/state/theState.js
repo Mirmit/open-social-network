@@ -103,11 +103,10 @@ const store = createStore({
     async refreshMyBeats(context, number) {
       const numberOfBeats = context.getters.biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
-      let beats = context.getters.myBeats;
-      console.log('beats before setting anything', beats);
+      let myBeats = context.getters.myBeats;
       for (let i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
         let beatId = context.getters.myEthAddress + i;
-        if (!(beatId in beats )) {
+        if (!(beatId in myBeats )) {
            let currentBeat = await context.dispatch(
             'getOneBeat',
             {
@@ -115,23 +114,27 @@ const store = createStore({
               id: i
             }
           );
-          if (currentBeat) {
-            currentBeat.username = 'me';
-            beats[beatId] = currentBeat;
+          if (currentBeat != null) {
+            myBeats[beatId] = currentBeat;
+            //TODO load replies not working
+            while (currentBeat?.replyTo != null) {
+              currentBeat = await context.dispatch(
+                  'loadReplyToBeat',
+                  currentBeat
+              );
+            }
           }
         } else {
           break;
         }
       }
-      context.commit('setMyBeats', beats);
+      context.commit('setMyBeats', myBeats);
     },
     async refreshBeats(context, {ethAddress, number}) {
-      console.log('eth address for bios info', ethAddress)
       const biosInfo = await context.dispatch(
         'getBiosInfo',
          ethAddress
       );
-      console.log('getBiosInfo in refreshBeats', biosInfo);
       const numberOfBeats = biosInfo.numberOfBeats;
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = context.getters.beats;
@@ -150,14 +153,59 @@ const store = createStore({
             currentBeat.username = biosInfo.username;
             currentBeat.userImage = biosInfo.image;
             beats[beatId] = currentBeat;
+            //TODO load replies not working
+            while (currentBeat.replyTo) {
+              const currentBeat = await context.dispatch(
+                  'loadReplyToBeat',
+                  currentBeat
+              );
+            }
           }
+
         } else {
           break;
         }
       }
-      console.log('beats in other user beats', beats);
       context.commit('setBeats', beats);
     },
+    async loadReplyToBeat(context, currentBeat) {
+      let myBeats = context.getters.myBeats;
+      let beats = context.getters.beats;
+      if (currentBeat.replyTo in beats) {
+        currentBeat = beats[currentBeat.replyTo];
+      } else if (currentBeat.replyTo in myBeats) {
+        currentBeat = myBeats[currentBeat.replyTo];
+      } else {
+        const replyEthAddress = currentBeat.replyTo.substring(0, 42);
+        const replyBeatId = currentBeat.replyTo.substring(42,99999)*1;
+        let currentBeat = await context.dispatch(
+            'getOneBeat',
+            {
+              ethAddress: replyEthAddress,
+              id: replyBeatId
+            }
+        );
+        if (currentBeat) {
+          if (replyEthAddress === this.getters.myEthAddress) {
+            currentBeat.username = 'me';
+            myBeats[currentBeat.replyTo] = currentBeat;
+          } else {
+            const biosInfo = await context.dispatch(
+                'getBiosInfo',
+                replyEthAddress
+            );
+            currentBeat.username = biosInfo.username;
+            currentBeat.userImage = biosInfo.image;
+            beats[currentBeat.replyTo] = currentBeat;
+          }
+        }
+        context.commit('setBeats', beats);
+        context.commit('setMyBeats', myBeats);
+      }
+
+      return currentBeat;
+    }
+    ,
     async getOneBeat(context, { ethAddress, id }) {
       const bee = new Bee(context.getters.beeAddress);
       const topic = context.getters.beatTopic + '/' + id;

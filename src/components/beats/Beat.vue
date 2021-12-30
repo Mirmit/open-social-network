@@ -28,7 +28,8 @@ import {
   IonCardContent,
   IonCard,
   IonAvatar,
-  IonItem
+  IonItem,
+  IonButton
 } from "@ionic/vue";
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -45,7 +46,8 @@ export default {
     IonCardContent,
     IonCard,
     IonAvatar,
-    IonItem
+    IonItem,
+    IonButton
   },
   props: {
     title: String,
