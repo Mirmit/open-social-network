@@ -45,7 +45,8 @@ export default {
       'postageBatchId',
       'beatTopic',
       'myBeats',
-      'biosInfo'
+      'biosInfo',
+      'myEthAddress'
     ]),
   },
   methods: {
@@ -58,7 +59,7 @@ export default {
       const newBeat = {
         id: newBeatId,
         title: this.title,
-        author: this.biosInfo.username,
+        author: this.myEthAddress,
         datetime: date,
         content: this.content
       };

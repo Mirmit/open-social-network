@@ -7,7 +7,7 @@
         </ion-avatar>
         <ion-card-title>{{ title }}</ion-card-title>
       </ion-item>
-        <ion-card-subtitle color="primary">{{ author }} - {{ dateFormatted }}</ion-card-subtitle>
+        <ion-card-subtitle color="primary">{{ authorUsername }} - {{ dateFormatted }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       {{ content }}
@@ -27,6 +27,7 @@ import {
 } from "@ionic/vue";
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "Beat",
@@ -55,7 +56,26 @@ export default {
       }
 
       return this.datetime;
-    }
+    },
+    authorUsername: function () {
+      let username = '';
+      if (this.author === this.myEthAddress) {
+        username = 'me';
+      } else {
+        const biosInfo = this.getBiosInfo(this.author);
+        username = biosInfo.username;
+      }
+
+      return username;
+    },
+    ...mapGetters([
+      'myEthAddress',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'getBiosInfo'
+    ]),
   }
 }
 </script>
