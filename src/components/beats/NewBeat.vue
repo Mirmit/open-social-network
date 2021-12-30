@@ -2,6 +2,9 @@
   <ion-card class="card-style">
     <ion-card-header>
       <ion-card-title>
+        <ion-header v-if="replyTo !== ''">
+          Reply:
+        </ion-header>
         <ion-input placeholder="Title" v-model="title"></ion-input>
       </ion-card-title>
       <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>
@@ -23,6 +26,12 @@ import {mapActions, mapGetters} from "vuex";
 export default {
   name: "NewBeat",
   emits: [ 'closeNewBeat' ],
+  props: {
+    replyTo: {
+      default: '',
+      type: String
+    }
+  },
   components: {
     IonCard,
     IonCardHeader,
@@ -63,6 +72,9 @@ export default {
         datetime: date,
         content: this.content
       };
+      if (this.replyTo !== '') {
+        newBeat.replyTo = this.replyTo;
+      }
       await this.addNewBeat(newBeat);
       this.waitForSigner(false);
       await this.refreshMyBeats();
@@ -85,9 +97,5 @@ export default {
     z-index: 5;
     opacity: 1;
     padding-bottom: 20px;
-  }
-
-  ion-card-subtitle {
-    padding-left:7px
   }
 </style>

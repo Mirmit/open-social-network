@@ -14,6 +14,7 @@
           :author="beat.author"
           :datetime="beat.datetime"
           :content="beat.content"
+          :username="beat.username"
       ></beat>
     </ion-content>
   </ion-page>

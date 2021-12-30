@@ -115,9 +115,10 @@ const store = createStore({
               id: i
             }
           );
-           if (currentBeat) {
-             beats[beatId] = currentBeat;
-           }
+          if (currentBeat) {
+            currentBeat.username = 'me';
+            beats[beatId] = currentBeat;
+          }
         } else {
           break;
         }
@@ -125,6 +126,7 @@ const store = createStore({
       context.commit('setMyBeats', beats);
     },
     async refreshBeats(context, {ethAddress, number}) {
+      console.log('eth address for bios info', ethAddress)
       const biosInfo = await context.dispatch(
         'getBiosInfo',
          ethAddress
@@ -145,7 +147,7 @@ const store = createStore({
             }
           );
           if (currentBeat) {
-            currentBeat.author = biosInfo.username;
+            currentBeat.username = biosInfo.username;
             currentBeat.userImage = biosInfo.image;
             beats[beatId] = currentBeat;
           }
@@ -199,7 +201,6 @@ const store = createStore({
         ethAddress = context.getters.myEthAddress;
         myBios = true;
       }
-      console.log('ethAddress:', ethAddress);
       let othersBiosInfo = context.getters.othersBiosInfo;
       let biosInfo = {};
       //Check if we already have this bios in storage. If we do not, we make the query and store the result in state
@@ -207,13 +208,22 @@ const store = createStore({
         biosInfo = othersBiosInfo[ethAddress];
       } else {
         try {
-          const biosInfo = await bee.getJsonFeed(
-            context.getters.biosTopic,
-            { address: ethAddress }
-          );
           if (myBios) {
-            context.commit('setBiosInfo', biosInfo);
+            if (this.getters.biosInfo !== {} || forceRefresh) {
+              biosInfo = await bee.getJsonFeed(
+                  context.getters.biosTopic,
+                  {address: ethAddress}
+              );
+              context.commit('setBiosInfo', biosInfo);
+            } else {
+              biosInfo = this.getters.biosInfo;
+            }
           } else {
+            biosInfo = await bee.getJsonFeed(
+                context.getters.biosTopic,
+                { address: ethAddress }
+            );
+            console.log('Im here in other bios', biosInfo)
             othersBiosInfo[ethAddress] = biosInfo;
             context.commit('setOthersBiosInfo', othersBiosInfo);
           }

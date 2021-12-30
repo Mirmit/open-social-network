@@ -96,6 +96,9 @@
           <ion-button @click="loginAndClose" slot="end">
             <ion-icon :icon="logInOutline"></ion-icon>
           </ion-button>
+          <ion-button @click="resetStateAndRefresh" slot="end">
+            Reset state
+          </ion-button>
         </div>
       </ion-col>
       <ion-col v-else>
@@ -231,13 +234,18 @@ export default {
     saveBeeAddress() {
       this.setBeeAddress(this.beeAddressToChange);
     },
+    resetStateAndRefresh() {
+      this.resetState();
+      window.location.reload();
+    },
     ...mapActions([
       'setBiosInfo',
       'setPostageBatchId',
       'signer',
       'setBeeAddress',
       'checkBeeNodeConnected',
-      'login'
+      'login',
+      'resetState'
     ]),
   },
   computed: {

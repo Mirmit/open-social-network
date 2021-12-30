@@ -9,6 +9,8 @@
       <beat
           v-for="beat in beats"
           :key="beat.id"
+          :id="beat.id"
+          :username="beat.username"
           :title="beat.title"
           :author="beat.author"
           :datetime="beat.datetime"
@@ -64,12 +66,12 @@ export default {
       'setLoading'
     ]),
   },
-  async ionViewDidEnter() {
+  async ionViewWillEnter() {
     if (this.registered && this.logged) {
       this.setLoading(true);
       await this.getBiosInfo();
       const numberOfFollowing = this.biosInfo.following ? this.biosInfo.following.length : 0;
-      console.log('array of following', this.biosInfo.following, numberOfFollowing);
+      console.log('numberOfFollowing', numberOfFollowing)
       this.beatList= [];
       for(let i = 0; i < numberOfFollowing; i++) {
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});

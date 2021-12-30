@@ -7,11 +7,16 @@
         </ion-avatar>
         <ion-card-title>{{ title }}</ion-card-title>
       </ion-item>
-        <ion-card-subtitle color="primary">{{ authorUsername }} - {{ dateFormatted }}</ion-card-subtitle>
+        <ion-card-subtitle color="primary">{{ username }} - {{ dateFormatted }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       {{ content }}
+      <ion-button slot="end" @click="replyOpen = !replyOpen">
+        Reply
+      </ion-button>
     </ion-card-content>
+    <new-beat v-if="replyOpen" :reply-to="author + id">
+    </new-beat>
   </ion-card>
 </template>
 
@@ -28,10 +33,12 @@ import {
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {mapActions, mapGetters} from "vuex";
+import NewBeat from "./NewBeat";
 
 export default {
   name: "Beat",
   components: {
+    NewBeat,
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
@@ -45,10 +52,17 @@ export default {
     author: String,
     datetime: [ Number, String],
     content: String,
-    userImage: String
+    id: Number,
+    userImage: String,
+    username: String
+  },
+  data() {
+    return {
+      replyOpen: false
+    }
   },
   computed: {
-    dateFormatted: function () {
+    dateFormatted() {
       if (typeof this.datetime === 'number') {
         dayjs.extend(relativeTime);
 
@@ -57,17 +71,6 @@ export default {
 
       return this.datetime;
     },
-    authorUsername: function () {
-      let username = '';
-      if (this.author === this.myEthAddress) {
-        username = 'me';
-      } else {
-        const biosInfo = this.getBiosInfo(this.author);
-        username = biosInfo.username;
-      }
-
-      return username;
-    },
     ...mapGetters([
       'myEthAddress',
     ]),
@@ -75,7 +78,7 @@ export default {
   methods: {
     ...mapActions([
       'getBiosInfo'
-    ]),
+    ])
   }
 }
 </script>
