@@ -58,7 +58,7 @@ export default {
       const newBeat = {
         id: newBeatId,
         title: this.title,
-        author: 'me',
+        author: this.biosInfo.username,
         datetime: date,
         content: this.content
       };
