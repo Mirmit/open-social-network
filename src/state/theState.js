@@ -55,7 +55,6 @@ const store = createStore({
   },
   mutations: {
     setMyBeats(state, myBeats) {
-      console.log('I set my beats to this', myBeats);
       state.myBeats = myBeats;
     },
     setBeats(state, beats) {
@@ -115,6 +114,9 @@ const store = createStore({
             }
           );
           if (currentBeat != null) {
+            const biosInfo = context.getters.biosInfo;
+            currentBeat.username = biosInfo.username;
+            currentBeat.userImage = biosInfo.image;
             myBeats[beatId] = currentBeat;
             while (currentBeat.replyTo != null) {
               let replyTo = currentBeat.replyTo;
@@ -139,7 +141,6 @@ const store = createStore({
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = context.getters.beats;
       for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
-        console.log('inside the loooo', i);
         let beatId = ethAddress + i;
         if (!(beatId in beats)) {
           let currentBeat = await context.dispatch(
@@ -210,7 +211,6 @@ const store = createStore({
     async getOneBeat(context, { ethAddress, id }) {
       const bee = new Bee(context.getters.beeAddress);
       const topic = context.getters.beatTopic + '/' + id;
-      console.log('ethaddress in get one beat', ethAddress, id);
       try {
         return await bee.getJsonFeed(
           topic,
@@ -226,7 +226,6 @@ const store = createStore({
       const bee = new Bee(context.getters.beeAddress);
       const signer = await context.dispatch('signer');
       let biosInfo = await context.getters.biosInfo;
-      console.log('biosInfo before posting new Beat', biosInfo);
       const beatNumber = (biosInfo.numberOfBeats ? biosInfo.numberOfBeats : 0) + 1;
       try {
         await bee.setJsonFeed(
@@ -236,7 +235,6 @@ const store = createStore({
           { signer: signer }
         );
         biosInfo.numberOfBeats = beatNumber;
-        console.log('biosInfo after posting new Beat', biosInfo);
         await context.dispatch('setBiosInfo', biosInfo);
         await context.dispatch('refreshMyBeats', 5);
       } catch(error) {

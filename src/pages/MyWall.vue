@@ -71,7 +71,6 @@ export default {
       this.setLoading(true);
       await this.getBiosInfo();
       const numberOfFollowing = this.biosInfo.following ? this.biosInfo.following.length : 0;
-      console.log('numberOfFollowing', numberOfFollowing)
       this.beatList= [];
       for(let i = 0; i < numberOfFollowing; i++) {
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput } from "@ionic/vue";
+import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput, IonHeader } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
@@ -38,7 +38,8 @@ export default {
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
-    IonInput
+    IonInput,
+    IonHeader
   },
   data() {
     return {

@@ -10,11 +10,14 @@
       <beat
           v-for="beat in orderedMyBeats"
           :key="beat.id"
+          :id="beat.id"
           :title="beat.title"
           :author="beat.author"
           :datetime="beat.datetime"
           :content="beat.content"
           :username="beat.username"
+          :userImage="beat.userImage"
+          :replyTo="beat.replyTo"
       ></beat>
     </ion-content>
   </ion-page>

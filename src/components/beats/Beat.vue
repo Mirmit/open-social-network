@@ -1,19 +1,36 @@
 <template>
   <ion-card>
+    <ion-card-header v-if="replyToBeat">
+      <ion-card-subtitle>Reply to</ion-card-subtitle>
+      <beat
+        :key="replyToBeat.id"
+        :title="replyToBeat.title"
+        :author="replyToBeat.author"
+        :datetime="replyToBeat.datetime"
+        :content="replyToBeat.content"
+        :username="replyToBeat.username"
+        :userImage="replyToBeat.userImage"
+        :replyTo="replyToBeat.replyTo"
+      >
+      </beat>
+    </ion-card-header>
     <ion-card-header>
       <ion-item>
         <ion-avatar v-if="userImage" slot="start">
           <img :src="userImage">
         </ion-avatar>
         <ion-card-title>{{ title }}</ion-card-title>
+        <ion-button slot="end" @click="replyOpen = !replyOpen">
+          Reply
+        </ion-button>
       </ion-item>
         <ion-card-subtitle color="primary">{{ username }} - {{ dateFormatted }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       {{ content }}
-      <ion-button slot="end" @click="replyOpen = !replyOpen">
-        Reply
-      </ion-button>
+    </ion-card-content>
+    <ion-card-content v-if="hasReplies">
+      <ion-card-subtitle>Has replies</ion-card-subtitle>
     </ion-card-content>
     <new-beat v-if="replyOpen" :reply-to="author + id">
     </new-beat>
@@ -56,11 +73,15 @@ export default {
     content: String,
     id: Number,
     userImage: String,
-    username: String
+    username: String,
+    replyTo: String
   },
   data() {
     return {
-      replyOpen: false
+      replyOpen: false,
+      replyToBeat: null,
+      hasReplies: false,
+      replies: null
     }
   },
   computed: {
@@ -75,12 +96,35 @@ export default {
     },
     ...mapGetters([
       'myEthAddress',
+      'myBeats',
+      'beats'
     ]),
   },
   methods: {
     ...mapActions([
-      'getBiosInfo'
+      'getBiosInfo',
+      'getOneBeat',
     ])
+  },
+  async mounted() {
+    if (this.replyTo) {
+      if (this.replyTo in this.beats) {
+        this.replyToBeat = this.beats[this.replyTo];
+      } else if (this.replyTo in this.myBeats) {
+        this.replyToBeat = this.myBeats[this.replyTo];
+      }
+    }
+    const beatId = this.author + this.id;
+    // Look up for beat answers loaded in storage
+    const replies1 = Object.fromEntries(Object.entries(this.beats).filter( beat => beat[1].replyTo === beatId))
+    const replies2 = Object.fromEntries(Object.entries(this.myBeats).filter( beat => beat[1].replyTo === beatId))
+    this.replies = {
+      ...replies1,
+      ...replies2
+    }
+    if (Object.keys(this.replies).length > 0) {
+      this.hasReplies = true;
+    }
   }
 }
 </script>
