@@ -270,7 +270,6 @@ const store = createStore({
                 context.getters.biosTopic,
                 { address: ethAddress }
             );
-            console.log('Im here in other bios', biosInfo)
             othersBiosInfo[ethAddress] = biosInfo;
             context.commit('setOthersBiosInfo', othersBiosInfo);
           }

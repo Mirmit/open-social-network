@@ -76,7 +76,7 @@ export default {
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
       }
       this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
-      this.noBeats = this.myBeats ? (Object.keys(this.myBeats).length > 0) : true;
+      this.noBeats = Object.keys(this.orderedBeats).length <= 0;
       this.setLoading(false);
     }
   }
