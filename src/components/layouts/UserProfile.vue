@@ -23,7 +23,7 @@ import { IonLabel, IonButton, IonModal} from "@ionic/vue";
 import EditUserProfile from "./EditUserProfile";
 
 export default {
-  name: "ActionButton",
+  name: "UserProfile",
   components: {
     EditUserProfile,
     IonLabel,

@@ -1,19 +1,52 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <h1>Discover page</h1>
+      <other-user-profile v-for="otherBiosInfo in othersBiosInfo"
+        :key="otherBiosInfo.username"
+        :username="otherBiosInfo.username"
+        :bios="otherBiosInfo.bios"
+        :image="otherBiosInfo.image"
+        :number-of-beats="otherBiosInfo.numberOfBeats"
+      ></other-user-profile>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { IonPage , IonContent} from "@ionic/vue"
+import OtherUserProfile from "../components/layouts/OtherUserProfile";
+import router from "../router";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "Discover",
   components: {
     IonPage,
-    IonContent
+    IonContent,
+    OtherUserProfile
+  },
+  computed: {
+    ...mapGetters([
+      'registered',
+      'logged',
+      'othersBiosInfo'
+    ]),
+  },
+  methods: {
+    ...mapActions([
+        'getBiosInfo',
+        'setLoading'
+    ])
+  }
+  ,
+  async ionViewWillEnter() {
+    if (this.registered && this.logged) {
+      this.setLoading(true);
+      console.log('this.othersBiosInfo', this.othersBiosInfo);
+      this.setLoading(false);
+    } else {
+      await router.push({ name: 'MyWall'})
+    }
   }
 }
 </script>
