@@ -116,11 +116,11 @@ const store = createStore({
           );
           if (currentBeat != null) {
             myBeats[beatId] = currentBeat;
-            //TODO load replies not working
-            while (currentBeat?.replyTo != null) {
+            while (currentBeat.replyTo != null) {
+              let replyTo = currentBeat.replyTo;
               currentBeat = await context.dispatch(
                   'loadReplyToBeat',
-                  currentBeat
+                  { replyTo }
               );
             }
           }
@@ -154,31 +154,32 @@ const store = createStore({
             currentBeat.userImage = biosInfo.image;
             beats[beatId] = currentBeat;
             //TODO load replies not working
-            while (currentBeat.replyTo) {
-              const currentBeat = await context.dispatch(
+            while (currentBeat.replyTo != null) {
+              let replyTo = currentBeat.replyTo;
+              currentBeat = await context.dispatch(
                   'loadReplyToBeat',
-                  currentBeat
+                  { replyTo }
               );
             }
           }
-
         } else {
           break;
         }
       }
       context.commit('setBeats', beats);
     },
-    async loadReplyToBeat(context, currentBeat) {
+    async loadReplyToBeat(context, { replyTo }) {
       let myBeats = context.getters.myBeats;
       let beats = context.getters.beats;
-      if (currentBeat.replyTo in beats) {
-        currentBeat = beats[currentBeat.replyTo];
-      } else if (currentBeat.replyTo in myBeats) {
-        currentBeat = myBeats[currentBeat.replyTo];
+      let currentBeat = null;
+      if (replyTo in beats) {
+        currentBeat = beats[replyTo];
+      } else if (replyTo in myBeats) {
+        currentBeat = myBeats[replyTo];
       } else {
-        const replyEthAddress = currentBeat.replyTo.substring(0, 42);
-        const replyBeatId = currentBeat.replyTo.substring(42,99999)*1;
-        let currentBeat = await context.dispatch(
+        const replyEthAddress = replyTo.substring(0, 42);
+        const replyBeatId = replyTo.substring(42,99999)*1;
+        currentBeat = await context.dispatch(
             'getOneBeat',
             {
               ethAddress: replyEthAddress,
@@ -188,7 +189,7 @@ const store = createStore({
         if (currentBeat) {
           if (replyEthAddress === this.getters.myEthAddress) {
             currentBeat.username = 'me';
-            myBeats[currentBeat.replyTo] = currentBeat;
+            myBeats[replyTo] = currentBeat;
           } else {
             const biosInfo = await context.dispatch(
                 'getBiosInfo',
@@ -196,7 +197,7 @@ const store = createStore({
             );
             currentBeat.username = biosInfo.username;
             currentBeat.userImage = biosInfo.image;
-            beats[currentBeat.replyTo] = currentBeat;
+            beats[replyTo] = currentBeat;
           }
         }
         context.commit('setBeats', beats);
