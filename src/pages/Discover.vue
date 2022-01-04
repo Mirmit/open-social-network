@@ -7,6 +7,7 @@
         :bios="otherBiosInfo.bios"
         :image="otherBiosInfo.image"
         :number-of-beats="otherBiosInfo.numberOfBeats"
+        :following="otherBiosInfo.following"
       ></other-user-profile>
     </ion-content>
   </ion-page>

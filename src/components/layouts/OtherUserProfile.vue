@@ -2,29 +2,80 @@
   <ion-card class="ion-text-center" style="margin-top:20px">
     <img :src="image" style="height:120px">
     <h2>{{ username }}</h2>
-    <h3>Signer Address</h3>
     <p>{{ bios }}</p>
     <p>{{ numberOfBeats }} beats</p>
-    <ion-button>
-      Go to wall
+    <ion-button @click="openCloseWall">
+      {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
+    <ion-card-content v-if="isWallOpen">
+      <beat
+          v-for="beat in beatsInWall"
+          :key="beat.id"
+          :id="beat.id"
+          :username="beat.username"
+          :title="beat.title"
+          :author="beat.author"
+          :datetime="beat.datetime"
+          :content="beat.content"
+          :userImage="beat.userImage"
+      ></beat>
+    </ion-card-content>
+
   </ion-card>
 </template>
 
 <script>
-import { IonButton, IonCard } from "@ionic/vue";
+import { IonButton, IonCard, IonCardContent } from "@ionic/vue";
+import _ from "lodash";
+import {mapActions, mapGetters} from "vuex";
+import Beat from "../beats/Beat";
 
 export default {
   name: "OtherUserProfile",
   components: {
     IonButton,
-    IonCard
+    IonCard,
+    IonCardContent,
+    Beat
   },
   props: {
     username: String,
     bios: String,
     image: String,
-    numberOfBeats: Number
+    numberOfBeats: Number,
+    following: Array
+  },
+  computed: {
+    ...mapGetters([
+        'beats'
+    ])
+  },
+  data() {
+    return {
+      isWallOpen: false,
+      beatsInWall: null
+    }
+  },
+  methods: {
+    async openCloseWall() {
+      this.isWallOpen = !this.isWallOpen
+      if (this.isWallOpen) {
+        const numberOfFollowing = this.following ? this.following.length : 0
+        this.beatList= {}
+        for(let i = 0; i < numberOfFollowing; i++) {
+          await this.refreshBeats({ethAddress: this.following[i], number: 10})
+          let addBeats = Object.fromEntries(Object.entries(this.beats).filter( beat => beat[1].author === this.following[i].toLowerCase()))
+          this.beatList = {
+            ...this.beatList,
+            ...addBeats
+          }
+        }
+        this.beatsInWall = _.orderBy(this.beatList, ['datetime'], ['desc'])
+      }
+    },
+    ...mapActions([
+        'refreshBeats'
+    ])
   }
 }
 </script>
