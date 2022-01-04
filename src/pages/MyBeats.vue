@@ -6,6 +6,7 @@
           :bios="biosInfo.bios"
           :image="biosInfo.image"
           :number-of-beats="biosInfo.numberOfBeats"
+          :address="myEthAddress"
       ></user-profile>
       <beat
           v-for="beat in orderedMyBeats"
@@ -54,7 +55,8 @@ export default {
       'biosInfo',
       'registered',
       'loading',
-      'logged'
+      'logged',
+      'myEthAddress'
     ]),
     orderedMyBeats() {
       return _.orderBy(this.myBeats, ['datetime'], ['desc']);

@@ -7,7 +7,7 @@
         </ion-card-header>
       </ion-card>
       <beat
-          v-for="beat in beats"
+          v-for="beat in orderedBeats"
           :key="beat.id"
           :id="beat.id"
           :username="beat.username"
