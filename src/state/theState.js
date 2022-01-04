@@ -154,7 +154,6 @@ const store = createStore({
             currentBeat.username = biosInfo.username;
             currentBeat.userImage = biosInfo.image;
             beats[beatId] = currentBeat;
-            //TODO load replies not working
             while (currentBeat.replyTo != null) {
               let replyTo = currentBeat.replyTo;
               currentBeat = await context.dispatch(
@@ -247,11 +246,17 @@ const store = createStore({
       if (!ethAddress) {
         ethAddress = context.getters.myEthAddress;
         myBios = true;
+      } else {
+        if (typeof ethAddress === 'string') {
+          if (this.getters.myEthAddress === ethAddress.toLowerCase()) {
+            myBios = true;
+          }
+        }
       }
       let othersBiosInfo = context.getters.othersBiosInfo;
       let biosInfo = {};
       //Check if we already have this bios in storage. If we do not, we make the query and store the result in state
-      if (othersBiosInfo[ethAddress] && !forceRefresh) {
+      if (othersBiosInfo[ethAddress] && !forceRefresh && !myBios) {
         biosInfo = othersBiosInfo[ethAddress];
       } else {
         try {

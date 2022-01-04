@@ -57,6 +57,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'refreshBeats'
+    ]),
     async openCloseWall() {
       this.isWallOpen = !this.isWallOpen
       if (this.isWallOpen) {
@@ -72,10 +75,7 @@ export default {
         }
         this.beatsInWall = _.orderBy(this.beatList, ['datetime'], ['desc'])
       }
-    },
-    ...mapActions([
-        'refreshBeats'
-    ])
+    }
   }
 }
 </script>

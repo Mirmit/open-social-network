@@ -43,7 +43,6 @@ export default {
   async ionViewWillEnter() {
     if (this.registered && this.logged) {
       this.setLoading(true);
-      console.log('this.othersBiosInfo', this.othersBiosInfo);
       this.setLoading(false);
     } else {
       await router.push({ name: 'MyWall'})
