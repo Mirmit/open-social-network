@@ -7,6 +7,9 @@
     <ion-button @click="openCloseWall">
       {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
+    <ion-button @click="followOrUnfollow">
+      {{ isFollowed ? 'Unfollow' : 'Follow' }}
+    </ion-button>
     <ion-card-content v-if="isWallOpen">
       <beat
           v-for="beat in beatsInWall"
@@ -20,7 +23,6 @@
           :userImage="beat.userImage"
       ></beat>
     </ion-card-content>
-
   </ion-card>
 </template>
 
@@ -43,12 +45,17 @@ export default {
     bios: String,
     image: String,
     numberOfBeats: Number,
-    following: Array
+    following: Array,
+    author: String
   },
   computed: {
     ...mapGetters([
-        'beats'
-    ])
+        'beats',
+        'biosInfo'
+    ]),
+    isFollowed() {
+      return this.biosInfo.following.find(el => el === this.author) !== undefined
+    }
   },
   data() {
     return {
@@ -58,7 +65,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'refreshBeats'
+      'refreshBeats',
+      'getBiosInfo'
     ]),
     async openCloseWall() {
       this.isWallOpen = !this.isWallOpen
@@ -74,6 +82,15 @@ export default {
           }
         }
         this.beatsInWall = _.orderBy(this.beatList, ['datetime'], ['desc'])
+      }
+    },
+    async followOrUnfollow() {
+      await this.getBiosInfo();
+      let biosInfo = this.biosInfo;
+      if (this.isFollowed) {
+        console.log('bios info before filter', this.biosInfo)
+        biosInfo.following = this.biosInfo.following.filter( el => el !== this.author);
+        console.log('bios info after filter', biosInfo)
       }
     }
   }

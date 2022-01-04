@@ -1,13 +1,14 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <other-user-profile v-for="otherBiosInfo in othersBiosInfo"
+      <other-user-profile v-for="(otherBiosInfo, name) in othersBiosInfo"
         :key="otherBiosInfo.username"
         :username="otherBiosInfo.username"
         :bios="otherBiosInfo.bios"
         :image="otherBiosInfo.image"
         :number-of-beats="otherBiosInfo.numberOfBeats"
         :following="otherBiosInfo.following"
+        :author="name"
       ></other-user-profile>
     </ion-content>
   </ion-page>
