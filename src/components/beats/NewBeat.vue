@@ -2,12 +2,12 @@
   <ion-card class="card-style">
     <ion-card-header>
       <ion-card-title>
-        <ion-header v-if="replyTo !== ''">
-          Reply:
-        </ion-header>
+<!--        <ion-header v-if="replyTo !== ''">-->
+<!--          Reply:-->
+<!--        </ion-header>-->
         <ion-input placeholder="Title" v-model="title"></ion-input>
       </ion-card-title>
-      <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>
+<!--      <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>-->
     </ion-card-header>
     <ion-card-content>
       <ion-input placeholder="Write your beat" v-model="content"
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput, IonHeader } from "@ionic/vue";
+import { IonCard, IonCardHeader, IonCardContent, IonCardTitle,  IonInput } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
@@ -37,9 +37,7 @@ export default {
     IonCardHeader,
     IonCardContent,
     IonCardTitle,
-    IonCardSubtitle,
     IonInput,
-    IonHeader
   },
   data() {
     return {
