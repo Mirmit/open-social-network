@@ -29,7 +29,19 @@
       {{ content }}
     </ion-card-content>
     <ion-card-content v-if="hasReplies">
-      <ion-card-subtitle>Has replies</ion-card-subtitle>
+      <ion-card-subtitle @click="viewBeatDetail = !viewBeatDetail">Has replies</ion-card-subtitle>
+      <div v-if="viewBeatDetail">
+        <beat v-for="reply in replies"
+              :key="reply.id"
+              :title="reply.title"
+              :author="reply.author"
+              :datetime="reply.datetime"
+              :content="reply.content"
+              :username="reply.username"
+              :userImage="reply.userImage"
+        >
+      </beat>
+      </div>
     </ion-card-content>
     <new-beat v-if="replyOpen" :reply-to="author + id" @close-new-beat="replyOpen = !replyOpen">
     </new-beat>
@@ -80,7 +92,8 @@ export default {
       replyOpen: false,
       replyToBeat: null,
       hasReplies: false,
-      replies: null
+      replies: null,
+      viewBeatDetail: false
     }
   },
   computed: {
