@@ -66,7 +66,6 @@ export default {
   methods: {
     ...mapActions([
       'refreshBeats',
-      'getBiosInfo',
       'setBiosInfo'
     ]),
     async openCloseWall() {
@@ -86,10 +85,9 @@ export default {
       }
     },
     async followOrUnfollow() {
-      await this.getBiosInfo();
       let biosInfo = this.biosInfo;
       if (this.isFollowed) {
-        biosInfo.following = this.biosInfo.following.filter( el => el !== this.author);
+        biosInfo.following = biosInfo.following.filter( el => el !== this.author);
       } else {
         biosInfo.following.push(this.author);
       }

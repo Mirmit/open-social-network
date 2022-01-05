@@ -290,12 +290,13 @@ const store = createStore({
       const signer = await context.dispatch('signer');
       try {
         await bee.setJsonFeed(
-          context.getters.postageBatchId,
-          context.getters.biosTopic,
-          biosInfo,
-          { signer: signer }
-        );
-        context.commit('setBiosInfo', biosInfo);
+            context.getters.postageBatchId,
+            context.getters.biosTopic,
+            biosInfo,
+            {signer: signer}
+        ).then(() => {
+          context.commit('setBiosInfo', biosInfo);
+        })
       } catch(error) {
         console.log('custom error', error);
       }
