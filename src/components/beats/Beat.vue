@@ -1,7 +1,7 @@
 <template>
   <ion-card>
     <ion-card-header v-if="replyToBeat">
-      <ion-card-subtitle>Reply to</ion-card-subtitle>
+      <ion-card-subtitle>Replies to</ion-card-subtitle>
       <beat
         :key="replyToBeat.id"
         :title="replyToBeat.title"
@@ -10,7 +10,6 @@
         :content="replyToBeat.content"
         :username="replyToBeat.username"
         :userImage="replyToBeat.userImage"
-        :replyTo="replyToBeat.replyTo"
       >
       </beat>
     </ion-card-header>
@@ -32,7 +31,7 @@
     <ion-card-content v-if="hasReplies">
       <ion-card-subtitle>Has replies</ion-card-subtitle>
     </ion-card-content>
-    <new-beat v-if="replyOpen" :reply-to="author + id">
+    <new-beat v-if="replyOpen" :reply-to="author + id" @close-new-beat="replyOpen = !replyOpen">
     </new-beat>
   </ion-card>
 </template>

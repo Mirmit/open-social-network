@@ -15,6 +15,7 @@ import { IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from "@ionic/vue"
 import { logOutOutline, logInOutline } from 'ionicons/icons';
 import TheTabs from "./TheTabs";
 import {mapActions, mapGetters} from "vuex";
+import router from "../../router";
 
 export default {
   name: "TheHeader",
@@ -41,8 +42,9 @@ export default {
       'getBiosInfo',
       'logout'
     ]),
-    logoutAndRefresh() {
-      this.logout();
+    async logoutAndRefresh() {
+      await this.logout();
+      await router.push({ name: 'MyWall'})
       window.location.reload();
     }
   },
