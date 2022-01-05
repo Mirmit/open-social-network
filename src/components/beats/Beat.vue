@@ -1,7 +1,7 @@
 <template>
   <ion-card>
     <ion-card-header v-if="replyToBeat">
-      <ion-card-subtitle>Replies to</ion-card-subtitle>
+      <ion-card-subtitle color="primary">Replies to</ion-card-subtitle>
       <beat
         :key="replyToBeat.id"
         :title="replyToBeat.title"
@@ -13,23 +13,27 @@
       >
       </beat>
     </ion-card-header>
-    <ion-card-header>
-      <ion-item>
-        <ion-avatar v-if="userImage" slot="start">
-          <img :src="userImage">
-        </ion-avatar>
-        <ion-card-title>{{ title }}</ion-card-title>
-        <ion-button slot="end" @click="replyOpen = !replyOpen">
-          Reply
-        </ion-button>
-      </ion-item>
-        <ion-card-subtitle color="primary">{{ username }} - {{ dateFormatted }}</ion-card-subtitle>
-    </ion-card-header>
     <ion-card-content>
-      {{ content }}
-    </ion-card-content>
-    <ion-card-content v-if="hasReplies">
-      <ion-card-subtitle @click="viewBeatDetail = !viewBeatDetail">Has replies</ion-card-subtitle>
+      <ion-row>
+        <ion-col size="3">
+          <ion-avatar v-if="userImage" >
+            <img :src="userImage">
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="9">
+          <ion-card-subtitle color="primary" style="padding-bottom:10px">{{ username }} - {{ dateFormatted }}</ion-card-subtitle>
+          <ion-card-title>{{ title }}</ion-card-title>
+          <p style="color:black;margin-top:5px">{{ content }}</p>
+        </ion-col>
+      </ion-row>
+     <ion-row>
+        <ion-col size="10" >
+          <ion-icon v-if="hasReplies" @click="viewBeatDetail = !viewBeatDetail" color="primary" :icon="chatbubbles" style="font-size:25px"></ion-icon>
+        </ion-col>
+        <ion-col col="2">
+          <ion-icon @click="replyOpen = !replyOpen" color="secondary" :icon="heartCircle" style="font-size:30px"></ion-icon>
+        </ion-col>
+      </ion-row>
       <div v-if="viewBeatDetail">
         <beat v-for="reply in replies"
               :key="reply.id"
@@ -56,13 +60,15 @@ import {
   IonCardContent,
   IonCard,
   IonAvatar,
-  IonItem,
-  IonButton
+  IonIcon,
+  IonRow,
+  IonCol
 } from "@ionic/vue";
 import * as dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {mapActions, mapGetters} from "vuex";
 import NewBeat from "./NewBeat";
+import {chatbubbles, heartCircle} from 'ionicons/icons';
 
 export default {
   name: "Beat",
@@ -74,8 +80,9 @@ export default {
     IonCardContent,
     IonCard,
     IonAvatar,
-    IonItem,
-    IonButton
+    IonIcon,
+    IonRow,
+    IonCol
   },
   props: {
     title: String,
@@ -137,10 +144,16 @@ export default {
     if (Object.keys(this.replies).length > 0) {
       this.hasReplies = true;
     }
-  }
+  },
+  setup(){
+    return { chatbubbles, heartCircle};
+  },
 }
 </script>
 
 <style scoped>
-
+ion-card-title{
+  font-size:16px;
+  font-weight: bold;
+}
 </style>

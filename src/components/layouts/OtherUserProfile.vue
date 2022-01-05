@@ -3,12 +3,12 @@
     <img :src="image" style="height:120px">
     <h2>{{ username }}</h2>
     <p>{{ bios }}</p>
-    <p>{{ numberOfBeats }} beats</p>
-    <ion-button @click="openCloseWall" v-if="viewWall">
-      {{ isWallOpen ? 'Close' : 'View' }} wall
-    </ion-button>
-    <ion-button @click="followOrUnfollow">
+    <p>({{ numberOfBeats }} beats)</p>
+    <ion-button fill="outline" size="small" @click="followOrUnfollow">
       {{ isFollowed ? 'Unfollow' : 'Follow' }}
+    </ion-button>
+    <ion-button @click="openCloseWall" size="small" v-if="viewWall" >
+      {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
     <ion-card-content v-if="isWallOpen">
       <beat
@@ -110,10 +110,19 @@ h1 {
   font-size: 20px
 }
 h2 {
-  font-size: 20px
+  font-size: 20px;
+  color:black;
 }
 h3 {
   font-size: 16px
+}
+
+p{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+ion-card{
+  padding: 15px;
 }
 
 </style>

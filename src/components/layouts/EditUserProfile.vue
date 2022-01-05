@@ -138,7 +138,7 @@ export default {
       const newFollowing = this.following;
       this.following = newFollowing.filter(followedInArray => {
         console.log(followedInArray, followed, followedInArray !== followed);
-        return followedInArray != followed;
+        return followedInArray !== followed;
       });
       console.log('last follwing', followed, newFollowing);
     }
@@ -163,5 +163,7 @@ export default {
 </script>
 
 <style scoped>
-
+ion-card{
+  overflow-y:scroll;
+}
 </style>
