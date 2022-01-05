@@ -74,7 +74,7 @@ export default {
         const numberOfFollowing = this.following ? this.following.length : 0
         this.beatList= {}
         for(let i = 0; i < numberOfFollowing; i++) {
-          await this.refreshBeats({ethAddress: this.following[i], number: 10})
+          await this.refreshBeats({ethAddress: this.following[i], number: 2})
           let addBeats = Object.fromEntries(Object.entries(this.beats).filter( beat => beat[1].author === this.following[i].toLowerCase()))
           this.beatList = {
             ...this.beatList,
