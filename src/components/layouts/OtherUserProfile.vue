@@ -4,7 +4,7 @@
     <h2>{{ username }}</h2>
     <p>{{ bios }}</p>
     <p>{{ numberOfBeats }} beats</p>
-    <ion-button @click="openCloseWall">
+    <ion-button @click="openCloseWall" v-if="viewWall">
       {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
     <ion-button @click="followOrUnfollow">
@@ -46,7 +46,11 @@ export default {
     image: String,
     numberOfBeats: Number,
     following: Array,
-    author: String
+    author: String,
+    viewWall: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     ...mapGetters([

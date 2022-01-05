@@ -44,8 +44,15 @@
           <ion-label>Following</ion-label>
         </ion-list-header>
         <ion-item v-for="followed in following" v-bind:key="followed">
-          <ion-label>{{ followed }}</ion-label>
-          <ion-icon name="close" @click="stopFollowing(followed)"></ion-icon>
+          <other-user-profile
+                              :username="othersBiosInfo[followed].username"
+                              :bios="othersBiosInfo[followed].bios"
+                              :image="othersBiosInfo[followed].image"
+                              :number-of-beats="othersBiosInfo[followed].numberOfBeats"
+                              :following="othersBiosInfo[followed].following"
+                              :author="followed"
+                              :view-wall="false"
+          ></other-user-profile>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -68,6 +75,7 @@ import {
 } from "@ionic/vue";
 import ActionButton from "../UI/ActionButton";
 import {mapActions, mapGetters} from "vuex";
+import OtherUserProfile from "./OtherUserProfile";
 
 export default {
   name: "EditUserProfile",
@@ -83,7 +91,8 @@ export default {
     IonLabel,
     IonIcon,
     IonListHeader,
-    IonList
+    IonList,
+    OtherUserProfile
   },
   data() {
     return {
@@ -98,7 +107,8 @@ export default {
   computed: {
     ...mapGetters([
       'biosInfo',
-      'myBeats'
+      'myBeats',
+      'othersBiosInfo'
     ]),
   },
   methods: {
