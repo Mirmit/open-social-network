@@ -127,7 +127,7 @@
           <p>If you are new with Swarm and you want to learn more about Swarm and Bee</p>
           <a href="https://www.ethswarm.org">Learn more</a>
         </div>
-        <ion-row v-if="postageBatchId === ''">
+        <ion-row v-if="postageBatchId.length !== 64">
           <ion-col>
             <div class="ion-text-center">
               <p>
@@ -135,6 +135,16 @@
               </p>
               <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
               <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+              <p>
+                <ion-text color="primary">2.1 </ion-text><br>If you already have a batchId, paste it here
+              </p>
+              <ion-item>
+                <ion-input
+                    placeholder="batchId" value="postageBatchIdToChange"
+                    v-model="postageBatchIdToChange"
+                ></ion-input>
+                <action-button @custom-click="saveBatchId" button-name="Add existing batchId"></action-button>
+              </ion-item>
             </div>
           </ion-col>
         </ion-row>
@@ -173,7 +183,8 @@ import {
   IonCol,
   IonIcon,
   IonTextarea,
-  IonButton
+  IonButton,
+  toastController
 } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 import {Bee} from "@ethersphere/bee-js";
@@ -200,7 +211,8 @@ export default {
       'username': '',
       'bios': '',
       'buyingBatch' : false,
-      'beeAddressToChange' : this.beeAddress
+      'beeAddressToChange' : this.beeAddress,
+      'postageBatchIdToChange': this.postageBatchId
     }
   },
   methods: {
@@ -224,15 +236,28 @@ export default {
       this.buyingBatch = false;
     },
     async loginAndClose() {
-      this.close();
+      // this.close();
       await this.login();
-      window.location.reload();
+      // window.location.reload();
     },
     close() {
       this.$emit('closeWelcomeUser');
     },
     saveBeeAddress() {
       this.setBeeAddress(this.beeAddressToChange);
+    },
+    async saveBatchId() {
+      if (this.postageBatchIdToChange.length === 64) {
+        this.setPostageBatchId(this.postageBatchIdToChange);
+      } else {
+        const toast = await toastController
+        .create({
+          message: 'Invalid postage batch id: ' + this.postageBatchIdToChange,
+          duration: 2000,
+          color: 'medium'
+        })
+        return toast.present();
+      }
     },
     resetStateAndRefresh() {
       this.resetState();
