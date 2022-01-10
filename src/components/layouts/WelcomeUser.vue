@@ -141,7 +141,7 @@
           <ion-col>
             <div class="ion-text-center">
               <p>
-                <ion-text color="primary">2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
+                <ion-text color="primary"><br>2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
               </p>
               <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
               <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
@@ -149,11 +149,12 @@
                 <ion-text color="primary">2.1 </ion-text><br>If you already have a batchId, paste it here
               </p>
               <ion-item>
+                <ion-label position="stacked">Stamps batch id:</ion-label>
                 <ion-input
-                    placeholder="batchId" value="postageBatchIdToChange"
+                    placeholder="batchId"
                     v-model="postageBatchIdToChange"
                 ></ion-input>
-                <action-button @custom-click="saveBatchId" button-name="Add existing batchId"></action-button>
+                <action-button @custom-click="saveBatchId" button-name="Save batchId"></action-button>
               </ion-item>
             </div>
           </ion-col>
