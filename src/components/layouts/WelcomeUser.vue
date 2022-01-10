@@ -92,12 +92,22 @@
     <ion-row v-else-if="registered">
       <ion-col v-if="!logged">
         <div class="ion-text-center">
-          <h2><ion-text color="primary">Log in</ion-text></h2>
+          <ion-loading
+              :is-open="loggingIn"
+              cssClass="my-custom-class"
+              message="Logging in..."
+          ></ion-loading>
           <ion-button @click="loginAndClose" slot="end">
-            <ion-icon :icon="logInOutline"></ion-icon>
+            Log in
           </ion-button>
-          <ion-button @click="resetStateAndRefresh" slot="end">
-            Reset state
+          <p style="font-size: 12px">If you want to switch to another account, first clean your locally stored data.</p>
+          <ion-loading
+              :is-open="clearingData"
+              cssClass="my-custom-class"
+              message="Clearing stored data..."
+          ></ion-loading>
+          <ion-button @click="resetStateAndRefresh" color="light">
+            Clear stored data
           </ion-button>
         </div>
       </ion-col>
@@ -171,9 +181,9 @@ import {
   IonSpinner,
   IonRow,
   IonCol,
-  IonIcon,
   IonTextarea,
-  IonButton
+  IonButton,
+  IonLoading
 } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 import {Bee} from "@ethersphere/bee-js";
@@ -190,9 +200,9 @@ export default {
     IonSpinner,
     IonRow,
     IonCol,
-    IonIcon,
     IonTextarea,
-    IonButton
+    IonButton,
+    IonLoading
   },
   emits: ['closeWelcomeUser'],
   data() {
@@ -200,7 +210,9 @@ export default {
       'username': '',
       'bios': '',
       'buyingBatch' : false,
-      'beeAddressToChange' : this.beeAddress
+      'beeAddressToChange' : this.beeAddress,
+      'clearingData':false,
+      'loggingIn':false
     }
   },
   methods: {
@@ -224,9 +236,11 @@ export default {
       this.buyingBatch = false;
     },
     async loginAndClose() {
+      this.loggingIn = true;
       this.close();
       await this.login();
       window.location.reload();
+      this.loggingIn = false;
     },
     close() {
       this.$emit('closeWelcomeUser');
@@ -235,8 +249,11 @@ export default {
       this.setBeeAddress(this.beeAddressToChange);
     },
     resetStateAndRefresh() {
+      this.clearingData = true;
       this.resetState();
       window.location.reload();
+      this.clearingData = false;
+
     },
     ...mapActions([
       'setBiosInfo',

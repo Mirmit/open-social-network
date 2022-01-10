@@ -6,12 +6,18 @@
         <ion-icon :icon="logOutOutline"></ion-icon>
       </ion-button>
     </ion-toolbar>
-    <the-tabs></the-tabs>
+    <the-tabs>
+    </the-tabs>
   </ion-header>
+  <ion-loading
+      :is-open="loggingOut"
+      cssClass="my-custom-class"
+      message="Logging out..."
+  ></ion-loading>
 </template>
 
 <script>
-import { IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from "@ionic/vue";
+import {IonHeader, IonTitle, IonToolbar, IonIcon, IonButton, IonLoading} from "@ionic/vue";
 import { logOutOutline, logInOutline } from 'ionicons/icons';
 import TheTabs from "./TheTabs";
 import {mapActions, mapGetters} from "vuex";
@@ -25,7 +31,13 @@ export default {
     IonTitle,
     IonToolbar,
     IonIcon,
-    IonButton
+    IonButton,
+    IonLoading
+  },
+  data() {
+    return {
+      loggingOut: false,
+    }
   },
   computed: {
     ...mapGetters([
@@ -43,9 +55,11 @@ export default {
       'logout'
     ]),
     async logoutAndRefresh() {
+      this.loggingOut = true;
       await this.logout();
       await router.push({ name: 'MyWall'})
       window.location.reload();
+      this.loggingOut = false;
     }
   },
   setup() {
