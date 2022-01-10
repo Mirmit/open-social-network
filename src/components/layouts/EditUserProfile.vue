@@ -1,10 +1,16 @@
 <template>
   <ion-card class="card-style">
     <ion-card-header>
-      <ion-icon name="close" @click="closeEdit"></ion-icon>
-      <ion-card-title>
-        Edit profile
-      </ion-card-title>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            Edit profile
+          </ion-card-title>
+        </ion-col>
+        <ion-col size="1" class="ion-justify-content-end">
+          <ion-icon :icon="closeOutline" @click="closeEdit" style="font-size: 30px"></ion-icon>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
@@ -55,8 +61,12 @@
           ></other-user-profile>
         </ion-item>
       </ion-list>
+      <ion-row style="justify-content: end">
+        <ion-col size="2">
+          <action-button @custom-click="updateProfile" button-name="Save"></action-button>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
-     <action-button @custom-click="updateProfile" button-name="Save"></action-button>
   </ion-card>
 </template>
 
@@ -71,11 +81,12 @@ import {
   IonLabel,
   IonIcon,
   IonListHeader,
-  IonList
+  IonList, IonRow, IonCol
 } from "@ionic/vue";
 import ActionButton from "../UI/ActionButton";
 import {mapActions, mapGetters} from "vuex";
 import OtherUserProfile from "./OtherUserProfile";
+import {closeOutline} from 'ionicons/icons';
 
 export default {
   name: "EditUserProfile",
@@ -92,7 +103,9 @@ export default {
     IonIcon,
     IonListHeader,
     IonList,
-    OtherUserProfile
+    OtherUserProfile,
+    IonRow,
+    IonCol
   },
   data() {
     return {
@@ -158,7 +171,10 @@ export default {
     this.bios = this.biosInfo.bios;
     this.following = this.biosInfo.following;
     this.numberOfBeats = this.biosInfo.numberOfBeats;
-  }
+  },
+  setup(){
+    return { closeOutline};
+  },
 }
 </script>
 
