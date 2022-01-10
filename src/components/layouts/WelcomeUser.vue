@@ -44,7 +44,13 @@
             <div class="ion-text-center">
               <p>
                 <ion-text color="primary">2. </ion-text><br>
-                Now, you should buy some stamps. Click here to buy your first batch</p>
+                Now, you should buy some stamps. Click here to buy your first batch
+              </p>
+              <ion-label position="stacked">Bee node debug url:</ion-label>
+              <ion-input
+                  v-model="beeAddressDebugUrl"
+                  value="http://localhost:1635"
+              ></ion-input>
               <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
               <ion-item v-else-if="buyingBatch">
                 <ion-spinner name="dots"></ion-spinner>
@@ -133,6 +139,11 @@
               <p>
                 <ion-text color="primary">2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
               </p>
+              <ion-label position="stacked">Bee node debug url:</ion-label>
+              <ion-input
+                  v-model="beeAddressDebugUrl"
+                  value="http://localhost:1635"
+              ></ion-input>
               <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
               <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
               <p>
@@ -212,7 +223,8 @@ export default {
       'bios': '',
       'buyingBatch' : false,
       'beeAddressToChange' : this.beeAddress,
-      'postageBatchIdToChange': this.postageBatchId
+      'postageBatchIdToChange': this.postageBatchId,
+      'beeAddressDebugUrl': 'http://localhost:1635'
     }
   },
   methods: {
@@ -230,9 +242,21 @@ export default {
     },
     async buyPostageStampBatch() {
       this.buyingBatch = true;
-      const bee = new Bee(this.beeAddress);
-      const postageBatchId = await bee.createPostageBatch("100", 17);
-      this.setPostageBatchId(postageBatchId);
+      const bee = new Bee(this.beeAddressDebugUrl);
+      try {
+        const postageBatchId = await bee.createPostageBatch("100", 17);
+        this.setPostageBatchId(postageBatchId);
+      } catch (error) {
+        console.log('error buying postage batch', error)
+        const toast = await toastController
+        .create({
+          message: error.message,
+          duration: 2000,
+          color: 'medium'
+        })
+        this.buyingBatch = false;
+        return toast.present();
+      }
       this.buyingBatch = false;
     },
     async loginAndClose() {

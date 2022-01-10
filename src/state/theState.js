@@ -354,7 +354,7 @@ const store = createStore({
         await bee.checkConnection();
         context.commit('setBeeNodeConnected', true);
       } catch(error) {
-        console.log('Error checking connection to bee node');
+        console.log('Error checking connection to bee node', error);
         alert('Cannot connect to bee node');
         context.commit('setBeeNodeConnected', false);
       }
