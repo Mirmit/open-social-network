@@ -7,14 +7,15 @@
 </template>
 
 <script>
-import { IonFab, IonFabButton } from "@ionic/vue";
+import {IonFab, IonFabButton, IonIcon} from "@ionic/vue";
 import {heart} from 'ionicons/icons';
 
 export default {
   name: "NewPostButton",
   components: {
     IonFab,
-    IonFabButton
+    IonFabButton,
+    IonIcon
   },
   emits: ['customClick'],
   setup() {

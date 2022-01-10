@@ -25,7 +25,7 @@
   <ion-loading
     :is-open="waitForSigner"
     cssClass="my-custom-class"
-    message="Wait for signer..."
+    message="Wait for signer... <br><br>It will appear twice. The first one is for publishing your beat and second to edit the number of beats of your profile."
   >
   </ion-loading>
 </template>

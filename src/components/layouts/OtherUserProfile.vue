@@ -1,4 +1,9 @@
 <template>
+  <ion-loading
+      :is-open="changingFollowStatus"
+      cssClass="my-custom-class"
+      message="Wait for signer..."
+  ></ion-loading>
   <ion-card class="ion-text-center" style="margin-top:20px">
     <img :src="image" style="height:120px">
     <h2>{{ username }}</h2>
@@ -11,6 +16,7 @@
       {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
     <ion-card-content v-if="isWallOpen">
+      <label>-- Welcome to {{username}}'s wall! --</label>
       <beat
           v-for="beat in beatsInWall"
           :key="beat.id"
@@ -27,7 +33,7 @@
 </template>
 
 <script>
-import { IonButton, IonCard, IonCardContent } from "@ionic/vue";
+import {IonButton, IonCard, IonCardContent, IonLoading} from "@ionic/vue";
 import _ from "lodash";
 import {mapActions, mapGetters} from "vuex";
 import Beat from "../beats/Beat";
@@ -38,7 +44,8 @@ export default {
     IonButton,
     IonCard,
     IonCardContent,
-    Beat
+    Beat,
+    IonLoading
   },
   props: {
     username: String,
@@ -64,7 +71,8 @@ export default {
   data() {
     return {
       isWallOpen: false,
-      beatsInWall: null
+      beatsInWall: null,
+      changingFollowStatus: false
     }
   },
   methods: {
@@ -89,6 +97,7 @@ export default {
       }
     },
     async followOrUnfollow() {
+      this.changingFollowStatus = true;
       let biosInfo = this.biosInfo;
       if (this.isFollowed) {
         biosInfo.following = biosInfo.following.filter( el => el !== this.author);
@@ -96,6 +105,7 @@ export default {
         biosInfo.following.push(this.author);
       }
       await this.setBiosInfo(biosInfo);
+      this.changingFollowStatus = false;
     }
   }
 }
@@ -123,6 +133,10 @@ p{
 }
 ion-card{
   padding: 15px;
+}
+
+label{
+  color:var(--ion-color-secondary-contrast)
 }
 
 </style>
