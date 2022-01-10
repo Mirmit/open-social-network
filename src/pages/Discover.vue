@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
+      <the-user-search></the-user-search>
       <other-user-profile v-for="(otherBiosInfo, name) in othersBiosInfo"
         :key="otherBiosInfo.username"
         :username="otherBiosInfo.username"
@@ -19,13 +20,15 @@ import { IonPage , IonContent} from "@ionic/vue"
 import OtherUserProfile from "../components/layouts/OtherUserProfile";
 import router from "../router";
 import {mapActions, mapGetters} from "vuex";
+import TheUserSearch from "../components/layouts/TheUserSearch";
 
 export default {
   name: "Discover",
   components: {
     IonPage,
     IonContent,
-    OtherUserProfile
+    OtherUserProfile,
+    TheUserSearch
   },
   computed: {
     ...mapGetters([
