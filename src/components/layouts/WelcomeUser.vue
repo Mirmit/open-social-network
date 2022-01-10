@@ -98,12 +98,22 @@
     <ion-row v-else-if="registered">
       <ion-col v-if="!logged">
         <div class="ion-text-center">
-          <h2><ion-text color="primary">Log in</ion-text></h2>
+          <ion-loading
+              :is-open="loggingIn"
+              cssClass="my-custom-class"
+              message="Logging in..."
+          ></ion-loading>
           <ion-button @click="loginAndClose" slot="end">
-            <ion-icon :icon="logInOutline"></ion-icon>
+            Log in
           </ion-button>
-          <ion-button @click="resetStateAndRefresh" slot="end">
-            Reset state
+          <p style="font-size: 12px">If you want to switch to another account, first clean your locally stored data.</p>
+          <ion-loading
+              :is-open="clearingData"
+              cssClass="my-custom-class"
+              message="Clearing stored data..."
+          ></ion-loading>
+          <ion-button @click="resetStateAndRefresh" color="light">
+            Clear stored data
           </ion-button>
         </div>
       </ion-col>
@@ -137,7 +147,7 @@
           <ion-col>
             <div class="ion-text-center">
               <p>
-                <ion-text color="primary">2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
+                <ion-text color="primary"><br>2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
               </p>
               <ion-label position="stacked">Bee node debug url:</ion-label>
               <ion-input
@@ -150,11 +160,12 @@
                 <ion-text color="primary">2.1 </ion-text><br>If you already have a batchId, paste it here
               </p>
               <ion-item>
+                <ion-label position="stacked">Stamps batch id:</ion-label>
                 <ion-input
-                    placeholder="batchId" value="postageBatchIdToChange"
+                    placeholder="batchId"
                     v-model="postageBatchIdToChange"
                 ></ion-input>
-                <action-button @custom-click="saveBatchId" button-name="Add existing batchId"></action-button>
+                <action-button @custom-click="saveBatchId" button-name="Save batchId"></action-button>
               </ion-item>
             </div>
           </ion-col>
@@ -192,9 +203,9 @@ import {
   IonSpinner,
   IonRow,
   IonCol,
-  IonIcon,
   IonTextarea,
   IonButton,
+  IonLoading,
   toastController
 } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
@@ -212,9 +223,9 @@ export default {
     IonSpinner,
     IonRow,
     IonCol,
-    IonIcon,
     IonTextarea,
-    IonButton
+    IonButton,
+    IonLoading
   },
   emits: ['closeWelcomeUser'],
   data() {
@@ -224,6 +235,8 @@ export default {
       'buyingBatch' : false,
       'beeAddressToChange' : this.beeAddress,
       'postageBatchIdToChange': this.postageBatchId,
+      'clearingData':false,
+      'loggingIn':false,
       'beeAddressDebugUrl': 'http://localhost:1635'
     }
   },
@@ -260,9 +273,9 @@ export default {
       this.buyingBatch = false;
     },
     async loginAndClose() {
-      // this.close();
+      this.loggingIn = true;
       await this.login();
-      // window.location.reload();
+      this.loggingIn = false;
     },
     close() {
       this.$emit('closeWelcomeUser');
@@ -284,7 +297,9 @@ export default {
       }
     },
     resetStateAndRefresh() {
+      this.clearingData = true;
       this.resetState();
+      this.clearingData = false;
       window.location.reload();
     },
     ...mapActions([
