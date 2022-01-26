@@ -77,19 +77,12 @@ export default {
     }
   },
   async ionViewWillEnter() {
-    console.log('entro a me');
     if (this.registered && this.logged) {
-      console.log('estic al if de me');
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);
       this.setLoading(false);
-    } else {
-      console.log('not registered or logged', this.registering);
     }
-    // } else {
-    //   // await router.push({ name: 'MyWall'})
-    // }
   },
 }
 </script>

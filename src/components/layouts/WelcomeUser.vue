@@ -33,8 +33,8 @@
           ></ion-input>
         </ion-item>
         <ion-item v-if="!beeNodeConnected">
-          <action-button  @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
-          <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
+            <action-button  @custom-click="checkBeeNodeConnected" button-name="Check connection"></action-button>
+            <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
         </ion-item>
         <ion-item v-else>
           Connection successful

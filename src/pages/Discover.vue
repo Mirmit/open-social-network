@@ -2,6 +2,9 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <the-user-search></the-user-search>
+      <ion-item fill="solid">
+        <ion-label class="ion-text-center"> -- Suggested profiles -- </ion-label>
+      </ion-item>
       <other-user-profile v-for="(otherBiosInfo, name) in othersBiosInfo"
         :key="otherBiosInfo.username"
         :username="otherBiosInfo.username"
@@ -16,7 +19,7 @@
 </template>
 
 <script>
-import { IonPage , IonContent} from "@ionic/vue"
+import { IonPage , IonContent, IonLabel, IonItem} from "@ionic/vue"
 import OtherUserProfile from "../components/layouts/OtherUserProfile";
 import router from "../router";
 import {mapActions, mapGetters} from "vuex";
@@ -28,7 +31,9 @@ export default {
     IonPage,
     IonContent,
     OtherUserProfile,
-    TheUserSearch
+    TheUserSearch,
+    IonLabel,
+    IonItem
   },
   computed: {
     ...mapGetters([

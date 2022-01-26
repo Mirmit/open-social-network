@@ -94,7 +94,6 @@ export default defineComponent({
     async setModalOpen(value) {
       this.isModalOpen = value;
       this.setRegistering(value);
-      console.log('start registering', this.registering);
     },
     ...mapActions([
       'setBiosInfo',
