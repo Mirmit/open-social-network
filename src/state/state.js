@@ -12,5 +12,6 @@ export default {
   registered: false,
   logged: false,
   waitForSigner: false,
-  beeNodeConnected: false
+  beeNodeConnected: false,
+  registering: false,
 }

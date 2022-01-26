@@ -45,7 +45,7 @@
             type="text"
         ></ion-input>
       </ion-item>
-      <ion-list v-if="following.length > 0">
+      <ion-list v-if="following?.length > 0">
         <ion-list-header>
           <ion-label>Following</ion-label>
         </ion-list-header>

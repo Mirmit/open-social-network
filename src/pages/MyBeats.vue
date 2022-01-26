@@ -29,7 +29,6 @@ import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
 import {mapActions, mapGetters} from "vuex";
-import router from "../router";
 import _ from "lodash";
 
 export default {
@@ -56,7 +55,8 @@ export default {
       'registered',
       'loading',
       'logged',
-      'myEthAddress'
+      'myEthAddress',
+      'registering'
     ]),
     orderedMyBeats() {
       return _.orderBy(this.myBeats, ['datetime'], ['desc']);
@@ -69,16 +69,28 @@ export default {
         'setLoading'
     ]),
   },
+  watch: {
+    registering(newVal) {
+      if (newVal === false){
+        window.location.reload();
+      }
+    }
+  },
   async ionViewWillEnter() {
+    console.log('entro a me');
     if (this.registered && this.logged) {
+      console.log('estic al if de me');
       this.setLoading(true);
       await this.getBiosInfo();
       await this.refreshMyBeats(10);
       this.setLoading(false);
     } else {
-      await router.push({ name: 'MyWall'})
+      console.log('not registered or logged', this.registering);
     }
-  }
+    // } else {
+    //   // await router.push({ name: 'MyWall'})
+    // }
+  },
 }
 </script>
 

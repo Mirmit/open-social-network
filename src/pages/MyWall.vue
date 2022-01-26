@@ -27,6 +27,7 @@ import Beat from "../components/beats/Beat";
 import { Utils } from "@ethersphere/bee-js";
 import {mapActions, mapGetters} from "vuex";
 import _ from "lodash";
+import router from "../router";
 
 export default {
   name: "MyWall",
@@ -78,6 +79,8 @@ export default {
       this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
       this.noBeats = Object.keys(this.orderedBeats).length <= 0;
       this.setLoading(false);
+    } else {
+      await router.push({ name: 'MyBeats'})
     }
   }
 }

@@ -49,7 +49,7 @@ export default {
       this.setLoading(true);
       this.setLoading(false);
     } else {
-      await router.push({ name: 'MyWall'})
+      await router.push({ name: 'MyBeats'})
     }
   }
 }

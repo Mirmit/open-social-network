@@ -91,8 +91,10 @@ export default defineComponent({
         return false;
       }
     },
-    setModalOpen(value) {
+    async setModalOpen(value) {
       this.isModalOpen = value;
+      this.setRegistering(value);
+      console.log('start registering', this.registering);
     },
     ...mapActions([
       'setBiosInfo',
@@ -100,7 +102,8 @@ export default defineComponent({
       'setLoading',
       'signer',
       'setRegistered',
-      'setPostageBatchId'
+      'setPostageBatchId',
+      'setRegistering'
     ]),
     async checkUserStatus() {
       const userHasRegistered = await this.checkIfUserHasRegistered();
@@ -136,7 +139,8 @@ export default defineComponent({
       'registered',
       'logged',
       'postageBatchId',
-      'waitForSigner'
+      'waitForSigner',
+      'registering'
     ]),
   }
 });

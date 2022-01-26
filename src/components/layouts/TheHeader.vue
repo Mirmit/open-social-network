@@ -57,7 +57,7 @@ export default {
     async logoutAndRefresh() {
       this.loggingOut = true;
       await this.logout();
-      await router.push({ name: 'MyWall'})
+      await router.push({ name: 'MyBeats'})
       window.location.reload();
       this.loggingOut = false;
     }

@@ -51,7 +51,10 @@ const store = createStore({
     },
     beeNodeConnected(state) {
       return state.beeNodeConnected;
-    }
+    },
+    registering(state) {
+      return state.registering;
+    },
   },
   mutations: {
     setMyBeats(state, myBeats) {
@@ -77,6 +80,9 @@ const store = createStore({
     },
     setLogged(state, logged) {
       state.logged = logged;
+    },
+    setRegistering(state, registering) {
+      state.registering = registering;
     },
     setWaitForSigner(state, waitForSigner) {
       state.waitForSigner = waitForSigner;
@@ -341,6 +347,9 @@ const store = createStore({
     },
     setLogged(context, logged) {
       context.commit('setLogged', logged);
+    },
+    setRegistering(context, registering) {
+      context.commit('setRegistering', registering);
     },
     setPostageBatchId(context, postageBatchId) {
       context.commit('setPostageBatchId', postageBatchId);
