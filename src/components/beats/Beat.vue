@@ -27,10 +27,10 @@
         </ion-col>
       </ion-row>
      <ion-row>
-        <ion-col size="10">
+        <ion-col size="10" style="display: flex">
           <ion-icon v-if="hasReplies" @click="viewBeatDetail = !viewBeatDetail" color="primary" :icon="chatbubbles" style="font-size:25px"></ion-icon>
         </ion-col>
-        <ion-col col="2">
+        <ion-col col="2" style="display: flex">
           <ion-icon @click="replyOpen = !replyOpen" color="secondary" :icon="heartCircle" style="font-size:30px"></ion-icon>
         </ion-col>
       </ion-row>
@@ -155,5 +155,8 @@ export default {
 ion-card-title{
   font-size:16px;
   font-weight: bold;
+}
+ion-card-content{
+  padding-bottom:0px
 }
 </style>

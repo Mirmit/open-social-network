@@ -4,7 +4,7 @@
       cssClass="my-custom-class"
       message="Wait for signer..."
   ></ion-loading>
-  <ion-card class="ion-text-center" style="margin-top:20px">
+  <ion-card class="ion-text-center" style="margin-top:20px; padding:15px">
     <img :src="image" style="height:120px">
     <h2>{{ username }}</h2>
     <p>{{ bios }}</p>
@@ -136,10 +136,6 @@ h3 {
 p{
   margin-top: 5px;
   margin-bottom: 5px;
-}
-ion-card{
-  padding: 15px;
-  padding-bottom: 0px;
 }
 
 label{
