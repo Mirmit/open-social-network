@@ -15,19 +15,19 @@
     </ion-card-header>
     <ion-card-content>
       <ion-row>
-        <ion-col size="3">
+        <ion-col size="4" style="display: flex; justify-content: center">
           <ion-avatar v-if="userImage" >
             <img :src="userImage">
           </ion-avatar>
         </ion-col>
-        <ion-col size="9">
+        <ion-col size="8">
           <ion-card-subtitle color="primary" style="padding-bottom:10px">{{ username }} - {{ dateFormatted }}</ion-card-subtitle>
           <ion-card-title>{{ title }}</ion-card-title>
           <p style="color:black;margin-top:5px">{{ content }}</p>
         </ion-col>
       </ion-row>
      <ion-row>
-        <ion-col size="10" >
+        <ion-col size="10">
           <ion-icon v-if="hasReplies" @click="viewBeatDetail = !viewBeatDetail" color="primary" :icon="chatbubbles" style="font-size:25px"></ion-icon>
         </ion-col>
         <ion-col col="2">

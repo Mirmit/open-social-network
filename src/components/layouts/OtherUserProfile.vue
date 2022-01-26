@@ -15,9 +15,10 @@
     <ion-button @click="openCloseWall" size="small" v-if="viewWall" >
       {{ isWallOpen ? 'Close' : 'View' }} wall
     </ion-button>
-    <ion-card-content v-if="isWallOpen">
+    <div v-if="isWallOpen">
       <label>-- Welcome to {{username}}'s wall! --</label>
-      <beat
+      <ion-spinner v-if="isloading"></ion-spinner>
+      <beat class="ion-text-start" style="padding:0px"
           v-for="beat in beatsInWall"
           :key="beat.id"
           :id="beat.id"
@@ -28,12 +29,12 @@
           :content="beat.content"
           :userImage="beat.userImage"
       ></beat>
-    </ion-card-content>
+    </div>
   </ion-card>
 </template>
 
 <script>
-import {IonButton, IonCard, IonCardContent, IonLoading} from "@ionic/vue";
+import {IonButton, IonCard, IonLoading, IonSpinner} from "@ionic/vue";
 import _ from "lodash";
 import {mapActions, mapGetters} from "vuex";
 import Beat from "../beats/Beat";
@@ -43,9 +44,10 @@ export default {
   components: {
     IonButton,
     IonCard,
-    IonCardContent,
+    // IonCardContent,
     Beat,
-    IonLoading
+    IonLoading,
+    IonSpinner
   },
   props: {
     username: String,
@@ -72,7 +74,8 @@ export default {
     return {
       isWallOpen: false,
       beatsInWall: null,
-      changingFollowStatus: false
+      changingFollowStatus: false,
+      isloading: false,
     }
   },
   methods: {
@@ -83,6 +86,7 @@ export default {
     async openCloseWall() {
       this.isWallOpen = !this.isWallOpen
       if (this.isWallOpen) {
+        this.isloading = true;
         const numberOfFollowing = this.following ? this.following.length : 0
         this.beatList= {}
         for(let i = 0; i < numberOfFollowing; i++) {
@@ -93,10 +97,12 @@ export default {
             ...addBeats
           }
         }
-        this.beatsInWall = _.orderBy(this.beatList, ['datetime'], ['desc'])
+        this.beatsInWall = _.orderBy(this.beatList, ['datetime'], ['desc']);
+        this.isloading = false;
       }
     },
     async followOrUnfollow() {
+      console.log('hello');
       this.changingFollowStatus = true;
       let biosInfo = this.biosInfo;
       if (this.isFollowed) {
@@ -133,10 +139,16 @@ p{
 }
 ion-card{
   padding: 15px;
+  padding-bottom: 0px;
 }
 
 label{
   color:var(--ion-color-secondary-contrast)
+}
+
+ion-card-content{
+  padding: 0px;
+  padding-bottom: 0px;
 }
 
 </style>
