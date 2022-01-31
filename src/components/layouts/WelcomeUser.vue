@@ -38,7 +38,7 @@
           <div v-if="beeNodeConnected" style="margin-top:15px">
             <ion-text color="secondary" > Connection successful!!</ion-text>
           </div>
-          <div v-if="changedNode">
+          <div v-if="changedNode || !beeNodeConnected">
             <action-button  class="btn-sm" @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
           </div>
           <ion-row v-if="postageBatchId === ''">
@@ -144,7 +144,7 @@
             <div v-if="beeNodeConnected" style="margin-top:15px">
               <ion-text color="secondary" > Connection successful!!</ion-text>
             </div>
-            <div v-if="changedNode">
+            <div v-if="changedNode || !beeNodeConnected">
               <action-button  class="btn-sm" @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
             </div>
             <div v-if="!beeNodeConnected">
