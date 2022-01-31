@@ -102,7 +102,6 @@ export default {
       }
     },
     async followOrUnfollow() {
-      console.log('hello');
       this.changingFollowStatus = true;
       let biosInfo = this.biosInfo;
       if (this.isFollowed) {

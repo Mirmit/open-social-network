@@ -78,10 +78,14 @@ export default {
         console.log('following', numberOfFollowing, this.biosInfo.following[i]);
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
       }
+      console.log('beats', this.beats);
       this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
+      console.log(' ordered beats', this.orderedBeats);
+
       this.myWallBeats = this.orderedBeats.filter(beat => {
         return this.biosInfo.following.includes(beat.author)
       });
+      console.log('mywallbeats', this.myWallBeats);
       this.noBeats = Object.keys(this.myWallBeats).length <= 0;
       this.setLoading(false);
     } else {
