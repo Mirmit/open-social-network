@@ -110,7 +110,7 @@ const store = createStore({
       const totalBeats = Math.min(number, numberOfBeats);
       let myBeats = context.getters.myBeats;
       for (let i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
-        let beatId = context.getters.myEthAddress + i;
+        let beatId = context.getters.myEthAddress.toLowerCase() + i;
         if (!(beatId in myBeats )) {
            let currentBeat = await context.dispatch(
             'getOneBeat',
@@ -147,7 +147,7 @@ const store = createStore({
       const totalBeats = Math.min(number, numberOfBeats);
       let beats = context.getters.beats;
       for (var i = numberOfBeats; i > numberOfBeats - totalBeats; i--) {
-        let beatId = ethAddress + i;
+        let beatId = ethAddress.toLowerCase() + i;
         if (!(beatId in beats)) {
           let currentBeat = await context.dispatch(
             'getOneBeat',

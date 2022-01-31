@@ -37,14 +37,14 @@
             type="url"
         ></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Follow beater:</ion-label>
-        <ion-input
-            placeholder="address"
-            v-model="newFollower"
-            type="text"
-        ></ion-input>
-      </ion-item>
+<!--      <ion-item>-->
+<!--        <ion-label position="stacked">Follow beater:</ion-label>-->
+<!--        <ion-input-->
+<!--            placeholder="address"-->
+<!--            v-model="newFollower"-->
+<!--            type="text"-->
+<!--        ></ion-input>-->
+<!--      </ion-item>-->
       <ion-list v-if="following?.length > 0">
         <ion-list-header>
           <ion-label>Following</ion-label>
@@ -61,11 +61,7 @@
           ></other-user-profile>
         </ion-item>
       </ion-list>
-      <ion-row style="justify-content: end">
-        <ion-col size="2">
-          <action-button @custom-click="updateProfile" button-name="Save"></action-button>
-        </ion-col>
-      </ion-row>
+      <action-button @custom-click="updateProfile" button-name="Save" style="margin-top:15px"></action-button>
     </ion-card-content>
   </ion-card>
 </template>
