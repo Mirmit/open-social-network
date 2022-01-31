@@ -259,6 +259,7 @@ const store = createStore({
           }
         }
       }
+      ethAddress = ethAddress.toLowerCase();
       let othersBiosInfo = context.getters.othersBiosInfo;
       let biosInfo = {};
       //Check if we already have this bios in storage. If we do not, we make the query and store the result in state
@@ -330,7 +331,7 @@ const store = createStore({
     },
     async login(context) {
       await context.dispatch('signer');
-      await context.dispatch('getBiosInfo', { ethAddress: null, forceRefresh: true });
+      await context.dispatch('getBiosInfo', null, true);
       context.commit('setLogged', true);
     },
     waitForSigner(context, wait = true) {
