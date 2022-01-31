@@ -7,7 +7,7 @@
         </ion-card-header>
       </ion-card>
       <beat
-          v-for="beat in orderedBeats"
+          v-for="beat in myWallBeats"
           :key="beat.id"
           :id="beat.id"
           :username="beat.username"
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       orderedBeats: {},
+      myWallBeats: {},
       noBeats: false
     }
   },
@@ -74,10 +75,14 @@ export default {
       const numberOfFollowing = this.biosInfo.following ? this.biosInfo.following.length : 0;
       this.beatList= [];
       for(let i = 0; i < numberOfFollowing; i++) {
+        console.log('following', numberOfFollowing, this.biosInfo.following[i]);
         await this.refreshBeats({ethAddress: this.biosInfo.following[i], number: 10});
       }
       this.orderedBeats = _.orderBy(this.beats, ['datetime'], ['desc']);
-      this.noBeats = Object.keys(this.orderedBeats).length <= 0;
+      this.myWallBeats = this.orderedBeats.filter(beat => {
+        return this.biosInfo.following.includes(beat.author)
+      });
+      this.noBeats = Object.keys(this.myWallBeats).length <= 0;
       this.setLoading(false);
     } else {
       await router.push({ name: 'MyBeats'})

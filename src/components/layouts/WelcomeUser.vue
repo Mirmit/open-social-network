@@ -1,128 +1,30 @@
 <template>
   <ion-content>
-    <ion-row>
-      <ion-col>
-        <div class="ion-text-center">
-          <h1 v-if="!registered">Welcome to  <ion-text color="primary">Open Social Network</ion-text></h1>
-          <h1 v-else-if="registered">Welcome back to <ion-text  color="primary">Open Social Network</ion-text></h1>
-          <p>A <b>censorship-resistant</b>,<br> <b>permissionless</b> and <b>descentralized</b><br> social media platform based on Swarm. <br>Not based on the extractive attention economy.</p>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row v-if="!registered">
-      <ion-col>
-        <div class="ion-text-center">
-          <h2><ion-text color="primary">Let's start!</ion-text></h2>
-          <p>
-            This is the first time you visit Open Social Network and you must initialize your account (just setting a username)
-            in order to hear the network beating. <br><br>
-            <ion-text color="primary">1. </ion-text><br>First of all, lets connect to your bee node. If you don't have one available,
-            start bzzzing with the following link:
-          </p>
-          <a href="https://docs.ethswarm.org/docs/">Run your bee</a>
-          <p>If you are new with Swarm and you want to learn more about Swarm and Bee</p>
-          <a href="https://www.ethswarm.org">Learn more</a>
-        </div>
-        <p>Check your node connection entering your node url. </p>
-        <ion-item>
-          <ion-label position="stacked">Bee node url (default http://localhost:1633):</ion-label>
-          <ion-input
-              placeholder="username"
-              v-model="beeAddressToChange"
-              value="http://localhost:1633"
-          ></ion-input>
-        </ion-item>
-        <ion-item v-if="!beeNodeConnected">
-            <action-button  @custom-click="checkBeeNodeConnected" button-name="Check connection"></action-button>
-            <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
-        </ion-item>
-        <ion-item v-else>
-          Connection successful
-        </ion-item>
-        <ion-row v-if="postageBatchId === ''">
-          <ion-col>
-            <div class="ion-text-center">
-              <p>
-                <ion-text color="primary">2. </ion-text><br>
-                Now, you should buy some stamps. Click here to buy your first batch
-              </p>
-              <ion-label position="stacked">Bee node debug url:</ion-label>
-              <ion-input
-                  v-model="beeAddressDebugUrl"
-                  value="http://localhost:1635"
-              ></ion-input>
-              <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
-              <ion-item v-else-if="buyingBatch">
-                <ion-spinner name="dots"></ion-spinner>
-                Buying some stamps
-              </ion-item>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row v-else>
-          <ion-col>
-            <p>Fantastic, you have already bought some stamps. Your postage stamp batch id is:</p>
-            <ion-item>
-              {{ postageBatchId }}
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <div class="ion-text-center">
-              <p>
-                <ion-text color="primary">3. </ion-text><br>
-                Create your profile. Choose a username and tell something about you.
-                Open Social Network is designed to keep your anonymity, choose properly what you want to explain about you.
-              </p>
-              <ion-item>
-                <ion-label position="stacked">Username:</ion-label>
-                <ion-input
-                    placeholder="username"
-                    v-model="username"
-                ></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Something about you:</ion-label>
-                <ion-textarea
-                    placeholder="bios"
-                    v-model="bios"
-                ></ion-textarea>
-              </ion-item>
-              <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-    <ion-row v-else-if="registered">
-      <ion-col v-if="!logged">
-        <div class="ion-text-center">
-          <ion-loading
-              :is-open="loggingIn"
-              cssClass="my-custom-class"
-              message="Logging in..."
-          ></ion-loading>
-          <ion-button @click="loginAndClose" slot="end">
-            Log in
-          </ion-button>
-          <p style="font-size: 12px">If you want to switch to another account, first clean your locally stored data.</p>
-          <ion-loading
-              :is-open="clearingData"
-              cssClass="my-custom-class"
-              message="Clearing stored data..."
-          ></ion-loading>
-          <ion-button @click="resetStateAndRefresh" color="light">
-            Clear stored data
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col v-else>
-        <div class="ion-text-center">
-          <h2><ion-text color="primary">Let's start!</ion-text></h2>
-          <p>
-            <ion-text color="primary">1. </ion-text><br>Check your Swarm node connection.
-          </p>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center">
+            <h1 v-if="!registered">Welcome to  <ion-text color="primary">Open Social Network</ion-text></h1>
+            <h1 v-else-if="registered">Welcome back to <ion-text  color="primary">Open Social Network</ion-text></h1>
+            <p>A <b>censorship-resistant</b>,<br> <b>permissionless</b> and <b>descentralized</b><br> social media platform based on Swarm. <br>Not based on the extractive attention economy.</p>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row v-if="!registered">
+        <ion-col>
+          <div class="ion-text-center">
+            <h2><ion-text color="primary">Let's start!</ion-text></h2>
+            <p>
+              This is the first time you visit Open Social Network and you must initialize your account (just setting a username)
+              in order to hear the network beating. <br><br>
+              <ion-text color="primary">1. </ion-text><br>First of all, lets connect to your bee node. If you don't have one available,
+              start bzzzing with the following link:
+            </p>
+            <a href="https://docs.ethswarm.org/docs/">Run your bee</a>
+            <p>If you are new with Swarm and you want to learn more about Swarm and Bee</p>
+            <a href="https://www.ethswarm.org">Learn more</a>
+          </div>
+          <p>Check your node connection entering your node url. </p>
           <ion-item>
             <ion-label position="stacked">Bee node url (default http://localhost:1633):</ion-label>
             <ion-input
@@ -132,62 +34,163 @@
             ></ion-input>
           </ion-item>
           <ion-item v-if="!beeNodeConnected">
-            <action-button  @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
+            <action-button  @custom-click="checkBeeNodeConnected" button-name="Check connection"></action-button>
             <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
           </ion-item>
           <ion-item v-else>
             Connection successful
           </ion-item>
-          <p>If you don't have one available, start bzzzing with the following link:</p>
-          <a href="https://docs.ethswarm.org/docs/">Run your bee</a>
-          <p>If you are new with Swarm and you want to learn more about Swarm and Bee</p>
-          <a href="https://www.ethswarm.org">Learn more</a>
-        </div>
-        <ion-row v-if="postageBatchId.length !== 64">
-          <ion-col>
-            <div class="ion-text-center">
-              <p>
-                <ion-text color="primary"><br>2. </ion-text><br>You should buy some post stamps. Click here to buy your batch.
-              </p>
-              <ion-label position="stacked">Bee node debug url:</ion-label>
-              <ion-input
-                  v-model="beeAddressDebugUrl"
-                  value="http://localhost:1635"
-              ></ion-input>
-              <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
-              <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
-              <p>
-                <ion-text color="primary">2.1 </ion-text><br>If you already have a batchId, paste it here
-              </p>
-              <ion-item>
-                <ion-label position="stacked">Stamps batch id:</ion-label>
+          <ion-row v-if="postageBatchId === ''">
+            <ion-col>
+              <div class="ion-text-center">
+                <p>
+                  <ion-text color="primary">2. </ion-text><br>
+                  Now, you should buy some stamps. Click here to buy your first batch
+                </p>
+                <ion-label position="stacked">Bee node debug url:</ion-label>
                 <ion-input
-                    placeholder="batchId"
-                    v-model="postageBatchIdToChange"
+                    v-model="beeAddressDebugUrl"
+                    value="http://localhost:1635"
                 ></ion-input>
-                <action-button @custom-click="saveBatchId" button-name="Save batchId"></action-button>
-              </ion-item>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row v-else>
-          <ion-col>
-            <div class="ion-text-center">
-              <p>
-                Fantastic, you have already bought some stamps. Your postage stamp batch id is:
+                <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
+                <ion-item v-else-if="buyingBatch">
+                  <ion-spinner name="dots"></ion-spinner>
+                  Buying some stamps
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row v-else>
+            <ion-col>
+              <p>Fantastic, you have already bought some stamps. Your postage stamp batch id is:</p>
+              <ion-item>
                 {{ postageBatchId }}
-              </p>
-              <action-button @custom-click="close" button-name="Start"></action-button>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-    <ion-row v-else>
-      <ion-col >
-        <p>You don't have Metamask or another ethereum wallet EIP-1193 compatible provider.</p>
-      </ion-col>
-    </ion-row>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <div class="ion-text-center">
+                <p>
+                  <ion-text color="primary">3. </ion-text><br>
+                  Create your profile. Choose a username and tell something about you.
+                  Open Social Network is designed to keep your anonymity, choose properly what you want to explain about you.
+                </p>
+                <ion-item>
+                  <ion-label position="stacked">Username:</ion-label>
+                  <ion-input
+                      placeholder="username"
+                      v-model="username"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Something about you:</ion-label>
+                  <ion-textarea
+                      placeholder="bios"
+                      v-model="bios"
+                  ></ion-textarea>
+                </ion-item>
+                <action-button @custom-click="createFirstBios" button-name="Start"></action-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else-if="registered">
+        <ion-col v-if="!logged">
+          <div class="ion-text-center">
+            <ion-loading
+                :is-open="loggingIn"
+                cssClass="my-custom-class"
+                message="Logging in..."
+            ></ion-loading>
+            <ion-button @click="loginAndClose" slot="end">
+              Log in
+            </ion-button>
+            <p style="font-size: 12px">If you want to switch to another account, first clean your locally stored data.</p>
+            <ion-loading
+                :is-open="clearingData"
+                cssClass="my-custom-class"
+                message="Clearing stored data..."
+            ></ion-loading>
+            <ion-button @click="resetStateAndRefresh" color="light">
+              Clear stored data
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col v-else>
+          <div class="ion-text-center">
+            <h2><ion-text color="primary">Let's start!</ion-text></h2>
+            <p>
+              <ion-text color="primary">1. Swarm node connection</ion-text>
+            </p>
+            <ion-item>
+              <ion-label position="stacked">Bee node url (default http://localhost:1633):</ion-label>
+              <ion-input
+                  placeholder="username"
+                  v-model="beeAddressToChange"
+                  value="http://localhost:1633"
+              ></ion-input>
+            </ion-item>
+            <ion-item v-if="!beeNodeConnected">
+              <action-button  @custom-click="checkBeeNodeConnected" button-name="Check your node connection"></action-button>
+              <action-button @custom-click="saveBeeAddress" button-name="Change address"></action-button>
+            </ion-item>
+            <ion-item v-else>
+              Connection successful
+            </ion-item>
+            <p>If you don't have one available, start bzzzing with the following link:</p>
+            <a href="https://docs.ethswarm.org/docs/">Run your bee</a>
+            <p>If you are new with Swarm and you want to learn more about Swarm and Bee</p>
+            <a href="https://www.ethswarm.org">Learn more</a>
+          </div>
+          <ion-row v-if="postageBatchId.length !== 64">
+            <ion-col>
+              <div class="ion-text-center">
+                <p>
+                  <ion-text color="primary"><br>2. Post stamps</ion-text>
+                </p>
+                <ion-label>You should buy some post stamps. Click here to buy your batch.<br><br></ion-label>
+                <ion-label position="stacked">Bee node debug url:</ion-label>
+                <ion-input
+                    v-model="beeAddressDebugUrl"
+                    value="http://localhost:1635"
+                ></ion-input>
+                <action-button v-if="!buyingBatch" @custom-click="buyPostageStampBatch" button-name="Buy batch"></action-button>
+                <ion-spinner v-else-if="buyingBatch" name="dots">Buying some stamps</ion-spinner>
+                <p>
+                  If you already have a batchId, paste it here
+                </p>
+                <ion-item>
+                  <ion-label position="stacked">Stamps batch id:</ion-label>
+                  <ion-input
+                      placeholder="batchId"
+                      v-model="postageBatchIdToChange"
+                  ></ion-input>
+                  <action-button @custom-click="saveBatchId" button-name="Save batchId"></action-button>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row v-else>
+            <ion-col>
+              <div class="ion-text-center">
+                <p>
+                  Fantastic, you have already bought some stamps. Your postage stamp batch id is:
+                  {{ postageBatchId }}
+                </p>
+                <action-button @custom-click="close" button-name="Start"></action-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row v-else>
+        <ion-col >
+          <p>You don't have Metamask or another ethereum wallet EIP-1193 compatible provider.</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-content>
 </template>
 
@@ -331,6 +334,10 @@ export default {
 </script>
 
 <style scoped>
+ion-grid{
+  padding:20px;
+  padding-top:30px
+}
 h1 {
   font-size: 20px
 }
