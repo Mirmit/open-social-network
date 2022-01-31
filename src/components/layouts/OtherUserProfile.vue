@@ -108,7 +108,7 @@ export default {
       if (this.isFollowed) {
         biosInfo.following = biosInfo.following.filter( el => el !== this.author);
       } else {
-        biosInfo.following.push(this.author);
+        biosInfo.following.push(this.author.toLowerCase());
       }
       await this.setBiosInfo(biosInfo);
       this.changingFollowStatus = false;

@@ -10,7 +10,7 @@
       :image="searchedBiosInfo.image"
       :number-of-beats="searchedBiosInfo.numberOfBeats"
       :following="searchedBiosInfo.following"
-      :author="name"
+      :author="address"
   ></other-user-profile>
   <ion-item v-if="!isloading && !searchedBiosInfo && aSearchIsDone">
     <ion-label >There are no results for your search</ion-label>
@@ -48,7 +48,7 @@ export default {
       this.aSearchIsDone = true;
       this.isloading = true;
       if (Utils.Eth.isHexEthAddress(address)) {
-        this.searchedBiosInfo = await this.getBiosInfo(address);
+        this.searchedBiosInfo = await this.getBiosInfo(address.toLowerCase());
         this.address = address;
         this.isloading = false;
       } else {

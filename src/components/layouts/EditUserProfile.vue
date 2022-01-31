@@ -51,11 +51,11 @@
         </ion-list-header>
         <ion-item v-for="followed in following" v-bind:key="followed">
           <other-user-profile
-                              :username="othersBiosInfo[followed].username"
-                              :bios="othersBiosInfo[followed].bios"
-                              :image="othersBiosInfo[followed].image"
-                              :number-of-beats="othersBiosInfo[followed].numberOfBeats"
-                              :following="othersBiosInfo[followed].following"
+                              :username="othersBiosInfo[followed]?.username"
+                              :bios="othersBiosInfo[followed]?.bios"
+                              :image="othersBiosInfo[followed]?.image"
+                              :number-of-beats="othersBiosInfo[followed]?.numberOfBeats"
+                              :following="othersBiosInfo[followed]?.following"
                               :author="followed"
                               :view-wall="false"
           ></other-user-profile>
