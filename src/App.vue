@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+  <ion-app style="width:450px">
     <ion-header :style="shadow">
       <the-header></the-header>
     </ion-header>
