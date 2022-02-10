@@ -1,21 +1,26 @@
 <template>
   <ion-fab vertical="bottom" horizontal="end">
     <ion-fab-button color="secondary" @click="$emit('customClick')">
-      Beat!
+      <ion-icon :icon="heart" style="color:white"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </template>
 
 <script>
-import { IonFab, IonFabButton } from "@ionic/vue";
+import {IonFab, IonFabButton, IonIcon} from "@ionic/vue";
+import {heart} from 'ionicons/icons';
 
 export default {
   name: "NewPostButton",
   components: {
     IonFab,
-    IonFabButton
+    IonFabButton,
+    IonIcon
   },
-  emits: ['customClick']
+  emits: ['customClick'],
+  setup() {
+    return { heart};
+  },
 }
 </script>
 

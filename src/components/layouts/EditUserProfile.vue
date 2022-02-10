@@ -1,10 +1,16 @@
 <template>
   <ion-card class="card-style">
     <ion-card-header>
-      <ion-icon name="close" @click="closeEdit"></ion-icon>
-      <ion-card-title>
-        Edit profile
-      </ion-card-title>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>
+            Edit profile
+          </ion-card-title>
+        </ion-col>
+        <ion-col size="1" class="ion-justify-content-end">
+          <ion-icon :icon="closeOutline" @click="closeEdit" style="font-size: 30px"></ion-icon>
+        </ion-col>
+      </ion-row>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
@@ -31,25 +37,32 @@
             type="url"
         ></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Follow beater:</ion-label>
-        <ion-input
-            placeholder="address"
-            v-model="newFollower"
-            type="text"
-        ></ion-input>
-      </ion-item>
-      <ion-list v-if="following.length > 0">
+<!--      <ion-item>-->
+<!--        <ion-label position="stacked">Follow beater:</ion-label>-->
+<!--        <ion-input-->
+<!--            placeholder="address"-->
+<!--            v-model="newFollower"-->
+<!--            type="text"-->
+<!--        ></ion-input>-->
+<!--      </ion-item>-->
+      <ion-list v-if="following?.length > 0">
         <ion-list-header>
           <ion-label>Following</ion-label>
         </ion-list-header>
         <ion-item v-for="followed in following" v-bind:key="followed">
-          <ion-label>{{ followed }}</ion-label>
-          <ion-icon name="close" @click="stopFollowing(followed)"></ion-icon>
+          <other-user-profile
+                              :username="othersBiosInfo[followed]?.username"
+                              :bios="othersBiosInfo[followed]?.bios"
+                              :image="othersBiosInfo[followed]?.image"
+                              :number-of-beats="othersBiosInfo[followed]?.numberOfBeats"
+                              :following="othersBiosInfo[followed]?.following"
+                              :author="followed"
+                              :view-wall="false"
+          ></other-user-profile>
         </ion-item>
       </ion-list>
+      <action-button @custom-click="updateProfile" button-name="Save" style="margin-top:15px"></action-button>
     </ion-card-content>
-     <action-button @custom-click="updateProfile" button-name="Save"></action-button>
   </ion-card>
 </template>
 
@@ -64,10 +77,12 @@ import {
   IonLabel,
   IonIcon,
   IonListHeader,
-  IonList
+  IonList, IonRow, IonCol
 } from "@ionic/vue";
 import ActionButton from "../UI/ActionButton";
 import {mapActions, mapGetters} from "vuex";
+import OtherUserProfile from "./OtherUserProfile";
+import {closeOutline} from 'ionicons/icons';
 
 export default {
   name: "EditUserProfile",
@@ -83,7 +98,10 @@ export default {
     IonLabel,
     IonIcon,
     IonListHeader,
-    IonList
+    IonList,
+    OtherUserProfile,
+    IonRow,
+    IonCol
   },
   data() {
     return {
@@ -91,18 +109,23 @@ export default {
       image: '',
       bios: '',
       following: [],
-      newFollower: ''
+      newFollower: '',
+      numberOfBeats: 0
     }
   },
   computed: {
     ...mapGetters([
       'biosInfo',
-      'myBeats'
+      'myBeats',
+      'othersBiosInfo'
     ]),
   },
   methods: {
     async updateProfile() {
-      const newFollowing = this.following;
+      let newFollowing = this.following;
+      if (!newFollowing) {
+        newFollowing = [];
+      }
       if (this.newFollower) {
         newFollowing.push(this.newFollower);
       }
@@ -111,8 +134,9 @@ export default {
         image: this.image,
         bios: this.bios,
         following: newFollowing,
-        numberOfBeats: this.myBeats.length
+        numberOfBeats: this.numberOfBeats
       };
+      console.log(biosInfo);
       //update
       await this.setBiosInfo(biosInfo);
       this.$emit('closeEditProfile');
@@ -123,7 +147,7 @@ export default {
       const newFollowing = this.following;
       this.following = newFollowing.filter(followedInArray => {
         console.log(followedInArray, followed, followedInArray !== followed);
-        return followedInArray != followed;
+        return followedInArray !== followed;
       });
       console.log('last follwing', followed, newFollowing);
     }
@@ -142,10 +166,16 @@ export default {
     this.image = this.biosInfo.image;
     this.bios = this.biosInfo.bios;
     this.following = this.biosInfo.following;
-  }
+    this.numberOfBeats = this.biosInfo.numberOfBeats;
+  },
+  setup(){
+    return { closeOutline};
+  },
 }
 </script>
 
 <style scoped>
-
+ion-card{
+  overflow-y:scroll;
+}
 </style>

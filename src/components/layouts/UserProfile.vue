@@ -3,8 +3,8 @@
     <img :src="image" style="height:120px">
     <ion-label>
       <h2>{{ username }}</h2>
-      <h3>Signer Address</h3>
-      <p>{{ bios }}</p>
+      <p>{{ address }}</p>
+      <h3>{{ bios }}</h3>
       <p>{{ numberOfBeats }} beats</p>
     </ion-label>
     <ion-button @click="setOpen(true)">Edit profile</ion-button>
@@ -23,7 +23,7 @@ import { IonLabel, IonButton, IonModal} from "@ionic/vue";
 import EditUserProfile from "./EditUserProfile";
 
 export default {
-  name: "ActionButton",
+  name: "UserProfile",
   components: {
     EditUserProfile,
     IonLabel,
@@ -34,7 +34,8 @@ export default {
     username: String,
     bios: String,
     image: String,
-    numberOfBeats: Number
+    numberOfBeats: Number,
+    address: String
   },
   data() {
     return {

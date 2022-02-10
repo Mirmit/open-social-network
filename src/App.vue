@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+  <ion-app style="width:450px">
     <ion-header :style="shadow">
       <the-header></the-header>
     </ion-header>
@@ -20,8 +20,14 @@
     :is-open="loading"
     cssClass="my-custom-class"
     message="Please wait..."
->
-</ion-loading>
+  >
+  </ion-loading>
+  <ion-loading
+    :is-open="waitForSigner"
+    cssClass="my-custom-class"
+    message="Wait for signer... <br><br>It will appear twice. The first one is for publishing your beat and the second one to edit the number of beats of your profile."
+  >
+  </ion-loading>
 </template>
 
 <script>
@@ -73,7 +79,7 @@ export default defineComponent({
               this.biosTopic,
               { signer: signer }
           );
-          this.setLogged(true);
+          this.setRegistered(true);
 
           return true;
         } else {
@@ -85,28 +91,28 @@ export default defineComponent({
         return false;
       }
     },
-    setModalOpen(value) {
+    async setModalOpen(value) {
       this.isModalOpen = value;
+      this.setRegistering(value);
     },
     ...mapActions([
       'setBiosInfo',
       'getBiosInfo',
       'setLoading',
       'signer',
-      'setLogged',
-      'setPostageBatchId'
+      'setRegistered',
+      'setPostageBatchId',
+      'setRegistering'
     ]),
     async checkUserStatus() {
-      this.setLoading(true);
       const userHasRegistered = await this.checkIfUserHasRegistered();
       const userHasPostageStamps = this.postageBatchId !== '';
       //check if user has already registered on the network"
-      if (userHasRegistered && userHasPostageStamps) {
+      if (userHasRegistered && userHasPostageStamps && this.logged) {
         this.setModalOpen(false);
       } else {
         this.setModalOpen(true);
       }
-      this.setLoading(false);
     }
   },
   async created() {
@@ -129,8 +135,11 @@ export default defineComponent({
       'beatTopic',
       'biosTopic',
       'loading',
+      'registered',
       'logged',
-      'postageBatchId'
+      'postageBatchId',
+      'waitForSigner',
+      'registering'
     ]),
   }
 });

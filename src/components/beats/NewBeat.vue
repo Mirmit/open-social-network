@@ -2,9 +2,12 @@
   <ion-card class="card-style">
     <ion-card-header>
       <ion-card-title>
+<!--        <ion-header v-if="replyTo !== ''">-->
+<!--          Reply:-->
+<!--        </ion-header>-->
         <ion-input placeholder="Title" v-model="title"></ion-input>
       </ion-card-title>
-      <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>
+<!--      <ion-card-subtitle color="primary">{{ author }} - {{ datetime }}</ion-card-subtitle>-->
     </ion-card-header>
     <ion-card-content>
       <ion-input placeholder="Write your beat" v-model="content"
@@ -17,19 +20,24 @@
 </template>
 
 <script>
-import { IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle, IonInput } from "@ionic/vue";
+import { IonCard, IonCardHeader, IonCardContent, IonCardTitle,  IonInput } from "@ionic/vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "NewBeat",
   emits: [ 'closeNewBeat' ],
+  props: {
+    replyTo: {
+      default: '',
+      type: String
+    }
+  },
   components: {
     IonCard,
     IonCardHeader,
     IonCardContent,
     IonCardTitle,
-    IonCardSubtitle,
-    IonInput
+    IonInput,
   },
   data() {
     return {
@@ -44,31 +52,40 @@ export default {
       'beeAddress',
       'postageBatchId',
       'beatTopic',
-      'myBeats'
+      'myBeats',
+      'biosInfo',
+      'myEthAddress'
     ]),
   },
   methods: {
     async postBeat() {
+      this.waitForSigner();
       const beats = this.myBeats;
       const date = Date.now();
-      const newBeatId = Math.max.apply(Math, beats.map(function(o) { return o.id; })) + 1;
+      const newBeatId = this.biosInfo.numberOfBeats + 1;
       console.log('beats aasa', beats);
       const newBeat = {
         id: newBeatId,
         title: this.title,
-        author: 'me',
+        author: this.myEthAddress,
         datetime: date,
         content: this.content
       };
+      if (this.replyTo !== '') {
+        newBeat.replyTo = this.replyTo;
+      }
       await this.addNewBeat(newBeat);
+      this.waitForSigner(false);
+      await this.refreshMyBeats();
       this.$emit('closeNewBeat');
       this.title = '';
       this.content = '';
     },
     ...mapActions([
-      'getMyBeats',
       'signer',
-      'addNewBeat'
+      'addNewBeat',
+      'waitForSigner',
+      'refreshMyBeats'
     ]),
   }
 }
@@ -79,9 +96,5 @@ export default {
     z-index: 5;
     opacity: 1;
     padding-bottom: 20px;
-  }
-
-  ion-card-subtitle {
-    padding-left:7px
   }
 </style>

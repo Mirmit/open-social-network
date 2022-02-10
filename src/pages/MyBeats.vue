@@ -1,19 +1,24 @@
 <template>
   <ion-page>
     <ion-content>
-      <user-profile
+      <user-profile v-if="biosInfo"
           :username="biosInfo.username"
           :bios="biosInfo.bios"
           :image="biosInfo.image"
           :number-of-beats="biosInfo.numberOfBeats"
+          :address="myEthAddress"
       ></user-profile>
       <beat
-          v-for="beat in myBeats"
+          v-for="beat in orderedMyBeats"
           :key="beat.id"
+          :id="beat.id"
           :title="beat.title"
           :author="beat.author"
           :datetime="beat.datetime"
           :content="beat.content"
+          :username="beat.username"
+          :userImage="beat.userImage"
+          :replyTo="beat.replyTo"
       ></beat>
     </ion-content>
   </ion-page>
@@ -24,6 +29,7 @@ import { IonContent, IonPage } from "@ionic/vue";
 import Beat from "../components/beats/Beat";
 import UserProfile from "../components/layouts/UserProfile";
 import {mapActions, mapGetters} from "vuex";
+import _ from "lodash";
 
 export default {
   name: "MyBeats",
@@ -46,25 +52,38 @@ export default {
     ...mapGetters([
       'myBeats',
       'biosInfo',
+      'registered',
+      'loading',
       'logged',
-      'loading'
+      'myEthAddress',
+      'registering'
     ]),
+    orderedMyBeats() {
+      return _.orderBy(this.myBeats, ['datetime'], ['desc']);
+    }
   },
   methods: {
     ...mapActions([
-        'getMyBeats',
+        'refreshMyBeats',
         'getBiosInfo',
         'setLoading'
     ]),
   },
-  async ionViewDidEnter() {
-    if (this.logged) {
+  watch: {
+    registering(newVal) {
+      if (newVal === false){
+        window.location.reload();
+      }
+    }
+  },
+  async ionViewWillEnter() {
+    if (this.registered && this.logged) {
       this.setLoading(true);
       await this.getBiosInfo();
-      await this.getMyBeats(10);
+      await this.refreshMyBeats(10);
       this.setLoading(false);
     }
-  }
+  },
 }
 </script>
 
