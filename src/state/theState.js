@@ -294,13 +294,14 @@ const store = createStore({
     },
     async setBiosInfo(context, biosInfo) {
       const bee = new Bee(context.getters.beeAddress);
-      const signer = await context.dispatch('signer');
       try {
+        const signer = await context.dispatch('signer');
+        console.log('signer in setBiosInfo', signer)
         await bee.setJsonFeed(
             context.getters.postageBatchId,
             context.getters.biosTopic,
             biosInfo,
-            {signer: signer}
+            { signer }
         ).then(() => {
           context.commit('setBiosInfo', biosInfo);
         })
@@ -315,8 +316,8 @@ const store = createStore({
     },
     async signer(context) {
       if (window.ethereum) {
-        const signer = await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
-        context.commit('setMyEthAddress', '0x' + Utils.Eth.makeHexEthAddress(signer.address));
+        const signer = await Utils.makeEthereumWalletSigner(window.ethereum);
+        context.commit('setMyEthAddress', '0x' + Utils.makeHexEthAddress(signer.address));
 
         return signer;
       } else {
