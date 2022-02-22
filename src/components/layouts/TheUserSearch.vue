@@ -47,7 +47,7 @@ export default {
     async doSearch(address) {
       this.aSearchIsDone = true;
       this.isloading = true;
-      if (Utils.Eth.isHexEthAddress(address)) {
+      if (Utils.isHexEthAddress(address)) {
         this.searchedBiosInfo = await this.getBiosInfo(address.toLowerCase());
         this.address = address;
         this.isloading = false;
