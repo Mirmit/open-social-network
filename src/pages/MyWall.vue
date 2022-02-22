@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     async signer() {
-      return await Utils.Eth.makeEthereumWalletSigner(window.ethereum);
+      return await Utils.makeEthereumWalletSigner(window.ethereum);
     },
     ...mapActions([
       'refreshBeats',
